@@ -16,6 +16,7 @@ TITLES = {
     "landmarks": "Landmarks",
     "buildings": "Buildings",
     "garrisons": "Buildings with garrisons",
+    "difficulty": "Progressive difficulty",
 }
 
 

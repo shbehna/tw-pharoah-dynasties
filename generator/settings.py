@@ -81,3 +81,31 @@ OTHER_PRODUCTION_EXCLUDE = []
 # Number of copies of every garrison unit (commanders excluded), compared to vanilla.
 SETTLEMENT_GARRISON_MULTIPLIER = 1  # main buildings of major and minor settlements
 GARRISON_MULTIPLIER = 4  # every other building with a garrison (garrison buildings, outposts, landmarks, ...)
+
+# ---------------------------------------------------------------------------
+# Progressive difficulty
+# ---------------------------------------------------------------------------
+# Bonuses for AI factions only (not players, not rebels), applied by a campaign script.
+# Tier 1 starts at the first turn below; tier 2 replaces it at the second one.
+# Major factions are the ones the game flags as major; every other AI faction gets the
+# "other" values. Each list holds the tier 1 and tier 2 values.
+PROGRESSIVE_DIFFICULTY_TURNS = [20, 60]
+PROGRESSIVE_DIFFICULTY_MAJOR = {
+    "army_upkeep": [-25, -60],  # % upkeep cost of all units
+    "recruitment_cost": [-50, -100],  # % recruitment cost of all units
+    "income": [50, 100],  # % to all resources produced in every region
+    "recruitment_slots": [4, 8],  # local recruitment capacity
+    "construction_cost": [-25, -50],  # % construction cost of all buildings
+    "happiness": [5, 10],  # happiness in every province
+}
+PROGRESSIVE_DIFFICULTY_OTHER = {
+    "army_upkeep": [-10, -25],
+    "recruitment_cost": [-15, -30],
+    "income": [20, 40],
+    "recruitment_slots": [1, 2],
+    "construction_cost": [-10, -20],
+    "happiness": [2, 5],
+}
+# The script logs every bundle it applies or removes to the game's script log (when script
+# logging is enabled) and to this file in the game folder. None: game script log only.
+PROGRESSIVE_DIFFICULTY_LOG_FILE = "dynasties_rebalance.log"

@@ -130,3 +130,20 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Garrison buildings give ammunition to your armies in their region: City Guard Station and City Guard Compound (and their equivalents) +10% and +15%;
   Guard Tower (and equivalents) +10%, plus +5% (+10% for some cultures) when defending a siege; Ashur's garrison chain +15%, +20%, +25%;
   Babylon's Royal Garrison and Royal Garrison Palace +10% and +15%.
+
+### Progressive difficulty
+
+- AI factions get bonuses that grow during the campaign. Players and rebels never get them.
+
+  | Bonus | Major factions from turn 20 | Major factions from turn 60 | Other factions from turn 20 | Other factions from turn 60 |
+  | --- | --- | --- | --- | --- |
+  | Upkeep cost of all units | -25% | -60% | -10% | -25% |
+  | Recruitment cost of all units | -50% | -100% | -15% | -30% |
+  | All resources produced | +50% | +100% | +20% | +40% |
+  | Local recruitment capacity | +4 | +8 | +1 | +2 |
+  | Construction cost of all buildings | -25% | -50% | -10% | -20% |
+  | Happiness in every province | +5 | +10 | +2 | +5 |
+
+- The turn 60 bonuses replace the turn 20 ones (they do not add up). They show as the "Progressive Difficulty I/II" effect on the AI faction.
+- The bonuses also apply to campaigns started before the mod was installed, from the next load.
+- Every bonus given or removed is logged to `dynasties_rebalance.log` in the game folder (and to the game's script log when script logging is enabled).

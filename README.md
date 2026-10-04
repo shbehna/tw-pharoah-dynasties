@@ -1,7 +1,7 @@
 # Dynasties Rebalance
 
 A Total War: PHARAOH DYNASTIES mod that rebalances administrative burden, outposts, movement,
-landmarks, buildings and garrisons. What it changes is in [CHANGELOG.md](CHANGELOG.md); the
+landmarks, buildings and garrisons, and gives the AI bonuses that grow during the campaign. What it changes is in [CHANGELOG.md](CHANGELOG.md); the
 generator also writes a row-by-row list to `docs/CHANGES.md`.
 
 The mod is installed as a local pack in the game's `data` folder. Nothing is uploaded to the Workshop.
@@ -57,6 +57,8 @@ After a game patch, run `scripts\extract.ps1` first. Update [CHANGELOG.md](CHANG
 | Doubling other production % | Only bonuses (positive values), including main settlement buildings, temples and landmarks. Add patterns to `OTHER_PRODUCTION_EXCLUDE` to leave some out. |
 | Garrisons | Settlement main buildings keep their vanilla garrison (`SETTLEMENT_GARRISON_MULTIPLIER`); every other building's garrison units are multiplied (`GARRISON_MULTIPLIER`), landmark garrisons included. The garrison commander is never multiplied. |
 | Rebuilt landmarks | Four landmarks are replaced by new building levels (`<landmark>_2`); burden reductions defined for the old level move to the new one. |
+| Progressive difficulty | A script gives each AI faction (not players, not rebels) the effect bundle of the current tier: at the start of each player turn for every faction, and at the start of its own turn for a faction that appears later. Major factions are the ones the game flags as major (`faction:is_major()`). Turns and values: `PROGRESSIVE_DIFFICULTY_*`. |
+| Progressive difficulty log | Every bundle given or removed, one summary line per turn and the list of factions at each load go to `dynasties_rebalance.log` in the game folder (`PROGRESSIVE_DIFFICULTY_LOG_FILE`) and to the game's script log. |
 
 Units and buildings left over from Total War: TROY (`troy_` keys, not used in Pharaoh) are not changed.
 
@@ -75,7 +77,7 @@ python generator\conflicts.py
 
 - `generator/` reads the extracted game tables (`reference/vanilla`) and its own data files
   (`generator/data`), and writes the mod source to `src/`: one TSV file per table and section, the
-  texts, and two Lua scripts (administration tiers, outpost sacking). It only writes rows that differ
+  texts, and three Lua scripts (administration tiers, outpost sacking, progressive difficulty). It only writes rows that differ
   from the game.
 - `scripts/build.ps1` packs `src/` with RPFM (Rusted PackFile Manager) 4.7.4, the last version with a
   command line tool, converting the TSV files to the game's binary tables.
