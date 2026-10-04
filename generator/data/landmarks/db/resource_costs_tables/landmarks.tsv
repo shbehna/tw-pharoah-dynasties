@@ -1,0 +1,6 @@
+id	treasury_cost	expenditure_type	income_type
+#resource_costs_tables;2;db/resource_costs_tables/landmarks			
+phar_main_all_landmark_production_morale_boost_parha_2	0	CONSTRUCTION_BUILDING	OTHER
+phar_map_all_landmark_gold_happiness_tushhan_2	0	CONSTRUCTION_BUILDING	OTHER
+phar_main_all_landmark_happiness_hattusa_2	0	CONSTRUCTION_BUILDING	OTHER
+phar_map_all_landmark_replenishment_influence_nineveh_2	0	CONSTRUCTION_BUILDING	OTHER

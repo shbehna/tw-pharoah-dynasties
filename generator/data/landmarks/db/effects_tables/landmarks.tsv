@@ -1,0 +1,3 @@
+effect	icon	priority	icon_negative	category	is_positive_value_good
+#effects_tables;3;db/effects_tables/landmarks					
+phar_map_unit_fatigue_resistance_mod_unit_sets_high_tier_units	fx_icon_fatigue_positive.png	100	fx_icon_fatigue_positive.png	battle	false
