@@ -1,6 +1,7 @@
 """Buildings with garrisons.
 
-- every garrison unit a building provides is multiplied (same unit types, commanders excluded)
+- garrison units multiplied (same unit types, commanders excluded), with one multiplier for the
+  main buildings of settlements and one for every other building
 - garrison buildings give ammunition bonuses to own armies in the region (generator/data/garrisons)
 """
 
@@ -9,6 +10,7 @@ from __future__ import annotations
 import collections
 import hashlib
 
+from features.admin import settlement_class
 from lib.data import Overlay
 
 FEATURE = "garrisons"
@@ -26,18 +28,28 @@ def apply(overlay: Overlay, settings) -> None:
         count += overlay.import_rows(tsv, FEATURE)
     overlay.note(FEATURE, f"Garrison buildings give ammunition bonuses to own armies in their region "
                           f"({count} building effects, generator/data/garrisons).")
-    _multiply_garrisons(overlay, s.GARRISON_MULTIPLIER)
+    _multiply_garrisons(overlay, s)
 
 
-def _multiply_garrisons(overlay: Overlay, multiplier: int) -> None:
-    if multiplier <= 1:
-        return
+def _group_multipliers(overlay: Overlay, s) -> dict[str, int]:
+    """Unit group -> multiplier, from the kind of building that provides it."""
+    kinds: dict[str, set[str]] = collections.defaultdict(set)
+    for row in overlay.rows(GROUPS_BY_BUILDING):
+        building = row["building_level"]
+        if not building.startswith(LEGACY_PREFIX):
+            kinds[row["unit_group"]].add("settlement" if settlement_class(building) else "other")
+    multipliers = {}
+    for group, used_by in kinds.items():
+        if len(used_by) > 1:
+            overlay.note(FEATURE, f"Unit group {group} is used by settlement and other buildings; "
+                                  f"it gets the settlement multiplier.")
+        multipliers[group] = s.SETTLEMENT_GARRISON_MULTIPLIER if "settlement" in used_by else s.GARRISON_MULTIPLIER
+    return multipliers
+
+
+def _multiply_garrisons(overlay: Overlay, s) -> None:
     caste = {row["unit"]: row["caste"] for row in overlay.rows("main_units_tables")}
-    groups = {
-        row["unit_group"]
-        for row in overlay.rows(GROUPS_BY_BUILDING)
-        if not row["building_level"].startswith(LEGACY_PREFIX)
-    }
+    multipliers = _group_multipliers(overlay, s)
     units = list(overlay.rows(UNITS_IN_GROUP))
     used_ids = {int(row["id"]) for row in units}
 
@@ -45,16 +57,15 @@ def _multiply_garrisons(overlay: Overlay, multiplier: int) -> None:
     for row in sorted(units, key=lambda r: (r["unit_group"], int(r["priority"]), r["unit"], int(r["id"]))):
         group = row["unit_group"]
         # Garrison commanders (one bodyguard unit per culture) are lords: the garrison only gets one.
-        if group not in groups or caste.get(row["unit"]) in ("lord", "hero"):
+        if multipliers.get(group, 1) <= 1 or caste.get(row["unit"]) in ("lord", "hero"):
             continue
-        for copy in range(1, multiplier):
+        for copy in range(1, multipliers[group]):
             new_id = _new_id(f"{group}|{row['unit']}|{row['id']}|{copy}", used_ids)
             overlay.put(UNITS_IN_GROUP, dict(row, id=str(new_id)), FEATURE)
             added[group] += 1
-    overlay.note(FEATURE, f"Garrisons x{multiplier}: {sum(added.values())} garrison units added to "
-                          f"{len(added)} unit groups (commanders excluded). Large settlements can now exceed "
-                          f"20 garrison units in total; the units' priority decides which ones the game keeps "
-                          f"if it caps them.")
+    overlay.note(FEATURE, f"Garrisons of settlement main buildings x{s.SETTLEMENT_GARRISON_MULTIPLIER}, of every "
+                          f"other building x{s.GARRISON_MULTIPLIER}: {sum(added.values())} garrison units added to "
+                          f"{len(added)} unit groups (commanders excluded).")
 
 
 def _new_id(seed: str, used: set[int]) -> int:

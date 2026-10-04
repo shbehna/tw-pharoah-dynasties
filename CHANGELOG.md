@@ -73,8 +73,8 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   - The Northern Oasis Fields: +250 food per turn (vanilla +215), +2 influence (vanilla +3), +6 workforce growth (vanilla +7), +4 happiness (vanilla +5)
   - The Sacred Way: +100 favour with all your gods (vanilla +30), +4 happiness, +4 influence
 - Royal Legal Complex, High Citadel of Parha, Decorated Pottery Workshop and House of Exorcists are rebuilt as new buildings with the effects above.
-- Landmark garrisons: Cyclopean Walls 4 Palace Guards, Citadel of Troy 4 Troy's Chosen, Fortress of Ithaca 4 Exemplary Ambushers,
-  Lycian Stables 2 Lycian Winged Chariots, Hilltop Holdfast 2 Mad Mares of Thrace.
+- Landmark garrisons: Cyclopean Walls 8 Palace Guards, Citadel of Troy 8 Troy's Chosen, Fortress of Ithaca 8 Exemplary Ambushers,
+  Lycian Stables 4 Lycian Winged Chariots, Hilltop Holdfast 4 Mad Mares of Thrace.
 - Construction costs:
 
   | Landmark | Gold | Stone | Wood |
@@ -125,7 +125,8 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
 ### Buildings with garrisons
 
-- Every garrison unit a building provides is doubled (same unit types; the garrison commander is not doubled).
+- Buildings with a garrison, other than the main buildings of settlements, provide 4 times as many garrison units
+  (same unit types; the garrison commander is not multiplied). Settlement main buildings keep their vanilla garrison.
 - Garrison buildings give ammunition to your armies in their region: City Guard Station and City Guard Compound (and their equivalents) +10% and +15%;
   Guard Tower (and equivalents) +10%, plus +5% (+10% for some cultures) when defending a siege; Ashur's garrison chain +15%, +20%, +25%;
   Babylon's Royal Garrison and Royal Garrison Palace +10% and +15%.

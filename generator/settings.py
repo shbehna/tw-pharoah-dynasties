@@ -78,4 +78,6 @@ OTHER_PRODUCTION_EXCLUDE = []
 # ---------------------------------------------------------------------------
 # Buildings with garrisons
 # ---------------------------------------------------------------------------
-GARRISON_MULTIPLIER = 2  # number of copies of every garrison unit (commanders excluded)
+# Number of copies of every garrison unit (commanders excluded), compared to vanilla.
+SETTLEMENT_GARRISON_MULTIPLIER = 1  # main buildings of major and minor settlements
+GARRISON_MULTIPLIER = 4  # every other building with a garrison (garrison buildings, outposts, landmarks, ...)

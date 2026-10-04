@@ -55,7 +55,7 @@ After a game patch, run `scripts\extract.ps1` first. Update [CHANGELOG.md](CHANG
 | Granary, bronzeworker, goldsmith | The "%" is the main production effect; the extra +5% these buildings give at high influence is unchanged. Tausret's own versions of these chains are separate buildings and fall under the doubling rule. |
 | Beer Hall | The same building is the Wine Hall or Performance Hall for other cultures; all of them get the food bonus. |
 | Doubling other production % | Only bonuses (positive values), including main settlement buildings, temples and landmarks. Add patterns to `OTHER_PRODUCTION_EXCLUDE` to leave some out. |
-| Doubling garrisons | Every unit is doubled except the garrison commander, landmark garrisons included. |
+| Garrisons | Settlement main buildings keep their vanilla garrison (`SETTLEMENT_GARRISON_MULTIPLIER`); every other building's garrison units are multiplied (`GARRISON_MULTIPLIER`), landmark garrisons included. The garrison commander is never multiplied. |
 | Rebuilt landmarks | Four landmarks are replaced by new building levels (`<landmark>_2`); burden reductions defined for the old level move to the new one. |
 
 Units and buildings left over from Total War: TROY (`troy_` keys, not used in Pharaoh) are not changed.
