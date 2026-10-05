@@ -29,7 +29,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
 ### Outposts
 
-- Trading posts: +25% to all resources produced in the region (vanilla +10%).
+- Trading posts: +15% to all resources produced in the region (vanilla +10%).
 - Forts hold up to 20 units (vanilla 10) and reduce the upkeep of units stationed in them by 90% (vanilla 50%).
 - Warriors' Refuges hold up to 15 units (vanilla 6) and reduce the upkeep of units stationed in them by 30% (vanilla none).
 - Waystations: +3 happiness in the province.
@@ -137,10 +137,10 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
   | Bonus | Major factions from turn 20 | Major factions from turn 60 | Other factions from turn 20 | Other factions from turn 60 |
   | --- | --- | --- | --- | --- |
-  | Upkeep cost of all units | -25% | -60% | -10% | -25% |
-  | Recruitment cost of all units | -50% | -100% | -15% | -30% |
+  | Upkeep cost of all units | -40% | -80% | -20% | -40% |
+  | Recruitment cost of all units | -50% | -100% | -25% | -50% |
   | All resources produced | +50% | +100% | +20% | +40% |
-  | Local recruitment capacity | +4 | +8 | +1 | +2 |
+  | Local recruitment capacity | +4 | +8 | +2 | +4 |
   | Construction cost of all buildings | -25% | -50% | -10% | -20% |
   | Happiness in every province | +5 | +10 | +2 | +5 |
 

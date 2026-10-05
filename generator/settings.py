@@ -32,7 +32,7 @@ ADMIN_BRONZE_UPKEEP_EQUALS_FOOD = True
 # ---------------------------------------------------------------------------
 # Outposts
 # ---------------------------------------------------------------------------
-TRADING_POST_RESOURCE_PRODUCTION = 25  # % to all resources in the region (vanilla 10)
+TRADING_POST_RESOURCE_PRODUCTION = 15  # % to all resources in the region (vanilla 10)
 FORT_MAX_UNITS = 20  # vanilla 10
 WARRIORS_REFUGE_MAX_UNITS = 15  # vanilla 6
 FORT_UPKEEP_REDUCTION = 90  # % (vanilla 50)
@@ -91,7 +91,7 @@ GARRISON_MULTIPLIER = 4  # every other building with a garrison (garrison buildi
 # "other" values. Each list holds the tier 1 and tier 2 values.
 PROGRESSIVE_DIFFICULTY_TURNS = [20, 60]
 PROGRESSIVE_DIFFICULTY_MAJOR = {
-    "army_upkeep": [-25, -60],  # % upkeep cost of all units
+    "army_upkeep": [-40, -80],  # % upkeep cost of all units
     "recruitment_cost": [-50, -100],  # % recruitment cost of all units
     "income": [50, 100],  # % to all resources produced in every region
     "recruitment_slots": [4, 8],  # local recruitment capacity
@@ -99,10 +99,10 @@ PROGRESSIVE_DIFFICULTY_MAJOR = {
     "happiness": [5, 10],  # happiness in every province
 }
 PROGRESSIVE_DIFFICULTY_OTHER = {
-    "army_upkeep": [-10, -25],
-    "recruitment_cost": [-15, -30],
+    "army_upkeep": [-20, -40],
+    "recruitment_cost": [-25, -50],
     "income": [20, 40],
-    "recruitment_slots": [1, 2],
+    "recruitment_slots": [2, 4],
     "construction_cost": [-10, -20],
     "happiness": [2, 5],
 }
