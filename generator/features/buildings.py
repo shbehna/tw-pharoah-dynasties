@@ -3,7 +3,8 @@
 - religious building conversions cost stone and wood instead of gold (generator/data/buildings)
 - granary, bronzeworker and goldsmith chains
 - summer festival grounds and beer hall
-- every other building's resource production % multiplied
+- every other building's resource production % multiplied, for bonuses that only apply to some resources (food)
+  and for every bonus of landmarks
 """
 
 from __future__ import annotations
@@ -77,24 +78,29 @@ def _happiness_buildings(overlay: Overlay, s) -> set[str]:
     return {SUMMER_FESTIVAL_GROUNDS, BEER_HALL}
 
 
-def production_effects(overlay: Overlay) -> set[str]:
-    """Effects that change resource production by a percentage."""
-    return {
-        row["effect"]
-        for row in overlay.rows("effect_bonus_value_pooled_resource_factor_junctions_tables")
-        if row["bonus_value_id"] == "percentage_multiplier_mod"
-    }
+def production_effects(overlay: Overlay) -> dict[str, set[str]]:
+    """Effects that change resource production by a percentage -> resources they apply to (troy_food, ...)."""
+    resource_of_factor = {row["unique_id"]: row["resource"] for row in overlay.rows("pooled_resource_factor_junctions_tables")}
+    effects: dict[str, set[str]] = collections.defaultdict(set)
+    for row in overlay.rows("effect_bonus_value_pooled_resource_factor_junctions_tables"):
+        if row["bonus_value_id"] == "percentage_multiplier_mod":
+            effects[row["effect"]].add(resource_of_factor.get(row["resource_factor"], row["resource_factor"]))
+    return effects
 
 
 def _multiply_production(overlay: Overlay, s, mentioned: set[str]) -> None:
     factor = s.OTHER_PRODUCTION_MULTIPLIER
     excluded = [re.compile(p) for p in s.OTHER_PRODUCTION_EXCLUDE]
-    effects = production_effects(overlay)
+    all_resources = [re.compile(p) for p in s.OTHER_PRODUCTION_ALL_RESOURCES]
+    resources = {f"troy_{resource}" for resource in s.OTHER_PRODUCTION_RESOURCES}
+    all_effects = production_effects(overlay)
+    effects = {effect for effect, applies_to in all_effects.items() if applies_to <= resources}
     per_effect = collections.Counter()
     for row in list(overlay.rows(BEJ)):
         building = row["building"]
+        doubled = all_effects if any(p.search(building) for p in all_resources) else effects
         if (
-            row["effect"] not in effects
+            row["effect"] not in doubled
             or building.startswith(LEGACY_PREFIX)
             or building in mentioned
             or TRADING_POST in building
@@ -108,4 +114,6 @@ def _multiply_production(overlay: Overlay, s, mentioned: set[str]) -> None:
         per_effect[row["effect"]] += 1
     total = sum(per_effect.values())
     detail = ", ".join(f"{effect} ({count})" for effect, count in sorted(per_effect.items()))
-    overlay.note(FEATURE, f"Production % multiplied by {factor:g} on {total} building effects: {detail}.")
+    overlay.note(FEATURE, f"Production % multiplied by {factor:g} on {total} building effects (bonuses that only "
+                          f"apply to {', '.join(s.OTHER_PRODUCTION_RESOURCES)}, and every bonus of buildings matching "
+                          f"{', '.join(s.OTHER_PRODUCTION_ALL_RESOURCES)}): {detail}.")

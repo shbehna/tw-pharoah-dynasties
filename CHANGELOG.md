@@ -121,7 +121,9 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Goldsmith chain: +10%, +15%, +25% gold production (vanilla +5%, +10%, +20%); the Royal Goldsmith also gives -10% gold upkeep for armies in the province.
 - Summer Festival Grounds: +40% food production (vanilla +10%) and +2 happiness (vanilla +4).
 - Beer Hall (Wine Hall and Performance Hall for other cultures): +20% food production.
-- Every other building's resource production bonus is doubled, including main settlement buildings (+% to all resources in the region), temples, ports, fisheries, wood buildings, Tausret's resource chains (+20%, +40%, +60%) and landmarks. Production penalties are unchanged.
+- Every other building's food production bonus is doubled, including fisheries and Tausret's food chain.
+- Landmarks: every resource production bonus is doubled.
+- Other resource production bonuses of buildings (main settlement buildings, temples, ports, wood buildings, ...) are unchanged. Production penalties are unchanged.
 
 ### Buildings with garrisons
 
