@@ -68,14 +68,9 @@ GOLDSMITH_GOLD_UPKEEP = -10
 SUMMER_FESTIVAL_FOOD_PRODUCTION = 40  # vanilla 10
 SUMMER_FESTIVAL_HAPPINESS = 2  # vanilla 4
 BEER_HALL_FOOD_PRODUCTION = 20  # vanilla 0
-# Every other building's resource production % bonus is multiplied by this, if the bonus only
-# applies to resources in OTHER_PRODUCTION_RESOURCES (troy_<resource> keys: food, bronze, gold,
-# stones, wood). Bonuses to other resources keep their vanilla value.
+# Every other building with a resource production % bonus gets it multiplied by this.
+# This includes main settlement buildings (+% to all resources in the region) and landmarks.
 OTHER_PRODUCTION_MULTIPLIER = 2
-OTHER_PRODUCTION_RESOURCES = ["food"]
-# Regular expressions of building keys whose production % bonuses are multiplied for every
-# resource (landmarks, including the rebuilt ones and the unique wonders).
-OTHER_PRODUCTION_ALL_RESOURCES = [r"_landmark_"]
 # Regular expressions of building keys left out of the multiplier, e.g. r"_main_building_"
 # to keep settlement buildings at their vanilla production bonus.
 OTHER_PRODUCTION_EXCLUDE = []
