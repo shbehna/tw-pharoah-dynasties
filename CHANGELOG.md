@@ -127,8 +127,9 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
 ### Buildings with garrisons
 
-- Buildings with a garrison, other than the main buildings of settlements, provide 4 times as many garrison units
-  (same unit types; the garrison commander is not multiplied). Settlement main buildings keep their vanilla garrison.
+- Buildings with a garrison, other than the main buildings of settlements and lookout posts, provide 4 times as many garrison units
+  (same unit types; the garrison commander is not multiplied). Lookout posts provide 2 times as many.
+  Settlement main buildings keep their vanilla garrison.
 - Garrison buildings give ammunition to your armies in their region: City Guard Station and City Guard Compound (and their equivalents) +10% and +15%;
   Guard Tower (and equivalents) +10%, plus +5% (+10% for some cultures) when defending a siege; Ashur's garrison chain +15%, +20%, +25%;
   Babylon's Royal Garrison and Royal Garrison Palace +10% and +15%.

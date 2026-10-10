@@ -1,7 +1,7 @@
 """Buildings with garrisons.
 
 - garrison units multiplied (same unit types, commanders excluded), with one multiplier for the
-  main buildings of settlements and one for every other building
+  main buildings of settlements, one for lookout posts and one for every other building
 - garrison buildings give ammunition bonuses to own armies in the region (generator/data/garrisons)
 """
 
@@ -11,6 +11,7 @@ import collections
 import hashlib
 
 from features.admin import settlement_class
+from features.outposts import lookout_posts
 from lib.data import Overlay
 
 FEATURE = "garrisons"
@@ -33,17 +34,31 @@ def apply(overlay: Overlay, settings) -> None:
 
 def _group_multipliers(overlay: Overlay, s) -> dict[str, int]:
     """Unit group -> multiplier, from the kind of building that provides it."""
+    # In priority order: a unit group used by several kinds of buildings gets the first one's multiplier.
+    by_kind = {
+        "settlement": s.SETTLEMENT_GARRISON_MULTIPLIER,
+        "lookout post": s.LOOKOUT_GARRISON_MULTIPLIER,
+        "other": s.GARRISON_MULTIPLIER,
+    }
+    lookouts = set(lookout_posts(overlay))
     kinds: dict[str, set[str]] = collections.defaultdict(set)
     for row in overlay.rows(GROUPS_BY_BUILDING):
         building = row["building_level"]
-        if not building.startswith(LEGACY_PREFIX):
-            kinds[row["unit_group"]].add("settlement" if settlement_class(building) else "other")
+        if building.startswith(LEGACY_PREFIX):
+            continue
+        if settlement_class(building):
+            kinds[row["unit_group"]].add("settlement")
+        elif building in lookouts:
+            kinds[row["unit_group"]].add("lookout post")
+        else:
+            kinds[row["unit_group"]].add("other")
     multipliers = {}
     for group, used_by in kinds.items():
+        kind = next(k for k in by_kind if k in used_by)
         if len(used_by) > 1:
-            overlay.note(FEATURE, f"Unit group {group} is used by settlement and other buildings; "
-                                  f"it gets the settlement multiplier.")
-        multipliers[group] = s.SETTLEMENT_GARRISON_MULTIPLIER if "settlement" in used_by else s.GARRISON_MULTIPLIER
+            overlay.note(FEATURE, f"Unit group {group} is used by {' and '.join(sorted(used_by))} buildings; "
+                                  f"it gets the {kind} multiplier.")
+        multipliers[group] = by_kind[kind]
     return multipliers
 
 
@@ -63,8 +78,9 @@ def _multiply_garrisons(overlay: Overlay, s) -> None:
             new_id = _new_id(f"{group}|{row['unit']}|{row['id']}|{copy}", used_ids)
             overlay.put(UNITS_IN_GROUP, dict(row, id=str(new_id)), FEATURE)
             added[group] += 1
-    overlay.note(FEATURE, f"Garrisons of settlement main buildings x{s.SETTLEMENT_GARRISON_MULTIPLIER}, of every "
-                          f"other building x{s.GARRISON_MULTIPLIER}: {sum(added.values())} garrison units added to "
+    overlay.note(FEATURE, f"Garrisons of settlement main buildings x{s.SETTLEMENT_GARRISON_MULTIPLIER}, of lookout "
+                          f"posts x{s.LOOKOUT_GARRISON_MULTIPLIER}, of every other building x{s.GARRISON_MULTIPLIER}: "
+                          f"{sum(added.values())} garrison units added to "
                           f"{len(added)} unit groups (commanders excluded).")
 
 

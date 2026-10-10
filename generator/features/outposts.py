@@ -27,6 +27,10 @@ def _outposts(overlay: Overlay, kind: str, key_part: str) -> list[str]:
     )
 
 
+def lookout_posts(overlay: Overlay) -> list[str]:
+    return _outposts(overlay, "outpost", "_ers_outpost_")
+
+
 def apply(overlay: Overlay, settings) -> None:
     s = settings
     _trading_posts(overlay, s)
@@ -115,7 +119,7 @@ def _enemy_movement(overlay: Overlay, s) -> None:
     for building in monuments:
         set_effect(overlay, building, ENEMY_MOVEMENT_PROVINCE, "region_to_force_enemy_provincewide",
                    s.MONUMENT_ENEMY_MOVEMENT_PROVINCE, FEATURE, damaged=0)
-    lookouts = _outposts(overlay, "outpost", "_ers_outpost_")
+    lookouts = lookout_posts(overlay)
     for building in lookouts:
         set_effect(overlay, building, ENEMY_MOVEMENT_REGION, "region_to_force_enemy",
                    s.LOOKOUT_ENEMY_MOVEMENT_REGION, FEATURE, damaged=0)
