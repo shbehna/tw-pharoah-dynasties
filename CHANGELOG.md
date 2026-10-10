@@ -137,16 +137,17 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 ### Progressive difficulty
 
 - AI factions get bonuses that grow during the campaign. Players and rebels never get them.
+  Major factions get the first tier from the start of the campaign; other factions get no bonuses before turn 20.
 
-  | Bonus | Major factions from turn 20 | Major factions from turn 60 | Other factions from turn 20 | Other factions from turn 60 |
-  | --- | --- | --- | --- | --- |
-  | Upkeep cost of all units | -40% | -80% | -20% | -40% |
-  | Recruitment cost of all units | -50% | -100% | -25% | -50% |
-  | All resources produced | +50% | +100% | +20% | +40% |
-  | Local recruitment capacity | +4 | +8 | +2 | +4 |
-  | Construction cost of all buildings | -25% | -50% | -10% | -20% |
-  | Happiness in every province | +5 | +10 | +2 | +5 |
+  | Bonus | Major factions, start | Major, turn 20 | Major, turn 50 | Major, turn 80 | Other factions, turn 20 | Other, turn 50 | Other, turn 80 |
+  | --- | --- | --- | --- | --- | --- | --- | --- |
+  | Upkeep cost of all units | -10% | -30% | -60% | -80% | -15% | -30% | -45% |
+  | Recruitment cost of all units | -20% | -50% | -75% | -100% | -25% | -38% | -50% |
+  | All resources produced | +20% | +60% | +90% | +150% | +20% | +30% | +40% |
+  | Local recruitment capacity | +2 | +4 | +6 | +8 | +2 | +3 | +4 |
+  | Construction cost of all buildings | - | -20% | -40% | -60% | -10% | -15% | -20% |
+  | Happiness in every province | - | +5 | +8 | +10 | +2 | +4 | +5 |
 
-- The turn 60 bonuses replace the turn 20 ones (they do not add up). They show as the "Progressive Difficulty I/II" effect on the AI faction.
+- Each tier's bonuses replace the previous ones (they do not add up). They show as the "Progressive Difficulty 0/I/II/III" effect on the AI faction.
 - The bonuses also apply to campaigns started before the mod was installed, from the next load.
 - Every bonus given or removed is logged to `dynasties_rebalance.log` in the game folder (and to the game's script log when script logging is enabled).
