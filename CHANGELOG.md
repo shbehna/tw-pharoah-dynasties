@@ -153,3 +153,16 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Each tier's bonuses replace the previous ones (they do not add up). They show as the "Progressive Difficulty 0/I/II/III" effect on the AI faction.
 - The bonuses also apply to campaigns started before the mod was installed, from the next load.
 - Every bonus given or removed is logged to `dynasties_rebalance.log` in the game folder (and to the game's script log when script logging is enabled).
+
+### Campaign AI targets
+
+- AI armies prefer nearby targets and defend their own territory more, so AI empires grow into their neighbours instead of
+  spreading across the map. When and how often the AI goes to war is unchanged.
+- Distance now counts when the AI picks targets for its armies: targets more than 2 turns away lose priority, down to 20% of it
+  at the far end of the range (10% for armies that are recruiting). In vanilla, almost every AI faction ignored distance.
+- Task priorities, for every culture:
+  - Lower: taking an enemy's last settlement wherever it is (was the AI's top priority), attacking any enemy settlement when the
+    AI has not expanded recently, attacking the main threat's settlements anywhere, helping allies in coordinated wars.
+  - Higher: attacking enemy regions and provinces bordering the AI's own, completing a province, consolidating borders (unused in vanilla).
+  - Higher: defending besieged settlements, threatened regions, own regions and the capital, retaking lost territory, guarding borders with enemies.
+- Overrides the "War Coordination Priority" mod, which raises the priority of helping allies.

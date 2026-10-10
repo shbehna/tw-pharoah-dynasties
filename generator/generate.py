@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "generator"))
 
 import settings  # noqa: E402
-from features import admin, buildings, difficulty, garrisons, landmarks, movement, outposts  # noqa: E402
+from features import admin, ai, buildings, difficulty, garrisons, landmarks, movement, outposts  # noqa: E402
 from lib.data import GameData, Overlay  # noqa: E402
 from lib.output import drop_unchanged, write_source  # noqa: E402
 from lib.report import write_report  # noqa: E402
@@ -25,9 +25,9 @@ from lib.schema import Schema  # noqa: E402
 
 # Order matters: later features see (and may change) the rows written by earlier ones.
 # Landmarks run first so the production multiplier and garrison doubling include them.
-FEATURES = [landmarks, admin, outposts, movement, buildings, garrisons, difficulty]
+FEATURES = [landmarks, admin, outposts, movement, buildings, garrisons, difficulty, ai]
 # Section order of CHANGELOG.md, used for the report.
-REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "difficulty"]
+REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "difficulty", "ai"]
 
 
 def main() -> int:

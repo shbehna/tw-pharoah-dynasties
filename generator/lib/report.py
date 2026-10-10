@@ -17,6 +17,7 @@ TITLES = {
     "buildings": "Buildings",
     "garrisons": "Buildings with garrisons",
     "difficulty": "Progressive difficulty",
+    "ai": "Campaign AI targets",
 }
 
 
