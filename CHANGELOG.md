@@ -32,11 +32,10 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Trading posts: +15% to all resources produced in the region (vanilla +10%).
 - Forts hold up to 20 units (vanilla 10) and reduce the upkeep of units stationed in them by 90% (vanilla 50%).
 - Warriors' Refuges hold up to 15 units (vanilla 6) and reduce the upkeep of units stationed in them by 30% (vanilla none).
-- Waystations: +3 happiness in the province.
-- Monuments: -10% campaign movement for enemy armies in the province.
+- Monuments: +3 happiness in the province.
 - Lookout posts: -10% campaign movement for enemy armies in the region and -2.5% in the province (-12.5% in the lookout post's own region).
-- Campaign movement of your own armies: Forts and Warriors' Refuges +15% in the region, Monuments and Lookout posts +5% in the region,
-  Waystations +10% in the province (vanilla none). The bonuses of several outposts add up.
+- Campaign movement of your own armies: Forts and Warriors' Refuges +15% in the region, Lookout posts +5% in the region,
+  Monuments +5% and Waystations +10% in the province (vanilla none). The bonuses of several outposts add up.
 
 ### Movement
 

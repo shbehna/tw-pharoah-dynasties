@@ -36,7 +36,7 @@ def apply(overlay: Overlay, settings) -> None:
     s = settings
     _trading_posts(overlay, s)
     _forts_and_refuges(overlay, s)
-    _waystations(overlay, s)
+    _monuments(overlay, s)
     _enemy_movement(overlay, s)
     _own_movement(overlay, s)
 
@@ -99,12 +99,12 @@ def _forts_and_refuges(overlay: Overlay, s) -> None:
                           f"-{s.WARRIORS_REFUGE_UPKEEP_REDUCTION}% upkeep.")
 
 
-def _waystations(overlay: Overlay, s) -> None:
-    buildings = _outposts(overlay, "waystation", "_ers_waystation_")
+def _monuments(overlay: Overlay, s) -> None:
+    buildings = _outposts(overlay, "monument", "_ers_monument_")
     for building in buildings:
         set_effect(overlay, building, HAPPINESS, "region_to_province_own_text_provincewide",
-                   s.WAYSTATION_HAPPINESS, FEATURE, damaged=0)
-    overlay.note(FEATURE, f"Waystations ({len(buildings)}): +{s.WAYSTATION_HAPPINESS} happiness in the province.")
+                   s.MONUMENT_HAPPINESS, FEATURE, damaged=0)
+    overlay.note(FEATURE, f"Monuments ({len(buildings)}): +{s.MONUMENT_HAPPINESS} happiness in the province.")
 
 
 def _enemy_movement(overlay: Overlay, s) -> None:
@@ -117,18 +117,13 @@ def _enemy_movement(overlay: Overlay, s) -> None:
     overlay.put_loc(f"effects_description_{ENEMY_MOVEMENT_PROVINCE}",
                     "%+n% to campaign movement range of enemy armies starting the turn in this province", FEATURE)
 
-    monuments = _outposts(overlay, "monument", "_ers_monument_")
-    for building in monuments:
-        set_effect(overlay, building, ENEMY_MOVEMENT_PROVINCE, "region_to_force_enemy_provincewide",
-                   s.MONUMENT_ENEMY_MOVEMENT_PROVINCE, FEATURE, damaged=0)
     lookouts = lookout_posts(overlay)
     for building in lookouts:
         set_effect(overlay, building, ENEMY_MOVEMENT_REGION, "region_to_force_enemy",
                    s.LOOKOUT_ENEMY_MOVEMENT_REGION, FEATURE, damaged=0)
         set_effect(overlay, building, ENEMY_MOVEMENT_PROVINCE, "region_to_force_enemy_provincewide",
                    s.LOOKOUT_ENEMY_MOVEMENT_PROVINCE, FEATURE, damaged=0)
-    overlay.note(FEATURE, f"Monuments ({len(monuments)}): {s.MONUMENT_ENEMY_MOVEMENT_PROVINCE:g}% movement for enemy "
-                          f"armies in the province. Lookout posts ({len(lookouts)}): "
+    overlay.note(FEATURE, f"Lookout posts ({len(lookouts)}): movement of enemy armies "
                           f"{s.LOOKOUT_ENEMY_MOVEMENT_REGION:g}% in the region and "
                           f"{s.LOOKOUT_ENEMY_MOVEMENT_PROVINCE:g}% in the province (they stack in the outpost's region).")
 
@@ -140,7 +135,8 @@ def _own_movement(overlay: Overlay, s) -> None:
         ("Forts", "fort", "_ers_fort", "region_to_force_own", "region", s.FORT_OWN_MOVEMENT_REGION),
         ("Warriors' Refuges", "refugee", "_ers_refugee_", "region_to_force_own", "region",
          s.WARRIORS_REFUGE_OWN_MOVEMENT_REGION),
-        ("Monuments", "monument", "_ers_monument_", "region_to_force_own", "region", s.MONUMENT_OWN_MOVEMENT_REGION),
+        ("Monuments", "monument", "_ers_monument_", "region_to_force_own_provincewide", "province",
+         s.MONUMENT_OWN_MOVEMENT_PROVINCE),
         ("Lookout posts", "outpost", "_ers_outpost_", "region_to_force_own", "region", s.LOOKOUT_OWN_MOVEMENT_REGION),
         ("Waystations", "waystation", "_ers_waystation_", "region_to_force_own_provincewide", "province",
          s.WAYSTATION_OWN_MOVEMENT_PROVINCE),
