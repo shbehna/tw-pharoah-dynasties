@@ -46,7 +46,7 @@ LOOKOUT_ENEMY_MOVEMENT_PROVINCE = -2.5  # % campaign movement of enemy armies in
 # Movement
 # ---------------------------------------------------------------------------
 LAND_MOVEMENT = -30  # % campaign movement on land, every faction (player and AI)
-NAVAL_MOVEMENT = -30  # % campaign movement at sea, every faction
+NAVAL_MOVEMENT = -50  # % campaign movement at sea, every faction
 # Multiplier for the bonus of the naval "Full Speed" stance (vanilla +50%).
 # 0.7 makes full speed 30% slower as well: (100 - 30 + 35) = 0.7 * (100 + 50).
 NAVAL_FULL_SPEED_BONUS_SCALE = 0.5

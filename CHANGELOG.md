@@ -38,8 +38,8 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
 ### Movement
 
-- Campaign movement -30% on land and -30% at sea, for every faction (player and AI) on every difficulty.
-- The naval Full Speed stance gives +25% movement (vanilla +50%), so full speed is 95% of vanilla base speed (vanilla 150%).
+- Campaign movement -30% on land and -50% at sea, for every faction (player and AI) on every difficulty.
+- The naval Full Speed stance gives +25% movement (vanilla +50%), so full speed is also 50% slower: 75% of vanilla base speed (vanilla 150%).
 - Entering forced march requires at least 25% movement left.
 - After razing an outpost an army keeps 10% of its movement; after sacking one, 20%.
 
