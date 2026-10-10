@@ -16,6 +16,7 @@ REFUGE_UPKEEP_DUMMY = "dyn_rebal_dummy_ers_refugee_upkeep"
 HAPPINESS = "phar_main_province_management_happiness_building"
 ENEMY_MOVEMENT_REGION = "phar_main_mod_land_movement_campaign_debuff"  # "...of enemy armies starting the turn here"
 ENEMY_MOVEMENT_PROVINCE = "dyn_rebal_mod_land_movement_campaign_debuff_province"
+OWN_MOVEMENT = "phar_main_mod_land_movement_campaign_basic"  # the effect of roads
 
 
 def _outposts(overlay: Overlay, kind: str, key_part: str) -> list[str]:
@@ -37,6 +38,7 @@ def apply(overlay: Overlay, settings) -> None:
     _forts_and_refuges(overlay, s)
     _waystations(overlay, s)
     _enemy_movement(overlay, s)
+    _own_movement(overlay, s)
 
 
 def _trading_posts(overlay: Overlay, s) -> None:
@@ -129,3 +131,25 @@ def _enemy_movement(overlay: Overlay, s) -> None:
                           f"armies in the province. Lookout posts ({len(lookouts)}): "
                           f"{s.LOOKOUT_ENEMY_MOVEMENT_REGION:g}% in the region and "
                           f"{s.LOOKOUT_ENEMY_MOVEMENT_PROVINCE:g}% in the province (they stack in the outpost's region).")
+
+
+def _own_movement(overlay: Overlay, s) -> None:
+    # Effects of different buildings add up, so several outposts in a region or province stack.
+    notes = []
+    for name, kind, key_part, scope, area, value in (
+        ("Forts", "fort", "_ers_fort", "region_to_force_own", "region", s.FORT_OWN_MOVEMENT_REGION),
+        ("Warriors' Refuges", "refugee", "_ers_refugee_", "region_to_force_own", "region",
+         s.WARRIORS_REFUGE_OWN_MOVEMENT_REGION),
+        ("Monuments", "monument", "_ers_monument_", "region_to_force_own", "region", s.MONUMENT_OWN_MOVEMENT_REGION),
+        ("Lookout posts", "outpost", "_ers_outpost_", "region_to_force_own", "region", s.LOOKOUT_OWN_MOVEMENT_REGION),
+        ("Waystations", "waystation", "_ers_waystation_", "region_to_force_own_provincewide", "province",
+         s.WAYSTATION_OWN_MOVEMENT_PROVINCE),
+    ):
+        if not value:
+            continue
+        buildings = _outposts(overlay, kind, key_part)
+        for building in buildings:
+            set_effect(overlay, building, OWN_MOVEMENT, scope, value, FEATURE, damaged=0)
+        notes.append(f"{name} ({len(buildings)}) {value:+g}% in the {area}")
+    if notes:
+        overlay.note(FEATURE, f"Campaign movement of own armies: {'; '.join(notes)} (bonuses of several outposts add up).")

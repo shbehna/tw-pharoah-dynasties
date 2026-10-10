@@ -35,6 +35,8 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Waystations: +3 happiness in the province.
 - Monuments: -10% campaign movement for enemy armies in the province.
 - Lookout posts: -10% campaign movement for enemy armies in the region and -2.5% in the province (-12.5% in the lookout post's own region).
+- Campaign movement of your own armies: Forts and Warriors' Refuges +15% in the region, Monuments and Lookout posts +5% in the region,
+  Waystations +10% in the province (vanilla none). The bonuses of several outposts add up.
 
 ### Movement
 

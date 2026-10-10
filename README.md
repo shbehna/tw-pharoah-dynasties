@@ -50,6 +50,7 @@ After a game patch, run `scripts\extract.ps1` first. Update [CHANGELOG.md](CHANG
 | Administration tier thresholds | A small script changes the thresholds in the game's `supply_points.lua` when the campaign loads, instead of replacing that file, so the game's later fixes to it are kept. The tier titles show the new ranges. |
 | Province capitals | They cost 1 administration point more than other major settlements in vanilla and keep that +1 (`KEEP_PROVINCE_CAPITAL_EXTRA_ADMIN`). |
 | Lookout posts | Two effects, one for the region and one for the province; in the lookout post's own region they add up. |
+| Own army movement | Forts, Warriors' Refuges, Monuments, Lookout posts and Waystations use the campaign movement effect of roads (`phar_main_mod_land_movement_campaign_basic`), so they add up with each other and with roads. |
 | Monuments | The five regular Monuments. The unique wonders (pyramids, ziggurats, ...) share the monument interaction but are left out. |
 | Naval full speed | Sea movement is reduced for everyone and the Full Speed stance bonus is scaled down by the same proportion (`NAVAL_FULL_SPEED_BONUS_SCALE`), so full speed is as much slower as regular movement. |
 | Granary, bronzeworker, goldsmith | The "%" is the main production effect; the extra +5% these buildings give at high influence is unchanged. Tausret's own versions of these chains are separate buildings and fall under the doubling rule (only her food chain is doubled). |
