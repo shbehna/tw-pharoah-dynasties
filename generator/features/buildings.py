@@ -3,6 +3,8 @@
 - religious building conversions cost stone and wood instead of gold (generator/data/buildings)
 - granary, bronzeworker and goldsmith chains
 - summer festival grounds and beer hall
+- Kushite Delegate School influence
+- campaign movement bonus of buildings (outposts excluded)
 - every other building's resource production % multiplied, for bonuses that only apply to some resources (food)
   and for every bonus of landmarks
 """
@@ -31,6 +33,16 @@ BEER_HALL = "phar_main_all_province_management_happiness_type_b_2"
 FOOD_PRODUCTION = "phar_main_percentage_multiplier_mod_troy_food_buildings"
 HAPPINESS = "phar_main_province_management_happiness_building"
 TRADING_POST = "_ers_trading_post_"  # set in the outposts section
+DELEGATE_SCHOOL = "phar_main_amenmesse_province_management_main_building_production_boost_growth_3"
+INFLUENCE = "phar_main_influence_province_management_buildings"
+# Own-army campaign movement effects (land, sea, both). Roads' extra bonus at high influence
+# (..._influence_bonus) is left out so each building gets the bonus once.
+MOVEMENT_EFFECTS = {
+    "phar_main_mod_land_movement_campaign_basic",
+    "phar_main_movement_sea_mod_buildings",
+    "phar_main_mod_ship_movement_campaign_mod_land_movement_campaign_basic",
+}
+OUTPOST = "_ers_"  # outpost slots, including the unique wonders built in them
 
 
 def apply(overlay: Overlay, settings) -> None:
@@ -44,6 +56,26 @@ def apply(overlay: Overlay, settings) -> None:
     mentioned = _chains(overlay, s)
     mentioned |= _happiness_buildings(overlay, s)
     _multiply_production(overlay, s, mentioned)
+    _delegate_school(overlay, s)
+    _movement_bonus(overlay, s)
+
+
+def _delegate_school(overlay: Overlay, s) -> None:
+    current = overlay.get(BEJ, (DELEGATE_SCHOOL, INFLUENCE))
+    set_effect(overlay, DELEGATE_SCHOOL, INFLUENCE, current["effect_scope"], s.DELEGATE_SCHOOL_INFLUENCE, FEATURE)
+    overlay.note(FEATURE, f"Kushite Delegate School: {s.DELEGATE_SCHOOL_INFLUENCE:+g} influence in the province "
+                          f"(vanilla {float(current['value']):+g}).")
+
+
+def _movement_bonus(overlay: Overlay, s) -> None:
+    rows = [row for row in overlay.rows(BEJ)
+            if row["effect"] in MOVEMENT_EFFECTS and float(row["value"]) > 0
+            and not row["building"].startswith(LEGACY_PREFIX) and OUTPOST not in row["building"]]
+    for row in rows:
+        set_effect(overlay, row["building"], row["effect"], row["effect_scope"],
+                   float(row["value"]) + s.BUILDING_MOVEMENT_BONUS, FEATURE)
+    overlay.note(FEATURE, f"Campaign movement bonus of buildings +{s.BUILDING_MOVEMENT_BONUS}% "
+                          f"({len(rows)} buildings: {', '.join(sorted(row['building'] for row in rows))}).")
 
 
 def _chains(overlay: Overlay, s) -> set[str]:

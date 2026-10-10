@@ -74,6 +74,12 @@ GOLDSMITH_GOLD_UPKEEP = -5
 SUMMER_FESTIVAL_FOOD_PRODUCTION = 40  # vanilla 10
 SUMMER_FESTIVAL_HAPPINESS = 2  # vanilla 4
 BEER_HALL_FOOD_PRODUCTION = 20  # vanilla 0
+# Influence in the province of Amenmesse's Kushite Delegate School (vanilla -3, -2 at low and medium
+# influence); the other influence values are scaled the same way.
+DELEGATE_SCHOOL_INFLUENCE = 3
+# Added to the campaign movement % of every building that gives own armies a movement bonus (land or
+# sea): roads, Peleset and Sea Peoples buildings, landmarks. Outposts are set in their own section.
+BUILDING_MOVEMENT_BONUS = 5
 # Every other building's resource production % bonus is multiplied by this, if the bonus only
 # applies to resources in OTHER_PRODUCTION_RESOURCES (troy_<resource> keys: food, bronze, gold,
 # stones, wood). Bonuses to other resources keep their vanilla value.

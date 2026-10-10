@@ -26,7 +26,7 @@ def scaled_values(row: dict, new_value: float) -> dict:
     out = {"value": fmt_float(new_value)}
     for column in VALUE_COLUMNS[1:]:
         original = float(row[column])
-        out[column] = fmt_float(_round_like(original, original * factor))
+        out[column] = fmt_float(_round_like(original, original * factor) + 0.0)  # + 0.0: no "-0" when the sign flips
     return out
 
 

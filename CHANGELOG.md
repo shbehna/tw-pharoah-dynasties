@@ -123,6 +123,10 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Goldsmith chain: +10%, +15%, +25% gold production (vanilla +5%, +10%, +20%); the Royal Goldsmith also gives -5% gold upkeep for armies in the province.
 - Summer Festival Grounds: +40% food production (vanilla +10%) and +2 happiness (vanilla +4).
 - Beer Hall (Wine Hall and Performance Hall for other cultures): +20% food production.
+- Kushite Delegate School (Amenmesse): +3 influence in the province (vanilla -3).
+- Every building that gives your armies a campaign movement bonus gets +5% more: roads (all cultures, e.g. +10%, +15%, +25%,
+  vanilla +5%, +10%, +20%; the extra bonus at high influence is unchanged), the Peleset movement chain and mounted buildings,
+  Sea Peoples horde buildings (land and sea movement), Telmessos (+55%) and Ugarit (+30% at sea). Outposts are not included.
 - Every other building's food production bonus is doubled, including fisheries and Tausret's food chain.
 - Landmarks: every resource production bonus is doubled.
 - Other resource production bonuses of buildings (main settlement buildings, temples, ports, wood buildings, ...) are unchanged. Production penalties are unchanged.
