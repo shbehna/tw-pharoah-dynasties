@@ -13,8 +13,8 @@ ADMIN_TIER_THRESHOLDS = [0, 150, 250, 400, 600, 750, 950, 1150, 1350, 1600, 1900
 # Length of the administration bar in the UI, in points (vanilla: 730).
 ADMIN_BAR_MAX = 2300
 # Administration cost of the main settlement building, by building level (1-based).
-MAJOR_SETTLEMENT_ADMIN_COST = [2, 3, 4, 8, 12]  # vanilla 2-3-4-5-6
-MINOR_SETTLEMENT_ADMIN_COST = [2, 4, 6]  # vanilla 2-3-4
+MAJOR_SETTLEMENT_ADMIN_COST = [2, 5, 8, 12, 16]  # vanilla 2-3-4-5-6
+MINOR_SETTLEMENT_ADMIN_COST = [2, 5, 8]  # vanilla 2-3-4
 # Province capitals ("poc" major settlements) cost 1 more than other major
 # settlements in vanilla (3-4-5-6-7). True keeps that +1 on top of the values above.
 KEEP_PROVINCE_CAPITAL_EXTRA_ADMIN = True
@@ -49,7 +49,7 @@ LAND_MOVEMENT = -30  # % campaign movement on land, every faction (player and AI
 NAVAL_MOVEMENT = -30  # % campaign movement at sea, every faction
 # Multiplier for the bonus of the naval "Full Speed" stance (vanilla +50%).
 # 0.7 makes full speed 30% slower as well: (100 - 30 + 35) = 0.7 * (100 + 50).
-NAVAL_FULL_SPEED_BONUS_SCALE = 0.7
+NAVAL_FULL_SPEED_BONUS_SCALE = 0.5
 FORCED_MARCH_MIN_MOVEMENT = 25  # % of movement left required to enter forced march
 MOVEMENT_LEFT_AFTER_RAZING_OUTPOST = 0.1  # fraction of max movement
 MOVEMENT_LEFT_AFTER_SACKING_OUTPOST = 0.2
@@ -64,7 +64,7 @@ GRANARY_FOOD_UPKEEP = -15
 BRONZEWORKER_PRODUCTION = [10, 20, 35]  # vanilla 5-10-20
 BRONZEWORKER_BRONZE_UPKEEP = -10
 GOLDSMITH_PRODUCTION = [10, 15, 25]  # vanilla 5-10-20
-GOLDSMITH_GOLD_UPKEEP = -10
+GOLDSMITH_GOLD_UPKEEP = -5
 SUMMER_FESTIVAL_FOOD_PRODUCTION = 40  # vanilla 10
 SUMMER_FESTIVAL_HAPPINESS = 2  # vanilla 4
 BEER_HALL_FOOD_PRODUCTION = 20  # vanilla 0

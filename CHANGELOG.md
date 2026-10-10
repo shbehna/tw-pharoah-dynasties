@@ -10,9 +10,9 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The tier titles show the new ranges.
 - Each administration tier adds to building construction costs: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
 - Bronze upkeep of every administration tier is the same as its food upkeep (for example +140% bronze at tier 12, vanilla +120%).
-- Main buildings of major settlements cost 2, 3, 4, 8 and 12 administration points by level (vanilla 2, 3, 4, 5, 6).
-  Province capitals keep their vanilla extra point: 3, 4, 5, 9 and 13.
-- Main buildings of minor settlements cost 2, 4 and 6 administration points by level (vanilla 2, 3, 4).
+- Main buildings of major settlements cost 2, 5, 8, 12 and 16 administration points by level (vanilla 2, 3, 4, 5, 6).
+  Province capitals keep their vanilla extra point: 3, 6, 9, 13 and 17.
+- Main buildings of minor settlements cost 2, 5 and 8 administration points by level (vanilla 2, 3, 4).
 - Administrative buildings reduce the administration burden (full value at high influence, less at lower influence):
   - Newscrier's Stand, Public Square, Hall of Messengers: -4, -8, -12 (the second Newscrier's Stand chain: -2, -5)
   - Hall of Records, Palace of Correspondence, Wisdom Codices: -4, -8, -12 (Seti's Office of Relations and Royal Palace: -4, -8)
@@ -39,7 +39,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 ### Movement
 
 - Campaign movement -30% on land and -30% at sea, for every faction (player and AI) on every difficulty.
-- The naval Full Speed stance gives +35% movement (vanilla +50%), so full speed is also 30% slower.
+- The naval Full Speed stance gives +25% movement (vanilla +50%), so full speed is 95% of vanilla base speed (vanilla 150%).
 - Entering forced march requires at least 25% movement left.
 - After razing an outpost an army keeps 10% of its movement; after sacking one, 20%.
 
@@ -118,7 +118,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   75 stone and 35 wood for Mesopotamian dwellings; 125/100, 175/125 and 225/150 for Sea Peoples idols; 75 and 75 for shrines.
 - Granary chain: +20%, +30%, +65% food production in the province (vanilla +5%, +10%, +20%); the Granary also gives -15% food upkeep for armies in the province.
 - Bronzeworker chain: +10%, +20%, +35% bronze production (vanilla +5%, +10%, +20%); the Royal Bronzeworker also gives -10% bronze upkeep for armies in the province.
-- Goldsmith chain: +10%, +15%, +25% gold production (vanilla +5%, +10%, +20%); the Royal Goldsmith also gives -10% gold upkeep for armies in the province.
+- Goldsmith chain: +10%, +15%, +25% gold production (vanilla +5%, +10%, +20%); the Royal Goldsmith also gives -5% gold upkeep for armies in the province.
 - Summer Festival Grounds: +40% food production (vanilla +10%) and +2 happiness (vanilla +4).
 - Beer Hall (Wine Hall and Performance Hall for other cultures): +20% food production.
 - Every other building's food production bonus is doubled, including fisheries and Tausret's food chain.
