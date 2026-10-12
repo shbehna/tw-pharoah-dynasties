@@ -146,11 +146,11 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
   | Bonus | Major factions, start | Major, turn 20 | Major, turn 50 | Major, turn 80 | Other factions, turn 20 | Other, turn 50 | Other, turn 80 |
   | --- | --- | --- | --- | --- | --- | --- | --- |
-  | Upkeep cost of all units | -10% | -30% | -60% | -80% | -15% | -30% | -45% |
-  | Recruitment cost of all units | -20% | -50% | -75% | -100% | -25% | -38% | -50% |
-  | All resources produced | +20% | +60% | +90% | +150% | +20% | +30% | +40% |
-  | Local recruitment capacity | +2 | +4 | +6 | +8 | +2 | +3 | +4 |
-  | Construction cost of all buildings | - | -20% | -40% | -60% | -10% | -15% | -20% |
+  | Upkeep cost of all units | -10% | -30% | -80% | -100% | -15% | -40% | -65% |
+  | Recruitment cost of all units | -20% | -50% | -80% | -100% | -25% | -50% | -75% |
+  | All resources produced | +20% | +60% | +120% | +180% | +20% | +30% | +50% |
+  | Local recruitment capacity | +2 | +6 | +12 | +20 | +2 | +6 | +10 |
+  | Construction cost of all buildings | - | -20% | -60% | -100% | -10% | -20% | -40% |
   | Happiness in every province | - | +5 | +8 | +10 | +2 | +4 | +5 |
 
 - Each tier's bonuses replace the previous ones (they do not add up). They show as the "Progressive Difficulty 0/I/II/III" effect on the AI faction.

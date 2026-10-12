@@ -109,19 +109,19 @@ GARRISON_MULTIPLIER = 4  # every other building with a garrison (garrison buildi
 # "other" values. Each list holds one value per tier: tier 0, 1, 2, 3.
 PROGRESSIVE_DIFFICULTY_TURNS = [0, 20, 50, 80]
 PROGRESSIVE_DIFFICULTY_MAJOR = {
-    "army_upkeep": [-10, -30, -60, -80],  # % upkeep cost of all units
-    "recruitment_cost": [-20, -50, -75, -100],  # % recruitment cost of all units
-    "income": [20, 60, 90, 150],  # % to all resources produced in every region
-    "recruitment_slots": [2, 4, 6, 8],  # local recruitment capacity
-    "construction_cost": [0, -20, -40, -60],  # % construction cost of all buildings
+    "army_upkeep": [-10, -30, -80, -100],  # % upkeep cost of all units
+    "recruitment_cost": [-20, -50, -80, -100],  # % recruitment cost of all units
+    "income": [20, 60, 120, 180],  # % to all resources produced in every region
+    "recruitment_slots": [2, 6, 12, 20],  # local recruitment capacity
+    "construction_cost": [0, -20, -60, -100],  # % construction cost of all buildings
     "happiness": [0, 5, 8, 10],  # happiness in every province
 }
 PROGRESSIVE_DIFFICULTY_OTHER = {
-    "army_upkeep": [0, -15, -30, -45],
-    "recruitment_cost": [0, -25, -38, -50],
-    "income": [0, 20, 30, 40],
-    "recruitment_slots": [0, 2, 3, 4],
-    "construction_cost": [0, -10, -15, -20],
+    "army_upkeep": [0, -15, -40, -65],
+    "recruitment_cost": [0, -25, -50, -75],
+    "income": [0, 20, 30, 50],
+    "recruitment_slots": [0, 2, 6, 10],
+    "construction_cost": [0, -10, -20, -40],
     "happiness": [0, 2, 4, 5],
 }
 # The script logs every bundle it applies or removes to the game's script log (when script
