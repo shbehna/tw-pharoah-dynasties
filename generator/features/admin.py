@@ -3,7 +3,7 @@
 - administration tier thresholds (script patching the game's script/campaign/supply_points.lua)
 - administration cost of main settlement buildings
 - administration tiers: bronze upkeep = food upkeep, construction cost penalty
-- administrative buildings that reduce the burden (generator/data/admin)
+- administrative buildings that reduce the burden
 """
 
 from __future__ import annotations
@@ -38,7 +38,7 @@ def apply(overlay: Overlay, settings) -> None:
     _thresholds(overlay, settings, tiers)
     _settlement_costs(overlay, settings)
     _tiers(overlay, settings, tiers)
-    _burden_reductions(overlay)
+    _burden_reductions(overlay, settings)
 
 
 def _tier_bundles(overlay: Overlay) -> dict[str, dict[int, str]]:
@@ -207,21 +207,26 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
             overlay.note(FEATURE, f"Administration tiers ({culture}): {'; '.join(parts)}.")
 
 
-def _burden_reductions(overlay: Overlay) -> None:
+def _burden_reductions(overlay: Overlay, s) -> None:
     remap = landmarks.remapped_levels(overlay.data)
-    remapped = []
-
-    def follow_landmarks(row):
-        if row["building"] in remap:
-            remapped.append(row["building"])
-            row = dict(row, building=remap[row["building"]])
-        return row
-
-    count = 0
-    for tsv in overlay.data.data_tables("admin"):
-        count += overlay.import_rows(tsv, FEATURE, transform=follow_landmarks)
-    overlay.note(FEATURE, f"{count} administrative buildings reduce the administration burden "
-                          f"(generator/data/admin).")
-    for building in remapped:
-        overlay.note(FEATURE, f"Burden reduction of {building} applied to {remap[building]}, "
-                              f"the landmark level that replaces it.")
+    levels = {row["level_name"] for row in overlay.rows("building_levels_tables")}
+    unknown = sorted(b for b in s.ADMIN_BURDEN_REDUCTIONS if remap.get(b, b) not in levels)
+    if unknown:
+        raise ValueError(f"ADMIN_BURDEN_REDUCTIONS: unknown building levels {unknown}")
+    for building, (full, reduced) in s.ADMIN_BURDEN_REDUCTIONS.items():
+        target = remap.get(building, building)
+        if target != building:
+            overlay.note(FEATURE, f"Burden reduction of {building} applied to {target}, "
+                                  f"the landmark level that replaces it.")
+        overlay.put(BEJ, {
+            "building": target,
+            "effect": ADMIN_EFFECT,
+            "effect_scope": "building_to_region",
+            "value": full,
+            "value_damaged": 0,
+            "value_ruined": 0,
+            "value_low_influence": reduced,
+            "value_medium_influence": reduced,
+        }, FEATURE)
+    overlay.note(FEATURE, f"{len(s.ADMIN_BURDEN_REDUCTIONS)} administrative buildings reduce the administration "
+                          f"burden (ADMIN_BURDEN_REDUCTIONS).")

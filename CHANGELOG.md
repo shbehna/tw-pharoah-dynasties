@@ -10,9 +10,9 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The tier titles show the new ranges.
 - Each administration tier adds to building construction costs: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
 - Bronze upkeep of every administration tier is the same as its food upkeep (for example +140% bronze at tier 12, vanilla +120%).
-- Main buildings of major settlements cost 2, 5, 8, 12 and 16 administration points by level (vanilla 2, 3, 4, 5, 6).
-  Province capitals keep their vanilla extra point: 3, 6, 9, 13 and 17.
-- Main buildings of minor settlements cost 2, 5 and 8 administration points by level (vanilla 2, 3, 4).
+- Main buildings of major settlements cost 3, 6, 10, 16 and 24 administration points by level (vanilla 2, 3, 4, 5, 6).
+  Province capitals keep their vanilla extra point: 4, 7, 11, 17 and 25.
+- Main buildings of minor settlements cost 3, 6 and 12 administration points by level (vanilla 2, 3, 4).
 - Administrative buildings reduce the administration burden (full value at high influence, less at lower influence):
   - Newscrier's Stand, Public Square, Hall of Messengers: -4, -8, -12 (the second Newscrier's Stand chain: -2, -5)
   - Hall of Records, Palace of Correspondence, Wisdom Codices: -4, -8, -12 (Seti's Office of Relations and Royal Palace: -4, -8)

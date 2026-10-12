@@ -31,9 +31,8 @@ The scripts find the game through Steam; if that fails, pass its folder: `script
 
 ## Change a value
 
-Every number is in [generator/settings.py](generator/settings.py). Hand-made rows (landmarks, the
-administrative buildings that reduce the burden, religious conversion costs, garrison ammunition)
-are TSV files in [generator/data/](generator/data). After editing either:
+Every number is in [generator/settings.py](generator/settings.py). Hand-made rows (landmarks,
+religious conversion costs, garrison ammunition) are TSV files in [generator/data/](generator/data). After editing either:
 
 ```powershell
 python generator\generate.py                                   # rewrites src\ and docs\CHANGES.md
@@ -91,7 +90,7 @@ python generator\conflicts.py
 | --- | --- |
 | `CHANGELOG.md` | What the mod changes |
 | `generator/settings.py` | All the numbers |
-| `generator/data/` | Hand-made rows (landmarks, burden reductions, conversion costs, garrison ammunition) |
+| `generator/data/` | Hand-made rows (landmarks, conversion costs, garrison ammunition) |
 | `generator/features/` | One module per section |
 | `generator/conflicts.py` | Comparison with the enabled mods |
 | `scripts/` | `setup`, `extract`, `build`, `install`, `check` |
