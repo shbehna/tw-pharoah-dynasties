@@ -16,7 +16,8 @@ import collections
 import math
 import re
 
-from lib.buildings import BEJ, UPKEEP_FACTOR, VALUE_COLUMNS, building_levels, building_sets, set_effect
+from lib.buildings import (BEJ, UPKEEP_FACTOR, VALUE_COLUMNS, bonus_value_ui, building_levels, building_sets, set_effect,
+                           upkeep_ui_name)
 from lib.data import Overlay, fmt_float
 
 FEATURE = "buildings"
@@ -46,6 +47,8 @@ MOVEMENT_EFFECTS = {
 }
 OUTPOST = "_ers_"  # outpost slots, including the unique wonders built in them
 UPKEEP_COST = "dyn_rebal_building_upkeep_"
+UPKEEP_DISPLAY_GOLD = "phar_main_dummy_building_gold_upkeep"
+RUIN_SUFFIXES = ("_ruin", "_ruins")
 
 
 def apply(overlay: Overlay, settings) -> None:
@@ -174,6 +177,8 @@ def _upkeep(overlay: Overlay, s) -> None:
         level_sets = sets.get(name, set())
         if name.startswith(LEGACY_PREFIX) or not level_sets & included or level_sets & excluded:
             continue
+        if name.endswith(RUIN_SUFFIXES):
+            continue  # abandoned settlements and landmarks: a placeholder cost of 1 stone, no upkeep
         build: dict[str, float] = collections.Counter()
         for factor, amount in costs.get(level["create_resource_cost"], {}).items():
             if amount < 0:
@@ -194,7 +199,30 @@ def _upkeep(overlay: Overlay, s) -> None:
             overlay.put("resource_cost_pooled_resource_junctions_tables",
                         {"pooled_resource_factor": factor, "resource_cost": cost_id, "amount": amount}, FEATURE)
         overlay.put("building_levels_tables", dict(level, upkeep_resource_cost=cost_id), FEATURE)
+        # The upkeep itself does not show on the building: like vanilla, a display-only effect shows it.
+        for factor, amount in upkeep.items():
+            effect = _upkeep_display_effect(overlay, resource_of[factor])
+            if overlay.get(BEJ, (name, effect)) is None:
+                overlay.put(BEJ, {"building": name, "effect": effect, "effect_scope": "region_to_region_own",
+                                  **{column: fmt_float(amount) for column in VALUE_COLUMNS}}, FEATURE)
         per_set["+".join(sorted(level_sets & included))] += 1
     overlay.note(FEATURE, f"Building upkeep: {s.BUILDING_UPKEEP_PERCENT}% of the construction cost per turn, rounded "
                           f"up to {s.BUILDING_UPKEEP_ROUNDING}, existing upkeep kept per resource ("
                           + ", ".join(f"{count} levels of {name}" for name, count in sorted(per_set.items())) + ").")
+
+
+def _upkeep_display_effect(overlay: Overlay, resource: str) -> str:
+    """Display-only effect "Building <Resource> Upkeep: -N" of `resource` (troy_<resource>). Vanilla has
+    one for gold, used by its few buildings with an upkeep; the others are new."""
+    if resource == "troy_gold":
+        return UPKEEP_DISPLAY_GOLD
+    short = resource.removeprefix("troy_").removesuffix("s")
+    effect = f"dyn_rebal_dummy_building_{short}_upkeep"
+    overlay.put("effects_tables", dict(overlay.get("effects_tables", (UPKEEP_DISPLAY_GOLD,)), effect=effect,
+                                       icon=f"fx_icon_{short}_income.png", icon_negative=f"fx_icon_{short}_upkeep.png"),
+                FEATURE)
+    overlay.put_loc(f"effects_description_{effect}", f"%+n to {short} income per turn due to building upkeep", FEATURE)
+    bonus_value_ui(overlay, f"dyn_rebal_dummy_{short}_upkeep", effect, upkeep_ui_name(overlay, resource, FEATURE),
+                   f"icon_effect_{short}_income.png", percent=False, positive_is_good=True, feature=FEATURE,
+                   designator="bonus_value_condition_designator_resource")
+    return effect

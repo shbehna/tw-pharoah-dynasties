@@ -99,3 +99,40 @@ def building_sets(overlay: Overlay) -> dict[str, set[str]]:
         for level in levels:
             target.setdefault(level, set()).add(row["building_set"])
     return {level: sets - excluded.get(level, set()) for level, sets in included.items()}
+
+
+RESOURCE_NAMES = {"troy_food": "Food", "troy_bronze": "Bronze", "troy_gold": "Gold", "troy_stones": "Stone", "troy_wood": "Wood"}
+
+
+def upkeep_ui_name(overlay: Overlay, resource: str, feature: str) -> str:
+    """Tooltip name "Building <Resource> Upkeep" (a bonus value name) of `resource` (troy_<resource>)."""
+    name = f"dyn_rebal_building_upkeep_{resource.removeprefix('troy_')}"
+    overlay.put("bonus_value_names_tables", {"key": name}, feature)
+    overlay.put_loc(f"bonus_value_names_screen_name_{name}", f"Building {RESOURCE_NAMES[resource]} Upkeep", feature)
+    return name
+
+
+def bonus_value_ui(overlay: Overlay, key: str, effect: str, name_id: str, icon: str, percent: bool,
+                   positive_is_good: bool, feature: str, designator: str = "") -> None:
+    """Tooltip line of `effect`. Without one, the game names an effect on a resource factor after
+    the factor (for building upkeep: "Building profit")."""
+    overlay.put("bonus_value_uis_tables", {
+        "key": key,
+        "name_id": name_id,
+        "priority": 110 if percent else 100,
+        "ui_category_id": "bonus_value_ui_settlements",
+        "value_formatting": "bonus_value_formatting_percent" if percent else "bonus_value_formatting_flat",
+        "icon": icon,
+        "is_positive_value_good": "true" if positive_is_good else "false",
+        "show_value": "true",
+        "designator_override": "",
+        "show_parameters_tooltip": "false",
+    }, feature)
+    overlay.put("effect_bonus_value_ui_additions_tables", {
+        "bonus_value_ui": key,
+        "effect": effect,
+        "is_positive_override": "true",
+        "condition": "",
+        "condition_designator": designator,
+        "is_description": "false",
+    }, feature)

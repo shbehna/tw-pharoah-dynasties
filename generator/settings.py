@@ -26,13 +26,9 @@ ADMIN_BUILDING_COST_FIRST_TIER = 1
 ADMIN_BUILDING_COST_START = 0
 ADMIN_BUILDING_COST_STEP = 10
 ADMIN_BUILDING_COST_MAX = None  # % cap, or None
-# Building upkeep penalty added to each administration tier (see BUILDING_UPKEEP_PERCENT), for the
-# resources in ADMIN_BUILDING_UPKEEP_RESOURCES (food, bronze, gold, stones, wood). Same rules as the
-# construction cost penalty above.
-ADMIN_BUILDING_UPKEEP_FIRST_TIER = 1
-ADMIN_BUILDING_UPKEEP_START = 0
-ADMIN_BUILDING_UPKEEP_STEP = 10
-ADMIN_BUILDING_UPKEEP_MAX = None  # % cap, or None
+# Building upkeep % of each administration tier (1-12; see BUILDING_UPKEEP_PERCENT), for the
+# resources in ADMIN_BUILDING_UPKEEP_RESOURCES (food, bronze, gold, stones, wood). 0: no effect.
+ADMIN_BUILDING_UPKEEP = [-50, -25, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
 ADMIN_BUILDING_UPKEEP_RESOURCES = ["gold", "stones", "wood"]
 # Make the bronze and gold upkeep penalty/bonus of each administration tier equal to the food one
 # (vanilla tiers have no gold upkeep effect).
@@ -214,7 +210,12 @@ OTHER_PRODUCTION_EXCLUDE = []
 # phar_sea_horde_* (Sea Peoples hordes).
 BUILDING_UPKEEP_PERCENT = 5
 BUILDING_UPKEEP_ROUNDING = 5
-BUILDING_UPKEEP_SETS = ["phar_main_municipal_complex", "phar_main_province_management", "phar_main_religion"]
+BUILDING_UPKEEP_SETS = [
+    "phar_main_municipal_complex",
+    "phar_main_province_management",
+    "phar_main_religion",
+    "phar_main_landmark",
+]
 BUILDING_UPKEEP_EXCLUDED_SETS = [
     "phar_main_military_administration",
     "phar_main_military_recruit",

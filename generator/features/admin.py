@@ -13,7 +13,7 @@ import collections
 import re
 
 from features import landmarks
-from lib.buildings import BEJ, UPKEEP_FACTOR, VALUE_COLUMNS
+from lib.buildings import BEJ, UPKEEP_FACTOR, VALUE_COLUMNS, bonus_value_ui, upkeep_ui_name
 from lib.data import Overlay, fmt_float
 
 FEATURE = "admin"
@@ -183,6 +183,8 @@ def _settlement_costs(overlay: Overlay, s) -> None:
 def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
     if s.ADMIN_RECRUITMENT_COST is not None and len(s.ADMIN_RECRUITMENT_COST) != ADMIN_TIERS:
         raise ValueError(f"ADMIN_RECRUITMENT_COST needs {ADMIN_TIERS} values: {s.ADMIN_RECRUITMENT_COST}")
+    if len(s.ADMIN_BUILDING_UPKEEP) != ADMIN_TIERS:
+        raise ValueError(f"ADMIN_BUILDING_UPKEEP needs {ADMIN_TIERS} values: {s.ADMIN_BUILDING_UPKEEP}")
     upkeep_effects = building_upkeep_effects(overlay, s.ADMIN_BUILDING_UPKEEP_RESOURCES)
     for culture, bundles in sorted(tiers.items()):
         for tier, bundle in sorted(bundles.items()):
@@ -203,7 +205,7 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
             construction = _tier_penalty(s, "ADMIN_BUILDING_COST", tier)
             if construction:
                 _put_effect(overlay, bundle, CONSTRUCTION_COST, "faction_to_region_own", construction)
-            upkeep = _tier_penalty(s, "ADMIN_BUILDING_UPKEEP", tier)
+            upkeep = s.ADMIN_BUILDING_UPKEEP[tier - 1]
             if upkeep:
                 for effect in upkeep_effects:
                     _put_effect(overlay, bundle, effect, "faction_to_faction_own", upkeep)
@@ -217,9 +219,9 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
             parts.append(f"recruitment cost {', '.join(f'{v:g}' for v in s.ADMIN_RECRUITMENT_COST)}% by tier")
         if s.ADMIN_BUILDING_COST_FIRST_TIER <= ADMIN_TIERS:
             parts.append(f"construction cost {_penalty_text(s, 'ADMIN_BUILDING_COST')}")
-        if upkeep_effects and s.ADMIN_BUILDING_UPKEEP_FIRST_TIER <= ADMIN_TIERS:
+        if upkeep_effects and any(s.ADMIN_BUILDING_UPKEEP):
             parts.append(f"{'/'.join(s.ADMIN_BUILDING_UPKEEP_RESOURCES)} building upkeep "
-                         f"{_penalty_text(s, 'ADMIN_BUILDING_UPKEEP')}")
+                         f"{', '.join(f'{v:+g}' for v in s.ADMIN_BUILDING_UPKEEP)}% by tier")
         if parts:
             overlay.note(FEATURE, f"Administration tiers ({culture}): {'; '.join(parts)}.")
 
@@ -268,7 +270,12 @@ def building_upkeep_effects(overlay: Overlay, resources: list[str]) -> list[str]
         }, FEATURE)
         overlay.put_loc(f"effects_description_{effect}",
                         f"%+n% to {resource.removesuffix('s')} upkeep of all buildings", FEATURE)
+        bonus_value_ui(overlay, f"dyn_rebal_building_upkeep_mod_{resource}", effect,
+                       upkeep_ui_name(overlay, f"troy_{resource}", FEATURE), "icon_effect_upkeep.png",
+                       percent=True, positive_is_good=False, feature=FEATURE)
         effects.append(effect)
+    # The factor's name for a gain; tooltips that still use it would call more upkeep "Building profit".
+    overlay.put_loc("pooled_resource_factors_display_name_positive_buildings_upkeep", "Building Upkeep", FEATURE)
     return effects
 
 
