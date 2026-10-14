@@ -34,7 +34,7 @@ EFFECTS = {
                           "{:+g} local recruitment capacity"),
     "construction_cost": (["phar_main_building_construction_cost_percentage_multiplier_mod_all"],
                           "faction_to_region_own", "{:+g}% construction cost of all buildings"),
-    "building_upkeep": ([], "faction_to_faction_own", "{:+g}% upkeep of all buildings"),
+    "building_upkeep": ([], "faction_to_region_own", "{:+g}% upkeep of all buildings"),
     "happiness": (["troy_effect_faction_happiness_in_all_own_territories"], "faction_to_province_own",
                   "{:+g} happiness in every province"),
 }

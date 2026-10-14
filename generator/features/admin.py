@@ -208,7 +208,7 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
             upkeep = s.ADMIN_BUILDING_UPKEEP[tier - 1]
             if upkeep:
                 for effect in upkeep_effects:
-                    _put_effect(overlay, bundle, effect, "faction_to_faction_own", upkeep)
+                    _put_effect(overlay, bundle, effect, "faction_to_region_own", upkeep)
         parts = []
         if s.ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD:
             parts.append("bronze and gold upkeep set equal to food upkeep")
