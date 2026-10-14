@@ -26,8 +26,18 @@ ADMIN_BUILDING_COST_FIRST_TIER = 1
 ADMIN_BUILDING_COST_START = 0
 ADMIN_BUILDING_COST_STEP = 10
 ADMIN_BUILDING_COST_MAX = None  # % cap, or None
-# Make the bronze upkeep penalty/bonus of each administration tier equal to the food one.
-ADMIN_BRONZE_UPKEEP_EQUALS_FOOD = True
+# Make the bronze and gold upkeep penalty/bonus of each administration tier equal to the food one
+# (vanilla tiers have no gold upkeep effect).
+ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD = True
+# Vanilla tiers 3-12 raise the recruitment cost of one resource, by culture: food (Egypt), bronze
+# (Hittites) or gold (Mesopotamia). True raises the food, bronze and gold recruitment cost of these
+# tiers by that same %. Aegean, Canaanite and Sea Peoples tiers already raise every recruitment cost.
+ADMIN_RECRUITMENT_COST_ALL_RESOURCES = True
+# Recruitment cost % of each administration tier (1-12), for every culture, or None for the vanilla
+# values. Only tiers that have a recruitment cost effect in vanilla (3-12) can change.
+# Vanilla: 0, 0, 10, 20, 30, 40, 50, 60, 80, 100, 120, 140 (Egypt, Hittites, Mesopotamia);
+# 0, 0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 80 (Aegea: native units; Canaan; Sea Peoples: horde units).
+ADMIN_RECRUITMENT_COST = [0, 0, 10, 20, 30, 40, 50, 60, 80, 100, 120, 140]
 # Buildings that reduce the administration burden (vanilla: none), in administration points:
 # building level -> (reduction at high influence, reduction at low and medium influence).
 # A damaged building gives no reduction. Rows of rebuilt landmarks move to their new level.

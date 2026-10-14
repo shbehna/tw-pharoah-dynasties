@@ -9,7 +9,13 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Administration tiers start at 0, 150, 250, 400, 600, 750, 950, 1150, 1350, 1600, 1900 and 2250 points
   (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The tier titles show the new ranges.
 - Each administration tier adds to building construction costs: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
-- Bronze upkeep of every administration tier is the same as its food upkeep (for example +140% bronze at tier 12, vanilla +120%).
+- Bronze and gold upkeep of every administration tier are the same as its food upkeep (for example +140% bronze and
+  gold at tier 12; vanilla +120% bronze, no gold).
+- Administration tiers that raise the recruitment cost of one resource (food for Egypt, bronze for the Hittites, gold
+  for Mesopotamia) raise the other two by the same amount (for example +140% food, bronze and gold at tier 12).
+- Recruitment cost of the administration tiers is the same for every culture: +10%, +20%, +30%, +40%, +50%, +60%,
+  +80%, +100%, +120% and +140% from tier 3 to tier 12. Aegea (native units), Canaan and the Sea Peoples (horde units)
+  had half of that in vanilla (+5% to +80%).
 - Main buildings of major settlements cost 3, 6, 10, 16 and 24 administration points by level (vanilla 2, 3, 4, 5, 6).
   Province capitals keep their vanilla extra point: 4, 7, 11, 17 and 25.
 - Main buildings of minor settlements cost 3, 6 and 12 administration points by level (vanilla 2, 3, 4).

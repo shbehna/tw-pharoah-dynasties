@@ -2,7 +2,8 @@
 
 - administration tier thresholds (script patching the game's script/campaign/supply_points.lua)
 - administration cost of main settlement buildings
-- administration tiers: bronze upkeep = food upkeep, construction cost penalty
+- administration tiers: bronze and gold upkeep = food upkeep, recruitment cost on every resource,
+  construction cost penalty
 - administrative buildings that reduce the burden
 """
 
@@ -27,8 +28,15 @@ VANILLA_MAJOR = [2, 3, 4, 5, 6]
 VANILLA_MINOR = [2, 3, 4]
 TIER_BUNDLE = re.compile(r"^phar_map_effect_bundle_supply_points_([a-z_]+)_(\d\d)$")
 ADMIN_TIERS = 12
-FOOD_UPKEEP = "phar_main_unit_upkeep_cost_percentage_multiplier_mod_food"
-BRONZE_UPKEEP = "phar_main_unit_upkeep_cost_percentage_multiplier_mod_bronze"
+RESOURCES = ["food", "bronze", "gold"]
+UPKEEP = {r: f"phar_main_unit_upkeep_cost_percentage_multiplier_mod_{r}" for r in RESOURCES}
+RECRUITMENT_COST = {r: f"phar_main_unit_recruitment_cost_percentage_multiplier_mod_{r}" for r in RESOURCES}
+# Recruitment cost of every resource for a unit set: Aegea (native units), Canaan, Sea Peoples (horde units).
+UNIT_SET_RECRUITMENT_COSTS = [
+    "phar_main_recruitment_cost_native_units",
+    "phar_sea_recruitment_cost_mod_unit_sets_all_units",
+    "phar_sea_recruitment_cost_mod_horde_units",
+]
 CONSTRUCTION_COST = "phar_main_building_construction_cost_percentage_multiplier_mod_all"
 EBEJ = "effect_bundles_to_effects_junctions_tables"
 
@@ -172,17 +180,23 @@ def _settlement_costs(overlay: Overlay, s) -> None:
 
 
 def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
+    if s.ADMIN_RECRUITMENT_COST is not None and len(s.ADMIN_RECRUITMENT_COST) != ADMIN_TIERS:
+        raise ValueError(f"ADMIN_RECRUITMENT_COST needs {ADMIN_TIERS} values: {s.ADMIN_RECRUITMENT_COST}")
     for culture, bundles in sorted(tiers.items()):
         for tier, bundle in sorted(bundles.items()):
-            if s.ADMIN_BRONZE_UPKEEP_EQUALS_FOOD:
-                food = overlay.get(EBEJ, (bundle, FOOD_UPKEEP))
-                bronze = overlay.get(EBEJ, (bundle, BRONZE_UPKEEP))
-                if food is not None:
-                    if bronze is None:
-                        bronze = dict(food, effect_key=BRONZE_UPKEEP)
-                    if bronze["value"] != food["value"]:
-                        bronze["value"] = food["value"]
-                        overlay.put(EBEJ, bronze, FEATURE)
+            if s.ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD:
+                _copy_effect(overlay, bundle, UPKEEP["food"], [UPKEEP["bronze"], UPKEEP["gold"]])
+            if s.ADMIN_RECRUITMENT_COST is not None:
+                value = s.ADMIN_RECRUITMENT_COST[tier - 1]
+                for key in [*RECRUITMENT_COST.values(), *UNIT_SET_RECRUITMENT_COSTS]:
+                    row = overlay.get(EBEJ, (bundle, key))
+                    if row is not None and float(row["value"]) != value:
+                        overlay.put(EBEJ, dict(row, value=value), FEATURE)
+            if s.ADMIN_RECRUITMENT_COST_ALL_RESOURCES:
+                # Each culture raises the recruitment cost of a single resource; copy it to the others.
+                source = next((key for key in RECRUITMENT_COST.values() if overlay.get(EBEJ, (bundle, key))), None)
+                if source is not None:
+                    _copy_effect(overlay, bundle, source, [key for key in RECRUITMENT_COST.values() if key != source])
             if tier >= s.ADMIN_BUILDING_COST_FIRST_TIER:
                 value = s.ADMIN_BUILDING_COST_START + s.ADMIN_BUILDING_COST_STEP * (tier - s.ADMIN_BUILDING_COST_FIRST_TIER)
                 if s.ADMIN_BUILDING_COST_MAX is not None:
@@ -197,14 +211,32 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
                     "advancement_stage": "start_turn_completed",
                 }, FEATURE)
         parts = []
-        if s.ADMIN_BRONZE_UPKEEP_EQUALS_FOOD:
-            parts.append("bronze upkeep set equal to food upkeep")
+        if s.ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD:
+            parts.append("bronze and gold upkeep set equal to food upkeep")
+        if s.ADMIN_RECRUITMENT_COST_ALL_RESOURCES and any(
+                overlay.get(EBEJ, (bundle, key)) for bundle in bundles.values() for key in RECRUITMENT_COST.values()):
+            parts.append("food, bronze and gold recruitment cost set equal")
+        if s.ADMIN_RECRUITMENT_COST is not None:
+            parts.append(f"recruitment cost {', '.join(f'{v:g}' for v in s.ADMIN_RECRUITMENT_COST)}% by tier")
         if s.ADMIN_BUILDING_COST_FIRST_TIER <= ADMIN_TIERS:
             cap = f" (max {s.ADMIN_BUILDING_COST_MAX}%)" if s.ADMIN_BUILDING_COST_MAX is not None else ""
             parts.append(f"construction cost +{s.ADMIN_BUILDING_COST_START}% from tier "
                          f"{s.ADMIN_BUILDING_COST_FIRST_TIER}, +{s.ADMIN_BUILDING_COST_STEP}% per tier after{cap}")
         if parts:
             overlay.note(FEATURE, f"Administration tiers ({culture}): {'; '.join(parts)}.")
+
+
+def _copy_effect(overlay: Overlay, bundle: str, source_key: str, target_keys: list[str]) -> None:
+    """Give the effects `target_keys` of `bundle` the value of its effect `source_key`, adding missing ones."""
+    source = overlay.get(EBEJ, (bundle, source_key))
+    if source is None:
+        return
+    for key in target_keys:
+        target = overlay.get(EBEJ, (bundle, key))
+        if target is None:
+            overlay.put(EBEJ, dict(source, effect_key=key), FEATURE)
+        elif target["value"] != source["value"]:
+            overlay.put(EBEJ, dict(target, value=source["value"]), FEATURE)
 
 
 def _burden_reductions(overlay: Overlay, s) -> None:
