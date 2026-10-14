@@ -9,6 +9,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Administration tiers start at 0, 150, 250, 400, 600, 750, 950, 1150, 1350, 1600, 1900 and 2250 points
   (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The tier titles show the new ranges.
 - Each administration tier adds to building construction costs: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
+- Each administration tier adds to the gold, stone and wood upkeep of buildings: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
 - Bronze and gold upkeep of every administration tier are the same as its food upkeep (for example +140% bronze and
   gold at tier 12; vanilla +120% bronze, no gold).
 - Administration tiers that raise the recruitment cost of one resource (food for Egypt, bronze for the Hittites, gold
@@ -135,6 +136,13 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Every other building's food production bonus is doubled, including fisheries and Tausret's food chain.
 - Landmarks: every resource production bonus is doubled.
 - Other resource production bonuses of buildings (main settlement buildings, temples, ports, wood buildings, ...) are unchanged. Production penalties are unchanged.
+- Administration, Management and Religion buildings (main settlement buildings, temples, Grand Temples, ...) have an upkeep
+  each turn of 5% of their construction cost, for each resource of that cost, rounded up to a multiple of 5 (vanilla: no upkeep).
+  For example, a major settlement costs 5 stone and 5 wood per turn at level 1, 45 stone, 10 wood and 10 gold at level 5;
+  a Grand Temple 60 stone, 10 wood and 15 gold. The Bay's happiness chain, which costs food to build, has a food upkeep (50 and 100).
+  Buildings that already have an upkeep keep it and only get the other resources: the Victory Points landmark keeps its
+  50 gold and adds 250 stone and 65 wood. Military Support, Recruitment, Resources and Production buildings, outposts,
+  landmarks and Sea Peoples horde buildings have no added upkeep.
 
 ### Buildings with garrisons
 
@@ -157,6 +165,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   | All resources produced | +20% | +60% | +120% | +180% | +20% | +30% | +50% |
   | Local recruitment capacity | +2 | +6 | +12 | +20 | +2 | +6 | +10 |
   | Construction cost of all buildings | - | -20% | -60% | -100% | -10% | -20% | -40% |
+  | Gold, stone and wood upkeep of all buildings | - | -20% | -60% | -100% | -10% | -20% | -40% |
   | Happiness in every province | - | +5 | +8 | +10 | +2 | +4 | +5 |
 
 - Each tier's bonuses replace the previous ones (they do not add up). They show as the "Progressive Difficulty 0/I/II/III" effect on the AI faction.

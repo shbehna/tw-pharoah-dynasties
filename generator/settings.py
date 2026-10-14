@@ -26,6 +26,14 @@ ADMIN_BUILDING_COST_FIRST_TIER = 1
 ADMIN_BUILDING_COST_START = 0
 ADMIN_BUILDING_COST_STEP = 10
 ADMIN_BUILDING_COST_MAX = None  # % cap, or None
+# Building upkeep penalty added to each administration tier (see BUILDING_UPKEEP_PERCENT), for the
+# resources in ADMIN_BUILDING_UPKEEP_RESOURCES (food, bronze, gold, stones, wood). Same rules as the
+# construction cost penalty above.
+ADMIN_BUILDING_UPKEEP_FIRST_TIER = 1
+ADMIN_BUILDING_UPKEEP_START = 0
+ADMIN_BUILDING_UPKEEP_STEP = 10
+ADMIN_BUILDING_UPKEEP_MAX = None  # % cap, or None
+ADMIN_BUILDING_UPKEEP_RESOURCES = ["gold", "stones", "wood"]
 # Make the bronze and gold upkeep penalty/bonus of each administration tier equal to the food one
 # (vanilla tiers have no gold upkeep effect).
 ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD = True
@@ -193,6 +201,26 @@ OTHER_PRODUCTION_ALL_RESOURCES = [r"_landmark_"]
 # Regular expressions of building keys left out of the multiplier, e.g. r"_main_building_"
 # to keep settlement buildings at their vanilla production bonus.
 OTHER_PRODUCTION_EXCLUDE = []
+# Per-turn building upkeep (vanilla: a handful of buildings). Every level of the building sets in
+# BUILDING_UPKEEP_SETS costs BUILDING_UPKEEP_PERCENT % of its construction cost per turn, for each
+# resource of that cost, rounded up to a multiple of BUILDING_UPKEEP_ROUNDING. A resource the
+# building already has an upkeep for keeps its vanilla upkeep. Levels also in a set of
+# BUILDING_UPKEEP_EXCLUDED_SETS are left out.
+# In-game categories: phar_main_municipal_complex (Administration), phar_main_province_management
+# (Management), phar_main_religion (Religion), phar_main_military_administration (Military Support),
+# phar_main_military_recruit (Recruitment), phar_main_resource_production (Resources),
+# phar_main_production_management (Production). Other sets: phar_main_landmark, phar_main_port_plah,
+# phar_main_military_ers / economic_ers / religious_ers / administrative_ers (outposts),
+# phar_sea_horde_* (Sea Peoples hordes).
+BUILDING_UPKEEP_PERCENT = 5
+BUILDING_UPKEEP_ROUNDING = 5
+BUILDING_UPKEEP_SETS = ["phar_main_municipal_complex", "phar_main_province_management", "phar_main_religion"]
+BUILDING_UPKEEP_EXCLUDED_SETS = [
+    "phar_main_military_administration",
+    "phar_main_military_recruit",
+    "phar_main_resource_production",
+    "phar_main_production_management",
+]
 
 # ---------------------------------------------------------------------------
 # Buildings with garrisons
@@ -217,6 +245,7 @@ PROGRESSIVE_DIFFICULTY_MAJOR = {
     "income": [20, 60, 120, 180],  # % to all resources produced in every region
     "recruitment_slots": [2, 6, 12, 20],  # local recruitment capacity
     "construction_cost": [0, -20, -60, -100],  # % construction cost of all buildings
+    "building_upkeep": [0, -20, -60, -100],  # % building upkeep (resources: ADMIN_BUILDING_UPKEEP_RESOURCES)
     "happiness": [0, 5, 8, 10],  # happiness in every province
 }
 PROGRESSIVE_DIFFICULTY_OTHER = {
@@ -225,6 +254,7 @@ PROGRESSIVE_DIFFICULTY_OTHER = {
     "income": [0, 20, 30, 50],
     "recruitment_slots": [0, 2, 6, 10],
     "construction_cost": [0, -10, -20, -40],
+    "building_upkeep": [0, -10, -20, -40],
     "happiness": [0, 2, 4, 5],
 }
 # The script logs every bundle it applies or removes to the game's script log (when script

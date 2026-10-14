@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from features import admin
 from lib.data import Overlay
 
 FEATURE = "difficulty"
@@ -19,20 +20,22 @@ ICON = "fx_icon_army.png"
 KINDS = {"major": "major factions", "other": "other factions"}
 TIER_NAMES = ["0", "I", "II", "III", "IV", "V"]  # tier 0 is the first one in the settings
 
-# Setting name -> (effect, scope, text for the report and the bundle description).
-# The effects and scopes are the ones vanilla uses for the same faction-wide bonuses.
+# Setting name -> (effects, scope, text for the report and the bundle description).
+# The effects and scopes are the ones vanilla uses for the same faction-wide bonuses; building
+# upkeep uses the mod's own effects (see admin.building_upkeep_effects), one per resource.
 EFFECTS = {
-    "army_upkeep": ("troy_effect_army_campaign_upkeep", "faction_to_force_own_factionwide",
+    "army_upkeep": (["troy_effect_army_campaign_upkeep"], "faction_to_force_own_factionwide",
                     "{:+g}% upkeep cost of all units"),
-    "recruitment_cost": ("phar_main_military_recruitment_cost_mod_all_units", "faction_to_force_own_factionwide",
+    "recruitment_cost": (["phar_main_military_recruitment_cost_mod_all_units"], "faction_to_force_own_factionwide",
                          "{:+g}% recruitment cost of all units"),
-    "income": ("troy_effect_economy_mod_all_resources", "faction_to_region_own",
+    "income": (["troy_effect_economy_mod_all_resources"], "faction_to_region_own",
                "{:+g}% to all resources produced"),
-    "recruitment_slots": ("troy_effect_faction_unit_recruitment_points", "faction_to_province_own",
+    "recruitment_slots": (["troy_effect_faction_unit_recruitment_points"], "faction_to_province_own",
                           "{:+g} local recruitment capacity"),
-    "construction_cost": ("phar_main_building_construction_cost_percentage_multiplier_mod_all",
+    "construction_cost": (["phar_main_building_construction_cost_percentage_multiplier_mod_all"],
                           "faction_to_region_own", "{:+g}% construction cost of all buildings"),
-    "happiness": ("troy_effect_faction_happiness_in_all_own_territories", "faction_to_province_own",
+    "building_upkeep": ([], "faction_to_faction_own", "{:+g}% upkeep of all buildings"),
+    "happiness": (["troy_effect_faction_happiness_in_all_own_territories"], "faction_to_province_own",
                   "{:+g} happiness in every province"),
 }
 
@@ -51,6 +54,12 @@ def apply(overlay: Overlay, settings) -> None:
             if len(tier_values) != len(turns):
                 raise ValueError(f"{name} ({kind}) needs one value per turn in PROGRESSIVE_DIFFICULTY_TURNS")
 
+    effects = dict(EFFECTS)
+    _, scope, _ = EFFECTS["building_upkeep"]
+    resources = s.ADMIN_BUILDING_UPKEEP_RESOURCES
+    effects["building_upkeep"] = (admin.building_upkeep_effects(overlay, resources), scope,
+                                  f"{{:+g}}% {'/'.join(resources)} upkeep of all buildings")
+
     tiers = []
     for tier, turn in enumerate(turns):
         bundles = {}
@@ -60,7 +69,7 @@ def apply(overlay: Overlay, settings) -> None:
                 continue
             bundle = f"{BUNDLE_PREFIX}_{kind}_{tier}"
             bundles[kind] = bundle
-            descriptions = _bundle(overlay, bundle, kind, tier, turn, table)
+            descriptions = _bundle(overlay, bundle, kind, tier, turn, table, effects)
             overlay.note(FEATURE, f"Tier {TIER_NAMES[tier]} from turn {turn}, AI {KINDS[kind]} ({bundle}): "
                                   f"{', '.join(descriptions)}.")
         tiers.append((turn, bundles))
@@ -71,20 +80,21 @@ def apply(overlay: Overlay, settings) -> None:
                           f"excluded) and logs every change to {log}.")
 
 
-def _bundle(overlay: Overlay, bundle: str, kind: str, tier: int, turn: int, table: dict) -> list[str]:
+def _bundle(overlay: Overlay, bundle: str, kind: str, tier: int, turn: int, table: dict, effects: dict) -> list[str]:
     descriptions = []
     for name, tier_values in table.items():
         value = tier_values[tier]
         if value == 0:
             continue
-        effect, scope, text = EFFECTS[name]
-        overlay.put(EBEJ, {
-            "effect_bundle_key": bundle,
-            "effect_key": effect,
-            "effect_scope": scope,
-            "value": value,
-            "advancement_stage": "start_turn_completed",
-        }, FEATURE)
+        keys, scope, text = effects[name]
+        for effect in keys:
+            overlay.put(EBEJ, {
+                "effect_bundle_key": bundle,
+                "effect_key": effect,
+                "effect_scope": scope,
+                "value": value,
+                "advancement_stage": "start_turn_completed",
+            }, FEATURE)
         descriptions.append(text.format(value))
 
     title = f"Progressive Difficulty {TIER_NAMES[tier]}"

@@ -3,7 +3,7 @@
 - administration tier thresholds (script patching the game's script/campaign/supply_points.lua)
 - administration cost of main settlement buildings
 - administration tiers: bronze and gold upkeep = food upkeep, recruitment cost on every resource,
-  construction cost penalty
+  construction cost and building upkeep penalties
 - administrative buildings that reduce the burden
 """
 
@@ -13,7 +13,7 @@ import collections
 import re
 
 from features import landmarks
-from lib.buildings import BEJ, VALUE_COLUMNS
+from lib.buildings import BEJ, UPKEEP_FACTOR, VALUE_COLUMNS
 from lib.data import Overlay, fmt_float
 
 FEATURE = "admin"
@@ -38,6 +38,7 @@ UNIT_SET_RECRUITMENT_COSTS = [
     "phar_sea_recruitment_cost_mod_horde_units",
 ]
 CONSTRUCTION_COST = "phar_main_building_construction_cost_percentage_multiplier_mod_all"
+BUILDING_UPKEEP = "dyn_rebal_building_upkeep_percentage_mod_"  # + resource; new effects
 EBEJ = "effect_bundles_to_effects_junctions_tables"
 
 
@@ -182,6 +183,7 @@ def _settlement_costs(overlay: Overlay, s) -> None:
 def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
     if s.ADMIN_RECRUITMENT_COST is not None and len(s.ADMIN_RECRUITMENT_COST) != ADMIN_TIERS:
         raise ValueError(f"ADMIN_RECRUITMENT_COST needs {ADMIN_TIERS} values: {s.ADMIN_RECRUITMENT_COST}")
+    upkeep_effects = building_upkeep_effects(overlay, s.ADMIN_BUILDING_UPKEEP_RESOURCES)
     for culture, bundles in sorted(tiers.items()):
         for tier, bundle in sorted(bundles.items()):
             if s.ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD:
@@ -197,19 +199,14 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
                 source = next((key for key in RECRUITMENT_COST.values() if overlay.get(EBEJ, (bundle, key))), None)
                 if source is not None:
                     _copy_effect(overlay, bundle, source, [key for key in RECRUITMENT_COST.values() if key != source])
-            if tier >= s.ADMIN_BUILDING_COST_FIRST_TIER:
-                value = s.ADMIN_BUILDING_COST_START + s.ADMIN_BUILDING_COST_STEP * (tier - s.ADMIN_BUILDING_COST_FIRST_TIER)
-                if s.ADMIN_BUILDING_COST_MAX is not None:
-                    value = min(value, s.ADMIN_BUILDING_COST_MAX)
-                if value == 0:
-                    continue  # no effect; would only show "+0%" in the tier's tooltip
-                overlay.put(EBEJ, {
-                    "effect_bundle_key": bundle,
-                    "effect_key": CONSTRUCTION_COST,
-                    "effect_scope": "faction_to_region_own",
-                    "value": value,
-                    "advancement_stage": "start_turn_completed",
-                }, FEATURE)
+            # A 0% penalty is left out: it would only show "+0%" in the tier's tooltip.
+            construction = _tier_penalty(s, "ADMIN_BUILDING_COST", tier)
+            if construction:
+                _put_effect(overlay, bundle, CONSTRUCTION_COST, "faction_to_region_own", construction)
+            upkeep = _tier_penalty(s, "ADMIN_BUILDING_UPKEEP", tier)
+            if upkeep:
+                for effect in upkeep_effects:
+                    _put_effect(overlay, bundle, effect, "faction_to_faction_own", upkeep)
         parts = []
         if s.ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD:
             parts.append("bronze and gold upkeep set equal to food upkeep")
@@ -219,11 +216,60 @@ def _tiers(overlay: Overlay, s, tiers: dict[str, dict[int, str]]) -> None:
         if s.ADMIN_RECRUITMENT_COST is not None:
             parts.append(f"recruitment cost {', '.join(f'{v:g}' for v in s.ADMIN_RECRUITMENT_COST)}% by tier")
         if s.ADMIN_BUILDING_COST_FIRST_TIER <= ADMIN_TIERS:
-            cap = f" (max {s.ADMIN_BUILDING_COST_MAX}%)" if s.ADMIN_BUILDING_COST_MAX is not None else ""
-            parts.append(f"construction cost +{s.ADMIN_BUILDING_COST_START}% from tier "
-                         f"{s.ADMIN_BUILDING_COST_FIRST_TIER}, +{s.ADMIN_BUILDING_COST_STEP}% per tier after{cap}")
+            parts.append(f"construction cost {_penalty_text(s, 'ADMIN_BUILDING_COST')}")
+        if upkeep_effects and s.ADMIN_BUILDING_UPKEEP_FIRST_TIER <= ADMIN_TIERS:
+            parts.append(f"{'/'.join(s.ADMIN_BUILDING_UPKEEP_RESOURCES)} building upkeep "
+                         f"{_penalty_text(s, 'ADMIN_BUILDING_UPKEEP')}")
         if parts:
             overlay.note(FEATURE, f"Administration tiers ({culture}): {'; '.join(parts)}.")
+
+
+def _tier_penalty(s, prefix: str, tier: int) -> float:
+    """% penalty of `tier` from the settings <prefix>_FIRST_TIER, _START, _STEP and _MAX."""
+    first = getattr(s, f"{prefix}_FIRST_TIER")
+    if tier < first:
+        return 0
+    value = getattr(s, f"{prefix}_START") + getattr(s, f"{prefix}_STEP") * (tier - first)
+    cap = getattr(s, f"{prefix}_MAX")
+    return value if cap is None else min(value, cap)
+
+
+def _penalty_text(s, prefix: str) -> str:
+    cap = getattr(s, f"{prefix}_MAX")
+    return (f"+{getattr(s, f'{prefix}_START')}% from tier {getattr(s, f'{prefix}_FIRST_TIER')}, "
+            f"+{getattr(s, f'{prefix}_STEP')}% per tier after" + (f" (max {cap}%)" if cap is not None else ""))
+
+
+def _put_effect(overlay: Overlay, bundle: str, effect: str, scope: str, value: float) -> None:
+    overlay.put(EBEJ, {
+        "effect_bundle_key": bundle,
+        "effect_key": effect,
+        "effect_scope": scope,
+        "value": value,
+        "advancement_stage": "start_turn_completed",
+    }, FEATURE)
+
+
+def building_upkeep_effects(overlay: Overlay, resources: list[str]) -> list[str]:
+    """New effects: % building upkeep of each resource (the game has none). Also used by progressive difficulty."""
+    factors = {row["resource"]: row["unique_id"] for row in overlay.rows("pooled_resource_factor_junctions_tables")
+               if row["factor"] == UPKEEP_FACTOR}
+    unknown = sorted(r for r in resources if f"troy_{r}" not in factors)
+    if unknown:
+        raise ValueError(f"ADMIN_BUILDING_UPKEEP_RESOURCES: unknown resources {unknown}")
+    effects = []
+    for resource in resources:
+        effect = BUILDING_UPKEEP + resource
+        icon = f"fx_icon_{resource.removesuffix('s')}_upkeep.png"
+        overlay.put("effects_tables", {"effect": effect, "icon": icon, "priority": 100, "icon_negative": icon,
+                                       "category": "campaign", "is_positive_value_good": "false"}, FEATURE)
+        overlay.put("effect_bonus_value_pooled_resource_factor_junctions_tables", {
+            "bonus_value_id": "percentage_multiplier_mod", "effect": effect, "resource_factor": factors[f"troy_{resource}"],
+        }, FEATURE)
+        overlay.put_loc(f"effects_description_{effect}",
+                        f"%+n% to {resource.removesuffix('s')} upkeep of all buildings", FEATURE)
+        effects.append(effect)
+    return effects
 
 
 def _copy_effect(overlay: Overlay, bundle: str, source_key: str, target_keys: list[str]) -> None:

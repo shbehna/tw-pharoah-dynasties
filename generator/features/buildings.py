@@ -7,14 +7,16 @@
 - campaign movement bonus of buildings (outposts excluded)
 - every other building's resource production % multiplied, for bonuses that only apply to some resources (food)
   and for every bonus of landmarks
+- per-turn upkeep of a share of the construction cost (administration, management and religious buildings)
 """
 
 from __future__ import annotations
 
 import collections
+import math
 import re
 
-from lib.buildings import BEJ, VALUE_COLUMNS, building_levels, set_effect
+from lib.buildings import BEJ, UPKEEP_FACTOR, VALUE_COLUMNS, building_levels, building_sets, set_effect
 from lib.data import Overlay, fmt_float
 
 FEATURE = "buildings"
@@ -43,6 +45,7 @@ MOVEMENT_EFFECTS = {
     "phar_main_mod_ship_movement_campaign_mod_land_movement_campaign_basic",
 }
 OUTPOST = "_ers_"  # outpost slots, including the unique wonders built in them
+UPKEEP_COST = "dyn_rebal_building_upkeep_"
 
 
 def apply(overlay: Overlay, settings) -> None:
@@ -58,6 +61,7 @@ def apply(overlay: Overlay, settings) -> None:
     _multiply_production(overlay, s, mentioned)
     _delegate_school(overlay, s)
     _movement_bonus(overlay, s)
+    _upkeep(overlay, s)
 
 
 def _delegate_school(overlay: Overlay, s) -> None:
@@ -149,3 +153,48 @@ def _multiply_production(overlay: Overlay, s, mentioned: set[str]) -> None:
     overlay.note(FEATURE, f"Production % multiplied by {factor:g} on {total} building effects (bonuses that only "
                           f"apply to {', '.join(s.OTHER_PRODUCTION_RESOURCES)}, and every bonus of buildings matching "
                           f"{', '.join(s.OTHER_PRODUCTION_ALL_RESOURCES)}): {detail}.")
+
+
+def _upkeep(overlay: Overlay, s) -> None:
+    resource_of = {row["unique_id"]: row["resource"] for row in overlay.rows("pooled_resource_factor_junctions_tables")}
+    upkeep_factor = {row["resource"]: row["unique_id"] for row in overlay.rows("pooled_resource_factor_junctions_tables")
+                     if row["factor"] == UPKEEP_FACTOR}
+    costs: dict[str, dict[str, float]] = collections.defaultdict(dict)
+    for row in overlay.rows("resource_cost_pooled_resource_junctions_tables"):
+        costs[row["resource_cost"]][row["pooled_resource_factor"]] = float(row["amount"])
+    sets = building_sets(overlay)
+    included, excluded = set(s.BUILDING_UPKEEP_SETS), set(s.BUILDING_UPKEEP_EXCLUDED_SETS)
+    unknown = sorted((included | excluded) - set().union(*sets.values()))
+    if unknown:
+        raise ValueError(f"BUILDING_UPKEEP_SETS / BUILDING_UPKEEP_EXCLUDED_SETS: unknown building sets {unknown}")
+
+    per_set = collections.Counter()
+    for level in list(overlay.rows("building_levels_tables")):
+        name = level["level_name"]
+        level_sets = sets.get(name, set())
+        if name.startswith(LEGACY_PREFIX) or not level_sets & included or level_sets & excluded:
+            continue
+        build: dict[str, float] = collections.Counter()
+        for factor, amount in costs.get(level["create_resource_cost"], {}).items():
+            if amount < 0:
+                build[resource_of[factor]] -= amount
+        upkeep = dict(costs.get(level["upkeep_resource_cost"], {}))
+        has_upkeep = {resource_of[factor] for factor in upkeep}
+        for resource, amount in build.items():
+            value = math.ceil(amount * s.BUILDING_UPKEEP_PERCENT / (100 * s.BUILDING_UPKEEP_ROUNDING)) * s.BUILDING_UPKEEP_ROUNDING
+            if resource not in has_upkeep and value > 0:
+                upkeep[upkeep_factor[resource]] = -value
+        if upkeep == costs.get(level["upkeep_resource_cost"], {}):
+            continue
+        # Levels with the same upkeep share one resource cost, named after the amounts.
+        cost_id = UPKEEP_COST + "_".join(f"{resource_of[f].removeprefix('troy_')}{-a:g}" for f, a in sorted(upkeep.items()))
+        overlay.put("resource_costs_tables", {"id": cost_id, "treasury_cost": 0,
+                                              "expenditure_type": "CONSTRUCTION_OTHER", "income_type": "OTHER"}, FEATURE)
+        for factor, amount in upkeep.items():
+            overlay.put("resource_cost_pooled_resource_junctions_tables",
+                        {"pooled_resource_factor": factor, "resource_cost": cost_id, "amount": amount}, FEATURE)
+        overlay.put("building_levels_tables", dict(level, upkeep_resource_cost=cost_id), FEATURE)
+        per_set["+".join(sorted(level_sets & included))] += 1
+    overlay.note(FEATURE, f"Building upkeep: {s.BUILDING_UPKEEP_PERCENT}% of the construction cost per turn, rounded "
+                          f"up to {s.BUILDING_UPKEEP_ROUNDING}, existing upkeep kept per resource ("
+                          + ", ".join(f"{count} levels of {name}" for name, count in sorted(per_set.items())) + ").")

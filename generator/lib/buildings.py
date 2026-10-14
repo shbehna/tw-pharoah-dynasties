@@ -7,6 +7,8 @@ import math
 from .data import Overlay, fmt_float
 
 BEJ = "building_effects_junction_tables"
+# Pooled resource factor of building upkeep: troy_<resource>_building_upkeep.
+UPKEEP_FACTOR = "buildings_upkeep"
 VALUE_COLUMNS = ["value", "value_damaged", "value_ruined", "value_low_influence", "value_medium_influence"]
 
 
@@ -79,3 +81,21 @@ def effects_by_building(overlay: Overlay) -> dict[str, list[dict]]:
     for row in overlay.rows(BEJ):
         out.setdefault(row["building"], []).append(row)
     return out
+
+
+def building_sets(overlay: Overlay) -> dict[str, set[str]]:
+    """Building level -> building sets it belongs to (e.g. phar_main_religion).
+
+    A set lists whole chains or single levels; rows marked `exclude` take a chain's level back out.
+    """
+    by_chain: dict[str, list[str]] = {}
+    for row in overlay.rows("building_levels_tables"):
+        by_chain.setdefault(row["chain"], []).append(row["level_name"])
+    included: dict[str, set[str]] = {}
+    excluded: dict[str, set[str]] = {}
+    for row in overlay.rows("building_set_to_building_junctions_tables"):
+        levels = [row["building_level"]] if row["building_level"] else by_chain.get(row["building_chain"], [])
+        target = excluded if row["exclude"] == "true" else included
+        for level in levels:
+            target.setdefault(level, set()).add(row["building_set"])
+    return {level: sets - excluded.get(level, set()) for level, sets in included.items()}
