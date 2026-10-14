@@ -7,6 +7,8 @@
 
     - reference\vanilla\db        game database tables (data_db.pack)
     - reference\vanilla\text\db   English texts (local_en.pack)
+    - reference\addons\<name>     tables of the mods that have a compatibility add-on (mod.json
+                                  "compat_addons"), from the Workshop folder, enabled or not
     - reference\active_mods\...   with -ActiveMods: every mod enabled in the launcher
                                   (used by generator\conflicts.py)
 
@@ -56,6 +58,21 @@ Invoke-Rpfm pack list -p (Join-Path $game 'data\data.pack') | ForEach-Object { "
 $binary = @(Get-ChildItem -Path (Join-Path $vanilla 'db') -Recurse -File | Where-Object { $_.Extension -ne '.tsv' })
 if ($binary.Count -gt 0) {
     Write-Warning "$($binary.Count) game tables could not be decoded with the schema (game updated?). Try: scripts\setup.ps1 -Force -SchemaRef master"
+}
+
+# --- Mods with a compatibility add-on (mod.json "compat_addons") -------------------------------------
+$addonsDir = Join-Path $ReferenceDir 'addons'
+Reset-Folder $addonsDir
+$workshop = Join-Path (Get-GameLibrary) "steamapps\workshop\content\$($config.steam_app_id)"
+foreach ($addon in @($config.compat_addons)) {
+    if (-not $addon) { continue }
+    $source = @(Get-ChildItem -Path (Join-Path $workshop $addon.workshop_id) -Filter '*.pack' -File -ErrorAction SilentlyContinue)
+    if ($source.Count -eq 0) {
+        Write-Warning "$($addon.title) (Workshop $($addon.workshop_id)) is not downloaded: subscribe to it to build its add-on."
+        continue
+    }
+    Write-Host "Extracting $($addon.title) for its compatibility add-on ..."
+    Export-Pack -Pack $source[0].FullName -Destination (Join-Path $addonsDir $addon.name) -Folders @('db')
 }
 
 # --- Mods enabled in the launcher ----------------------------------------------------------------

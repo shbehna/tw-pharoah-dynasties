@@ -60,6 +60,7 @@ After a game patch, run `scripts\extract.ps1` first. Update [CHANGELOG.md](CHANG
 | Progressive difficulty | A script gives each AI faction (not players, not rebels) the effect bundle of the current tier: at the start of each player turn for every faction, and at the start of its own turn for a faction that appears later. Major factions are the ones the game flags as major (`faction:is_major()`). Turns and values: `PROGRESSIVE_DIFFICULTY_*`; a tier whose values are all 0 (tier 0, from turn 0) has no effect bundle. |
 | Progressive difficulty log | Every bundle given or removed, one summary line per turn and the list of factions at each load go to `dynasties_rebalance.log` in the game folder (`PROGRESSIVE_DIFFICULTY_LOG_FILE`) and to the game's script log. |
 | Campaign AI targets | Only where AI armies go: the distance penalty of army tasks (`cai_task_management_system_variable_group_junctions_tables`, `AI_DISTANCE_*`) and the priority of army tasks for the task generator groups of the game's AI personalities (`cai_task_management_system_task_generator_groups_generators_junctions_tables`, `AI_TASK_PRIORITY_*`). War declarations, aggressiveness and diplomacy are not changed. Tasks aimed at the human player keep their vanilla priority. |
+| Unique characters | A script (`dyn_rebal_unique_characters.lua`) listens to `FactionDestroysOtherFaction` and `FactionDestroyed` and moves the unique characters of a destroyed AI faction to a human player (`cm:reassign_character_to_faction`). Unique: immortal, or subtype key containing `UNIQUE_CHARACTER_KEY_PARTS`, so characters of other mods are moved too. Unique generals of a human player that have never led an army for that player get one (`cm:create_force_with_existing_general` with `UNIQUE_CHARACTER_PLACEHOLDER_UNIT`, which is then removed). The game's own unique characters are permitted in every faction, with their bodyguards allowed everywhere; characters added by other mods rely on those mods for that. |
 
 Units and buildings left over from Total War: TROY (`troy_` keys, not used in Pharaoh) are not changed.
 
@@ -74,11 +75,27 @@ powershell -ExecutionPolicy Bypass -File scripts\extract.ps1 -ActiveMods
 python generator\conflicts.py
 ```
 
+### Compatibility add-ons
+
+Mods that add unique characters get an add-on pack that lets those characters serve in any faction, as the
+main mod does for the game's own (permitted subtypes, bodyguard units allowed everywhere, bodyguards for every
+culture). The add-on's rows refer to the other mod's characters and units, so **enable an add-on only together
+with its mod**.
+
+| Add-on pack | For |
+| --- | --- |
+| `dynasties_rebalance_compat_make_character_unique.pack` | Make Character Unique (Workshop 3320741050), also its "Slot" variant (same characters) |
+
+The add-ons are listed in `mod.json` (`compat_addons`). To add one for another mod, add an entry with its
+Workshop ID, subscribe to it, then run `scripts\extract.ps1` (it extracts the mod's tables to
+`referenceddons\`), `python generator\generate.py` (writes `src_addons\`) and `scripts\install.ps1`
+(builds and installs every pack).
+
 ## How it is built
 
 - `generator/` reads the extracted game tables (`reference/vanilla`) and its own data files
   (`generator/data`), and writes the mod source to `src/`: one TSV file per table and section, the
-  texts, and three Lua scripts (administration tiers, outpost sacking, progressive difficulty). It only writes rows that differ
+  texts, and four Lua scripts (administration tiers, outpost sacking, progressive difficulty, unique characters). It only writes rows that differ
   from the game.
 - `scripts/build.ps1` packs `src/` with RPFM (Rusted PackFile Manager) 4.7.4, the last version with a
   command line tool, converting the TSV files to the game's binary tables.
@@ -95,5 +112,6 @@ python generator\conflicts.py
 | `generator/conflicts.py` | Comparison with the enabled mods |
 | `scripts/` | `setup`, `extract`, `build`, `install`, `check` |
 | `src/` | Generated mod source, packed as-is (not versioned) |
+| `generator/addons.py`, `src_addons/` | Compatibility add-ons and their generated source (not versioned) |
 | `docs/CHANGES.md`, `docs/CONFLICTS.md` | Generated reports (not versioned) |
 | `tools/`, `reference/`, `dist/` | Downloaded or extracted (not versioned) |

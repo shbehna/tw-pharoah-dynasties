@@ -4,5 +4,14 @@
   "file_prefix": "!!!!!!!!!!!!!!!!_dynasties_rebalance_",
   "game": "pharaoh_dynasties",
   "game_folder": "Total War PHARAOH DYNASTIES",
-  "rpfm_version": "v4.7.4"
+  "rpfm_version": "v4.7.4",
+  "steam_app_id": "2951630",
+  "compat_addons": [
+    {
+      "name": "make_character_unique",
+      "title": "Make Character Unique",
+      "workshop_id": "3320741050",
+      "pack": "dynasties_rebalance_compat_make_character_unique.pack"
+    }
+  ]
 }

@@ -169,3 +169,19 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   - Higher: attacking enemy regions and provinces bordering the AI's own, completing a province, consolidating borders (unused in vanilla).
   - Higher: defending besieged settlements, threatened regions, own regions and the capital, retaking lost territory, guarding borders with enemies.
 - Overrides the "War Coordination Priority" mod, which raises the priority of helping allies.
+
+### Unique characters
+
+- When an AI faction is destroyed, by anyone, its unique characters join you (the faction that destroyed it if it is a
+  human player, else the first human player). Unique means immortal, or a legendary character (character type containing
+  `_hero_`, which also covers characters added by other mods that follow the game's naming, e.g. Make Character Unique).
+- A unique general of yours that is not on the map, is not wounded and has never led an army for you appears next to your
+  capital, alone. This also fixes characters that joined you but stayed greyed out in general recruitment.
+- The game's 27 unique characters can serve in any faction: they are permitted everywhere, their bodyguard units are allowed
+  for every faction, and their bodyguards (defined for their own culture only, e.g. Tausret's) apply to every culture.
+  This replaces the "Unique Character Join" mod, which should be disabled (it gives the characters to the AI faction that
+  destroyed theirs).
+- Compatibility add-on for Make Character Unique (`dynasties_rebalance_compat_make_character_unique.pack`): its 48
+  unique characters can serve in any faction too, and the game's unique characters can serve in the faction it adds.
+  Enable it only together with Make Character Unique.
+- Logged to `dynasties_rebalance.log`.

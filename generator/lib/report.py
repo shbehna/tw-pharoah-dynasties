@@ -18,6 +18,7 @@ TITLES = {
     "garrisons": "Buildings with garrisons",
     "difficulty": "Progressive difficulty",
     "ai": "Campaign AI targets",
+    "characters": "Unique characters",
 }
 
 

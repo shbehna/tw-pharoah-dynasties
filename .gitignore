@@ -13,3 +13,6 @@ dist/
 
 __pycache__/
 *.pyc
+
+# Compatibility add-ons written by generator/generate.py
+src_addons/
