@@ -183,6 +183,30 @@ BEER_HALL_FOOD_PRODUCTION = 20  # vanilla 0
 # Influence in the province of Amenmesse's Kushite Delegate School (vanilla -3, -2 at low and medium
 # influence); the other influence values are scaled the same way.
 DELEGATE_SCHOOL_INFLUENCE = 3
+# Administration and management buildings, by level. Damaged values and the lower values at low and
+# medium influence are scaled the same way.
+# Tax Collector's Office, Tax Administration Centre, Royal Tax Administration (also in province
+# capitals): % to all resources produced in the province (vanilla 5-10-20).
+TAX_ADMINISTRATION_PRODUCTION = [10, 20, 35]
+# Hall of Records, Palace of Correspondence, Wisdom Codices: % royal decree completion rate
+# ("administration efficiency for royal decrees", for the whole faction; vanilla none). Every building
+# adds to it. Outside province capitals the chain stops at Palace of Correspondence.
+WISDOM_CODICES_DECREE_RATE = [2, 5, 8]
+# Artisan's Workshop, Art School, Bazaar of the Arts: happiness in the province (vanilla 2-4-6).
+BAZAAR_OF_THE_ARTS_HAPPINESS = [3, 5, 8]
+# Midwife's House, Healing Hall, Surgeon's Practice: workforce growth in the province (vanilla 4-6-9).
+SURGEONS_PRACTICE_WORKFORCE_GROWTH = [5, 8, 12]
+# Mycenae's Kamaeu's Council, Damokoros' Residence, Lawagetas' Palace: happiness in the province
+# (vanilla 0-1-2) and influence of the last level (vanilla 7; 4 at low and medium influence).
+LAWAGETAS_PALACE_HAPPINESS = [1, 2, 4]
+LAWAGETAS_PALACE_INFLUENCE = 8
+# Road chains (Traveller's Inn, Caravanserai, Visitor's Quarters; Mycenae's Road Administration Office,
+# Tarasiya Road Network, Damokoros' Road Infrastructure): % to all resources produced in adjacent own
+# provinces (vanilla none).
+ROADS_ADJACENT_PRODUCTION = [1, 2, 5]
+# Workforce growth of the Management buildings built on a special resource (Olive Groves, Grand Bazaar,
+# ...) that give workforce growth (vanilla 2).
+RESOURCE_MANAGEMENT_WORKFORCE_GROWTH = 4
 # Added to the campaign movement % of every building that gives own armies a movement bonus (land or
 # sea): roads, Peleset and Sea Peoples buildings, landmarks. Outposts are set in their own section.
 BUILDING_MOVEMENT_BONUS = 5

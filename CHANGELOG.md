@@ -131,6 +131,18 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Summer Festival Grounds: +40% food production (vanilla +10%) and +2 happiness (vanilla +4).
 - Beer Hall (Wine Hall and Performance Hall for other cultures): +20% food production.
 - Kushite Delegate School (Amenmesse): +3 influence in the province (vanilla -3).
+- Tax Collector's Office, Tax Administration Centre, Royal Tax Administration: +10%, +20%, +35% to all resources produced
+  in the province (vanilla +5%, +10%, +20%).
+- Hall of Records, Palace of Correspondence, Wisdom Codices: +2%, +5%, +8% royal decree completion rate
+  ("administration efficiency for royal decrees"; vanilla none). Every building adds to it.
+- Artisan's Workshop, Art School, Bazaar of the Arts: +3, +5, +8 happiness (vanilla +2, +4, +6).
+- Midwife's House, Healing Hall, Surgeon's Practice: +5, +8, +12 workforce growth (vanilla +4, +6, +9).
+- Mycenae's Kamaeu's Council, Damokoros' Residence, Lawagetas' Palace: +1, +2, +4 happiness (vanilla none, +1, +2);
+  Lawagetas' Palace +8 influence (vanilla +7; +5 at low and medium influence, vanilla +4).
+- Roads (Traveller's Inn, Caravanserai, Visitor's Quarters, and Mycenae's Road Administration Office chain): +1%, +2%, +5%
+  to all resources produced in adjacent provinces (vanilla none).
+- Olive Groves, Fruit Gardens, Grape Orchards, Apple Orchard, Bakery and Grand Bazaar: +4 workforce growth (vanilla +2).
+  Fixes: Fruit Gardens no longer gives workforce growth when ruined; Grape Orchards gives it when damaged and at low and medium influence.
 - Every building that gives your armies a campaign movement bonus gets +5% more: roads (all cultures, e.g. +10%, +15%, +25%,
   vanilla +5%, +10%, +20%; the extra bonus at high influence is unchanged), the Peleset movement chain and mounted buildings,
   Sea Peoples horde buildings (land and sea movement), Telmessos (+55%) and Ugarit (+30% at sea). Outposts are not included.

@@ -4,6 +4,8 @@
 - granary, bronzeworker and goldsmith chains
 - summer festival grounds and beer hall
 - Kushite Delegate School influence
+- administration and management buildings: tax administration, Wisdom Codices, Bazaar of the Arts, Surgeon's
+  Practice, Lawagetas' Palace, roads, management buildings built on a special resource
 - campaign movement bonus of buildings (outposts excluded)
 - every other building's resource production % multiplied, for bonuses that only apply to some resources (food)
   and for every bonus of landmarks
@@ -39,6 +41,22 @@ HAPPINESS = "phar_main_province_management_happiness_building"
 TRADING_POST = "_ers_trading_post_"  # set in the outposts section
 DELEGATE_SCHOOL = "phar_main_amenmesse_province_management_main_building_production_boost_growth_3"
 INFLUENCE = "phar_main_influence_province_management_buildings"
+# Administration and management chains
+TAX_CHAINS = ["phar_main_major_main_building_production_boost_overall",
+              "phar_main_major_main_building_poc_production_boost_overall"]
+TAX_PRODUCTION = "phar_effect_economy_ers_trading_post_mod_all_resources"  # all resources in the province
+WISDOM_CODICES_CHAINS = ["phar_main_major_main_building_legitimacy_influence_boost",  # 2 levels
+                         "phar_main_major_poc_main_building_legitimacy_influence_boost"]
+DECREE_RATE = "phar_main_research_rate_mod_buildings"  # unused in vanilla
+BAZAAR_CHAIN = "phar_main_happiness_type_c"
+SURGEON_CHAIN = "phar_main_growth_type_a"
+LAWAGETAS_CHAIN = "phar_map_myc_province_management_eqeta"
+ROAD_CHAINS = ["phar_main_roads", "phar_map_myc_province_management_roads"]
+WORKFORCE_GROWTH = "phar_main_province_development_growth_added_building"
+ADJACENT_PRODUCTION = "phar_effect_resource_mod_all_buildings_adjacent"  # as Bay's Chief Scribe's Headquarters
+ADJACENT_PROVINCES = "province_to_adjacent_province_own"
+MANAGEMENT_SET = "phar_main_province_management"
+RESOURCE_DERIVATIVE = "_derivative"  # buildings unlocked by a special resource of the region
 # Own-army campaign movement effects (land, sea, both). Roads' extra bonus at high influence
 # (..._influence_bonus) is left out so each building gets the bonus once.
 MOVEMENT_EFFECTS = {
@@ -61,6 +79,7 @@ def apply(overlay: Overlay, settings) -> None:
 
     mentioned = _chains(overlay, s)
     mentioned |= _happiness_buildings(overlay, s)
+    mentioned |= _management_buildings(overlay, s)
     _multiply_production(overlay, s, mentioned)
     _delegate_school(overlay, s)
     _movement_bonus(overlay, s)
@@ -72,6 +91,70 @@ def _delegate_school(overlay: Overlay, s) -> None:
     set_effect(overlay, DELEGATE_SCHOOL, INFLUENCE, current["effect_scope"], s.DELEGATE_SCHOOL_INFLUENCE, FEATURE)
     overlay.note(FEATURE, f"Kushite Delegate School: {s.DELEGATE_SCHOOL_INFLUENCE:+g} influence in the province "
                           f"(vanilla {float(current['value']):+g}).")
+
+
+def _chain_levels(levels: dict[str, dict], chain: str, count: int) -> list[str]:
+    buildings = sorted((b for b, row in levels.items() if row["chain"] == chain), key=lambda b: int(levels[b]["level"]))
+    if len(buildings) != count:
+        raise RuntimeError(f"{chain}: expected {count} levels, found {buildings}")
+    return buildings
+
+
+def _set_chain(overlay: Overlay, levels: dict[str, dict], chain: str, effect: str, values: list[float],
+               scope: str | None = None) -> list[str]:
+    """Set `effect` on each level of `chain`; without `scope`, levels that lack the effect take the scope of
+    the chain's existing rows."""
+    buildings = _chain_levels(levels, chain, len(values))
+    existing = [row for b in buildings if (row := overlay.get(BEJ, (b, effect))) is not None]
+    for building, value in zip(buildings, values):
+        current = overlay.get(BEJ, (building, effect))
+        row_scope = scope or (current or existing[0])["effect_scope"]
+        set_effect(overlay, building, effect, row_scope, value, FEATURE)
+    return buildings
+
+
+def _management_buildings(overlay: Overlay, s) -> set[str]:
+    levels = building_levels(overlay)
+    tax = []
+    for chain in TAX_CHAINS:
+        tax += _set_chain(overlay, levels, chain, TAX_PRODUCTION, s.TAX_ADMINISTRATION_PRODUCTION)
+    overlay.note(FEATURE, f"Tax administration chains: +{'/'.join(map(str, s.TAX_ADMINISTRATION_PRODUCTION))}% "
+                          f"to all resources produced in the province.")
+
+    rates = s.WISDOM_CODICES_DECREE_RATE
+    _set_chain(overlay, levels, WISDOM_CODICES_CHAINS[0], DECREE_RATE, rates[:2], "building_to_faction_own")
+    _set_chain(overlay, levels, WISDOM_CODICES_CHAINS[1], DECREE_RATE, rates, "building_to_faction_own")
+    overlay.note(FEATURE, f"Wisdom Codices chains: +{'/'.join(f'{v:g}' for v in rates)}% royal decree completion rate.")
+
+    _set_chain(overlay, levels, BAZAAR_CHAIN, HAPPINESS, s.BAZAAR_OF_THE_ARTS_HAPPINESS)
+    _set_chain(overlay, levels, SURGEON_CHAIN, WORKFORCE_GROWTH, s.SURGEONS_PRACTICE_WORKFORCE_GROWTH)
+    lawagetas = _set_chain(overlay, levels, LAWAGETAS_CHAIN, HAPPINESS, s.LAWAGETAS_PALACE_HAPPINESS)
+    set_effect(overlay, lawagetas[-1], INFLUENCE, overlay.get(BEJ, (lawagetas[-1], INFLUENCE))["effect_scope"],
+               s.LAWAGETAS_PALACE_INFLUENCE, FEATURE)
+    overlay.note(FEATURE, f"Bazaar of the Arts chain: +{'/'.join(map(str, s.BAZAAR_OF_THE_ARTS_HAPPINESS))} happiness. "
+                          f"Surgeon's Practice chain: +{'/'.join(map(str, s.SURGEONS_PRACTICE_WORKFORCE_GROWTH))} workforce "
+                          f"growth. Lawagetas' Palace chain: +{'/'.join(map(str, s.LAWAGETAS_PALACE_HAPPINESS))} happiness, "
+                          f"last level +{s.LAWAGETAS_PALACE_INFLUENCE} influence.")
+
+    for chain in ROAD_CHAINS:
+        _set_chain(overlay, levels, chain, ADJACENT_PRODUCTION, s.ROADS_ADJACENT_PRODUCTION, ADJACENT_PROVINCES)
+    overlay.note(FEATURE, f"Road chains: +{'/'.join(map(str, s.ROADS_ADJACENT_PRODUCTION))}% to all resources produced "
+                          f"in adjacent provinces.")
+
+    sets = building_sets(overlay)
+    growth = sorted(row["building"] for row in overlay.rows(BEJ)
+                    if row["effect"] == WORKFORCE_GROWTH and RESOURCE_DERIVATIVE in row["building"]
+                    and MANAGEMENT_SET in sets.get(row["building"], set()) and float(row["value"]) > 0
+                    and not row["building"].startswith(LEGACY_PREFIX))
+    for building in growth:
+        # New values rather than rescaled ones: the Assuwa and Thrace Olive Groves have inconsistent
+        # vanilla values (growth when ruined; none when damaged or at low and medium influence).
+        row = overlay.get(BEJ, (building, WORKFORCE_GROWTH))
+        row.update(new_values(s.RESOURCE_MANAGEMENT_WORKFORCE_GROWTH))
+        overlay.put(BEJ, row, FEATURE)
+    overlay.note(FEATURE, f"Management buildings on a special resource: +{s.RESOURCE_MANAGEMENT_WORKFORCE_GROWTH} "
+                          f"workforce growth ({', '.join(growth)}).")
+    return set(tax)
 
 
 def _movement_bonus(overlay: Overlay, s) -> None:
@@ -89,10 +172,8 @@ def _chains(overlay: Overlay, s) -> set[str]:
     levels = building_levels(overlay)
     done = set()
     for chain, resource, production_setting, upkeep_setting in CHAINS:
-        buildings = sorted((b for b, row in levels.items() if row["chain"] == chain), key=lambda b: int(levels[b]["level"]))
         production = getattr(s, production_setting)
-        if len(buildings) != len(production):
-            raise RuntimeError(f"{chain}: expected {len(production)} levels, found {buildings}")
+        buildings = _chain_levels(levels, chain, len(production))
         effect = f"phar_main_percentage_multiplier_mod_troy_{resource}_buildings"
         for building, value in zip(buildings, production):
             set_effect(overlay, building, effect, PROVINCE, value, FEATURE)
