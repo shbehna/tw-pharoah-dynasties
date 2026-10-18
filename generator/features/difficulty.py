@@ -56,7 +56,7 @@ def apply(overlay: Overlay, settings) -> None:
 
     effects = dict(EFFECTS)
     _, scope, _ = EFFECTS["building_upkeep"]
-    resources = s.ADMIN_BUILDING_UPKEEP_RESOURCES
+    resources = s.PROGRESSIVE_DIFFICULTY_BUILDING_UPKEEP_RESOURCES
     effects["building_upkeep"] = (admin.building_upkeep_effects(overlay, resources), scope,
                                   f"{{:+g}}% {'/'.join(resources)} upkeep of all buildings")
 

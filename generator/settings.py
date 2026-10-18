@@ -29,7 +29,7 @@ ADMIN_BUILDING_COST_MAX = None  # % cap, or None
 # Building upkeep % of each administration tier (1-12; see BUILDING_UPKEEP_PERCENT), for the
 # resources in ADMIN_BUILDING_UPKEEP_RESOURCES (food, bronze, gold, stones, wood). 0: no effect.
 ADMIN_BUILDING_UPKEEP = [-50, -25, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
-ADMIN_BUILDING_UPKEEP_RESOURCES = ["gold", "stones", "wood"]
+ADMIN_BUILDING_UPKEEP_RESOURCES = ["gold", "stones"]
 # Make the bronze and gold upkeep penalty/bonus of each administration tier equal to the food one
 # (vanilla tiers have no gold upkeep effect).
 ADMIN_BRONZE_GOLD_UPKEEP_EQUALS_FOOD = True
@@ -191,7 +191,7 @@ TAX_ADMINISTRATION_PRODUCTION = [10, 20, 35]
 # Hall of Records, Palace of Correspondence, Wisdom Codices: % royal decree completion rate
 # ("administration efficiency for royal decrees", for the whole faction; vanilla none). Every building
 # adds to it. Outside province capitals the chain stops at Palace of Correspondence.
-WISDOM_CODICES_DECREE_RATE = [2, 5, 8]
+WISDOM_CODICES_DECREE_RATE = [1, 3, 5]
 # Artisan's Workshop, Art School, Bazaar of the Arts: happiness in the province (vanilla 2-4-6).
 BAZAAR_OF_THE_ARTS_HAPPINESS = [3, 5, 8]
 # Midwife's House, Healing Hall, Surgeon's Practice: workforce growth in the province (vanilla 4-6-9).
@@ -203,7 +203,7 @@ LAWAGETAS_PALACE_INFLUENCE = 8
 # Road chains (Traveller's Inn, Caravanserai, Visitor's Quarters; Mycenae's Road Administration Office,
 # Tarasiya Road Network, Damokoros' Road Infrastructure): % to all resources produced in adjacent own
 # provinces (vanilla none).
-ROADS_ADJACENT_PRODUCTION = [1, 2, 5]
+ROADS_ADJACENT_PRODUCTION = [2, 5, 10]
 # Workforce growth of the Management buildings built on a special resource (Olive Groves, Grand Bazaar,
 # ...) that give workforce growth (vanilla 2).
 RESOURCE_MANAGEMENT_WORKFORCE_GROWTH = 4
@@ -270,7 +270,7 @@ PROGRESSIVE_DIFFICULTY_MAJOR = {
     "income": [20, 60, 120, 180],  # % to all resources produced in every region
     "recruitment_slots": [2, 6, 12, 20],  # local recruitment capacity
     "construction_cost": [0, -20, -60, -100],  # % construction cost of all buildings
-    "building_upkeep": [0, -20, -60, -100],  # % building upkeep (resources: ADMIN_BUILDING_UPKEEP_RESOURCES)
+    "building_upkeep": [-80, -80, -80, -80],  # % building upkeep (resources: PROGRESSIVE_DIFFICULTY_BUILDING_UPKEEP_RESOURCES)
     "happiness": [0, 5, 8, 10],  # happiness in every province
 }
 PROGRESSIVE_DIFFICULTY_OTHER = {
@@ -279,9 +279,11 @@ PROGRESSIVE_DIFFICULTY_OTHER = {
     "income": [0, 20, 30, 50],
     "recruitment_slots": [0, 2, 6, 10],
     "construction_cost": [0, -10, -20, -40],
-    "building_upkeep": [0, -10, -20, -40],
+    "building_upkeep": [-80, -80, -80, -80],
     "happiness": [0, 2, 4, 5],
 }
+# Resources of the "building_upkeep" bonus (food, bronze, gold, stones, wood).
+PROGRESSIVE_DIFFICULTY_BUILDING_UPKEEP_RESOURCES = ["gold", "stones", "wood"]
 # The script logs every bundle it applies or removes to the game's script log (when script
 # logging is enabled) and to this file in the game folder. None: game script log only.
 PROGRESSIVE_DIFFICULTY_LOG_FILE = "dynasties_rebalance.log"

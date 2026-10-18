@@ -9,7 +9,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Administration tiers start at 0, 150, 250, 400, 600, 750, 950, 1150, 1350, 1600, 1900 and 2250 points
   (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The tier titles show the new ranges.
 - Each administration tier adds to building construction costs: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
-- Administration tiers change the gold, stone and wood upkeep of buildings: -50% at tier 1, -25% at tier 2, none at tier 3,
+- Administration tiers change the gold and stone upkeep of buildings: -50% at tier 1, -25% at tier 2, none at tier 3,
   then +10% at tier 4 and +10% more per tier, up to +90% at tier 12.
 - Bronze and gold upkeep of every administration tier are the same as its food upkeep (for example +140% bronze and
   gold at tier 12; vanilla +120% bronze, no gold).
@@ -139,7 +139,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Midwife's House, Healing Hall, Surgeon's Practice: +5, +8, +12 workforce growth (vanilla +4, +6, +9).
 - Mycenae's Kamaeu's Council, Damokoros' Residence, Lawagetas' Palace: +1, +2, +4 happiness (vanilla none, +1, +2);
   Lawagetas' Palace +8 influence (vanilla +7; +5 at low and medium influence, vanilla +4).
-- Roads (Traveller's Inn, Caravanserai, Visitor's Quarters, and Mycenae's Road Administration Office chain): +1%, +2%, +5%
+- Roads (Traveller's Inn, Caravanserai, Visitor's Quarters, and Mycenae's Road Administration Office chain): +2%, +5%, +10%
   to all resources produced in adjacent provinces (vanilla none).
 - Olive Groves, Fruit Gardens, Grape Orchards, Apple Orchard, Bakery and Grand Bazaar: +4 workforce growth (vanilla +2).
   Fixes: Fruit Gardens no longer gives workforce growth when ruined; Grape Orchards gives it when damaged and at low and medium influence.
@@ -170,17 +170,17 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 ### Progressive difficulty
 
 - AI factions get bonuses that grow during the campaign. Players and rebels never get them.
-  Major factions get the first tier from the start of the campaign; other factions get no bonuses before turn 20.
+  The first tier applies from the start of the campaign; other factions only get the building upkeep bonus before turn 20.
 
-  | Bonus | Major factions, start | Major, turn 20 | Major, turn 50 | Major, turn 80 | Other factions, turn 20 | Other, turn 50 | Other, turn 80 |
-  | --- | --- | --- | --- | --- | --- | --- | --- |
-  | Upkeep cost of all units | -10% | -30% | -80% | -100% | -15% | -40% | -65% |
-  | Recruitment cost of all units | -20% | -50% | -80% | -100% | -25% | -50% | -75% |
-  | All resources produced | +20% | +60% | +120% | +180% | +20% | +30% | +50% |
-  | Local recruitment capacity | +2 | +6 | +12 | +20 | +2 | +6 | +10 |
-  | Construction cost of all buildings | - | -20% | -60% | -100% | -10% | -20% | -40% |
-  | Gold, stone and wood upkeep of all buildings | - | -20% | -60% | -100% | -10% | -20% | -40% |
-  | Happiness in every province | - | +5 | +8 | +10 | +2 | +4 | +5 |
+  | Bonus | Major factions, start | Major, turn 20 | Major, turn 50 | Major, turn 80 | Other factions, start | Other, turn 20 | Other, turn 50 | Other, turn 80 |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | Upkeep cost of all units | -10% | -30% | -80% | -100% | - | -15% | -40% | -65% |
+  | Recruitment cost of all units | -20% | -50% | -80% | -100% | - | -25% | -50% | -75% |
+  | All resources produced | +20% | +60% | +120% | +180% | - | +20% | +30% | +50% |
+  | Local recruitment capacity | +2 | +6 | +12 | +20 | - | +2 | +6 | +10 |
+  | Construction cost of all buildings | - | -20% | -60% | -100% | - | -10% | -20% | -40% |
+  | Gold, stone and wood upkeep of all buildings | -80% | -80% | -80% | -80% | -80% | -80% | -80% | -80% |
+  | Happiness in every province | - | +5 | +8 | +10 | - | +2 | +4 | +5 |
 
 - Each tier's bonuses replace the previous ones (they do not add up). They show as the "Progressive Difficulty 0/I/II/III" effect on the AI faction.
 - The bonuses also apply to campaigns started before the mod was installed, from the next load.

@@ -258,7 +258,7 @@ def building_upkeep_effects(overlay: Overlay, resources: list[str]) -> list[str]
                if row["factor"] == UPKEEP_FACTOR}
     unknown = sorted(r for r in resources if f"troy_{r}" not in factors)
     if unknown:
-        raise ValueError(f"ADMIN_BUILDING_UPKEEP_RESOURCES: unknown resources {unknown}")
+        raise ValueError(f"Building upkeep: unknown resources {unknown}")
     effects = []
     for resource in resources:
         effect = BUILDING_UPKEEP + resource
