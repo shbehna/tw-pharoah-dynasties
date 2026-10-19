@@ -206,6 +206,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   `_hero_`, which also covers characters added by other mods that follow the game's naming, e.g. Make Character Unique).
 - A unique general of yours that is not on the map, is not wounded and has never led an army for you appears next to your
   capital, alone. This also fixes characters that joined you but stayed greyed out in general recruitment.
+  It happens once per character: you can disband a unique general's army afterwards and it does not come back.
 - The game's 27 unique characters can serve in any faction: they are permitted everywhere, their bodyguard units are allowed
   for every faction, and their bodyguards (defined for their own culture only, e.g. Tausret's) apply to every culture.
   This replaces the "Unique Character Join" mod, which should be disabled (it gives the characters to the AI faction that
