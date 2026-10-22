@@ -187,6 +187,10 @@ nearest 5; that mod should be disabled. Unit experience per turn, in the provinc
   Sword of Adad-narari I +175 (+25); Theban Veteran +115 (+20), unique version +175 (+20); Royal Steward and Man of the
   People +90, upgraded +165 (+50, +100); Lionlike in Wrath +125 (+75); Overseer of Militia +90 (+20).
 - Traits, unit experience per turn: Grieving (Achilles) +190 (+100); Mentor +35 (+10).
+- Hanigalbat's own buildings get 20% more than the matching shared ones (rounded to the nearest 5): Champion's Hall
+  +205 (+40); City Guard Station, Inner Army Headquarters, Defenders' Fortress +120, +180, +240 for own armies in the
+  region (vanilla none); Officers' School, Royal Officers' School, Palace of War +30, +65, +105 experience per turn for
+  characters (+20, +50, +80).
 - Buildings give half (rounded down) when damaged and at low or medium influence (the Officer Schools keep the full
   value at low and medium influence).
 

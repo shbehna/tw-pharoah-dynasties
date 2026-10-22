@@ -8,6 +8,14 @@ rounded to the nearest 5)."""
 # other scopes keep their vanilla value. Damaged buildings and low or medium influence give half (rounded
 # down), ruined buildings nothing.
 EXPERIENCE_UNIT_BUILDINGS = [
+    # Hanigalbat's own buildings: the value of the matching shared building + 20%, rounded to the nearest 5.
+    # Champion's Hall (shared 170; vanilla 40)
+    (r"phar_map_ash_military_administration_unit_training_type_b_1", 205),
+    # City Guard Station, Inner Army Headquarters (shared 100, 150), Defenders' Fortress (150 + 50 = 200),
+    # for own armies in their region (vanilla none)
+    (r"phar_map_ash_military_garrison_type_a_1", 120, "building_to_forces_own_regionwide"),
+    (r"phar_map_ash_military_garrison_type_a_2", 180, "building_to_forces_own_regionwide"),
+    (r"phar_map_ash_military_garrison_type_a_3", 240, "building_to_forces_own_regionwide"),
     # Kuru's Mercenary Hunting Camp, Mercenary Hunting Village (vanilla 25, 50)
     (r"phar_main_kuru_military_administration_unit_training_type_b_1", 105),
     (r"phar_main_kuru_military_administration_unit_training_type_b_2", 210),
@@ -16,8 +24,7 @@ EXPERIENCE_UNIT_BUILDINGS = [
     # Warriors' Refuge (vanilla 40)
     (r"phar_\w+_ers_refugee_\w+", 170),
     # Garrison buildings, for own armies in their region (vanilla none): City Guard Station, City Guard
-    # Compound, Guard Tower and their equivalents. Ashur's third garrison level is left out.
-    (r"phar_map_ash_military_garrison_type_a_3", None),
+    # Compound, Guard Tower and their equivalents.
     (r"phar_\w+_military_(?:administration_)?garrison_type_a(?:_[a-z_]+)?_1", 100, "building_to_forces_own_regionwide"),
     (r"phar_\w+_military_(?:administration_)?garrison_type_a(?:_[a-z_]+)?_2", 150, "building_to_forces_own_regionwide"),
     (r"phar_\w+_military_(?:administration_)?garrison_type_b(?:_[a-z_]+)?_1", 75, "building_to_forces_own_regionwide"),
@@ -46,6 +53,11 @@ EXPERIENCE_UNIT_BUILDINGS = [
 EXPERIENCE_CHARACTER_BUILDINGS = {
     "phar_main_all_military_administration_hero_training_2": 25,  # Officer School (vanilla 20)
     "phar_main_all_military_administration_hero_training_3": 55,  # Royal Officer School (vanilla 50)
+    # Hanigalbat: the value of the matching building above + 20%, rounded to the nearest 5
+    "phar_map_ash_military_administration_hero_training_1": 30,  # Officers' School (25; vanilla 20)
+    "phar_map_ash_military_administration_hero_training_2": 65,  # Royal Officers' School (55; vanilla 50)
+    # Palace of War (vanilla 80 x 55/50 = 88; Hanigalbat only)
+    "phar_map_ash_military_administration_hero_training_3": 105,
 }
 
 # Unit experience given to the army by followers and titles (their unit experience effects), by ancillary.
