@@ -13,5 +13,12 @@
       "workshop_id": "3320741050",
       "pack": "dynasties_rebalance_compat_make_character_unique.pack"
     }
+  ],
+  "separate_mods": [
+    {
+      "name": "start_confederations",
+      "title": "Dynasties Start Confederations",
+      "pack": "dynasties_start_confederations.pack"
+    }
   ]
 }

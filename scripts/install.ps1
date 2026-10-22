@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Builds the mod and its compatibility add-ons and copies them into the game's data folder (no Workshop upload).
+    Builds the mod, its compatibility add-ons and the separate mods, and copies them into the game's data folder (no Workshop upload).
 
 .DESCRIPTION
     After installing, enable the mod in the game launcher; it shows up as a local mod
@@ -27,6 +27,7 @@ $config = Get-ModConfig
 $dataDir = Join-Path (Get-GamePath -GamePath $GamePath) 'data'
 $target = Join-Path $dataDir $config.pack
 $addons = @($config.compat_addons | Where-Object { $_ })
+$separateMods = @($config.separate_mods | Where-Object { $_ })
 
 if (Get-Process -Name 'Pharaoh' -ErrorAction SilentlyContinue) {
     Write-Warning 'The game is running: changes apply the next time it starts.'
@@ -34,7 +35,7 @@ if (Get-Process -Name 'Pharaoh' -ErrorAction SilentlyContinue) {
 $lockedHint = 'The file is in use: close the game (it locks the packs it loaded) and run the script again.'
 
 if ($Uninstall) {
-    foreach ($name in @($config.pack) + @($addons | ForEach-Object { $_.pack })) {
+    foreach ($name in @($config.pack) + @($addons | ForEach-Object { $_.pack }) + @($separateMods | ForEach-Object { $_.pack })) {
         $path = Join-Path $dataDir $name
         if (Test-Path $path) {
             try { Remove-Item -Force -Path $path -Confirm:$false } catch { throw "$lockedHint ($($_.Exception.Message))" }
@@ -71,4 +72,20 @@ foreach ($addon in $addons) {
     try { Copy-Item -Force -Path $addonPack -Destination $addonTarget } catch { throw "$lockedHint ($($_.Exception.Message))" }
     Write-Host "Installed $addonTarget"
     Write-Host "Enable '$($addon.pack)' only together with $($addon.title) (Workshop $($addon.workshop_id))."
+}
+
+# Separate mods: independent of the main mod, enable them or not.
+foreach ($separate in $separateMods) {
+    $separatePack = Join-Path $DistDir $separate.pack
+    $separateTarget = Join-Path $dataDir $separate.pack
+    if (-not (Test-Path $separatePack)) {
+        if (Test-Path $separateTarget) {
+            try { Remove-Item -Force -Path $separateTarget -Confirm:$false } catch { throw "$lockedHint ($($_.Exception.Message))" }
+            Write-Host "Removed outdated $separateTarget"
+        }
+        continue
+    }
+    try { Copy-Item -Force -Path $separatePack -Destination $separateTarget } catch { throw "$lockedHint ($($_.Exception.Message))" }
+    Write-Host "Installed $separateTarget"
+    Write-Host "Enable '$($separate.pack)' in the launcher if you want $($separate.title) (independent of the main mod)."
 }

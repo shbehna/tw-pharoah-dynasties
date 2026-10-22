@@ -91,6 +91,22 @@ Workshop ID, subscribe to it, then run `scripts\extract.ps1` (it extracts the mo
 `referenceddons\`), `python generator\generate.py` (writes `src_addons\`) and `scripts\install.ps1`
 (builds and installs every pack).
 
+### Separate mods
+
+Optional packs that do not depend on the main mod: enable each one or not, with or without
+`dynasties_rebalance.pack`. They are listed in `mod.json` (`separate_mods`), generated to `src_mods\` and
+built and installed with the main mod.
+
+| Pack | What it does |
+| --- | --- |
+| `dynasties_start_confederations.pack` | When a new campaign starts, a faction played by a human confederates the AI factions that own some regions (`START_CONFEDERATIONS`): Hanigalbat gets the owner of Sangaritu. |
+
+Start confederations: the script (`dynasties_start_confederations.lua`) runs on the first tick of a new
+campaign only (`cm:add_first_tick_callback_new`, plus a saved flag). For each faction in
+`START_CONFEDERATIONS` played by a human, it looks up the owner of each listed region and confederates it
+(`cm:force_confederation`) unless it is a player or rebels. The owner is read in game, not from the start
+position, so the setting names regions rather than factions.
+
 ## How it is built
 
 - `generator/` reads the extracted game tables (`reference/vanilla`) and its own data files
@@ -113,5 +129,6 @@ Workshop ID, subscribe to it, then run `scripts\extract.ps1` (it extracts the mo
 | `scripts/` | `setup`, `extract`, `build`, `install`, `check` |
 | `src/` | Generated mod source, packed as-is (not versioned) |
 | `generator/addons.py`, `src_addons/` | Compatibility add-ons and their generated source (not versioned) |
+| `generator/separate_mods.py`, `src_mods/` | Separate mods and their generated source (not versioned) |
 | `docs/CHANGES.md`, `docs/CONFLICTS.md` | Generated reports (not versioned) |
 | `tools/`, `reference/`, `dist/` | Downloaded or extracted (not versioned) |

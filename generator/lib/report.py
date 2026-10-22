@@ -19,6 +19,7 @@ TITLES = {
     "difficulty": "Progressive difficulty",
     "ai": "Campaign AI targets",
     "characters": "Unique characters",
+    "confederations": "Confederations at the start (separate mod)",
 }
 
 

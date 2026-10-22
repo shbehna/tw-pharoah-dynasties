@@ -16,3 +16,6 @@ __pycache__/
 
 # Compatibility add-ons written by generator/generate.py
 src_addons/
+
+# Separate mods written by generator/generate.py
+src_mods/

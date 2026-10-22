@@ -215,3 +215,9 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   unique characters can serve in any faction too, and the game's unique characters can serve in the faction it adds.
   Enable it only together with Make Character Unique.
 - Logged to `dynasties_rebalance.log`.
+
+### Confederations at the start (separate mod)
+
+- Separate pack, `dynasties_start_confederations.pack`: enable it on its own, with or without the main mod.
+- When you start a new campaign as Hanigalbat, you confederate the AI faction that owns Sangaritu at the start (not a
+  player, not rebels). Only in new campaigns, once. Logged to `dynasties_rebalance.log`.

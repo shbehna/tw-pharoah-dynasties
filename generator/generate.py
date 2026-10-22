@@ -23,12 +23,14 @@ from lib.data import GameData, Overlay  # noqa: E402
 from lib.output import drop_unchanged, write_source  # noqa: E402
 from lib.report import write_report  # noqa: E402
 from lib.schema import Schema  # noqa: E402
+from separate_mods import generate_separate_mods  # noqa: E402
 
 # Order matters: later features see (and may change) the rows written by earlier ones.
 # Landmarks run first so the production multiplier and garrison doubling include them.
 FEATURES = [landmarks, admin, outposts, movement, buildings, garrisons, difficulty, ai, characters]
 # Section order of CHANGELOG.md, used for the report.
-REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "difficulty", "ai", "characters"]
+REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "difficulty", "ai", "characters",
+                "confederations"]
 
 
 def main() -> int:
@@ -50,6 +52,12 @@ def main() -> int:
     addons = generate_addons(ROOT, data, settings, mod)
     for summary in addons:
         overlay.note("characters", summary)
+    separate = generate_separate_mods(ROOT, data, settings, mod)
+    for entry, notes in separate:
+        overlay.note("confederations", f"Separate mod {entry['pack']} (src_mods/{entry['name']}/), "
+                                       f"independent of the main pack:")
+        for note in notes:
+            overlay.note("confederations", note)
     write_report(overlay, os.path.join(ROOT, "docs", "CHANGES.md"), REPORT_ORDER, mod["file_prefix"])
 
     rows = sum(len(t.rows) for t in overlay.tables.values())
@@ -57,6 +65,8 @@ def main() -> int:
           f"{len(overlay.scripts)} scripts; {dropped} rows identical to the game were left out).")
     for summary in addons:
         print(f"Add-on: {summary[:160]}")
+    for entry, _notes in separate:
+        print(f"Separate mod: {entry['title']} ({entry['pack']}) in src_mods/{entry['name']}/")
     print("Change report: docs/CHANGES.md")
     return 0
 

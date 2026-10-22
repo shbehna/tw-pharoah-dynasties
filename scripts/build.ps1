@@ -5,7 +5,8 @@
 .DESCRIPTION
     Creates a mod pack with RPFM and adds src\db, src\text and src\script; TSV tables
     are converted to the game's binary format on the way in. Each compatibility add-on
-    (mod.json "compat_addons") is built from src_addons\<name> into dist\<its pack>.
+    (mod.json "compat_addons") is built from src_addons\<name> into dist\<its pack>, and each
+    separate mod (mod.json "separate_mods") from src_mods\<name>.
 #>
 param()
 
@@ -55,4 +56,17 @@ foreach ($addon in @($config.compat_addons)) {
         continue
     }
     Build-ModPack -Source $source -PackName $addon.pack
+}
+
+# Separate mods (mod.json "separate_mods"): independent packs, built from src_mods\<name>.
+foreach ($separate in @($config.separate_mods)) {
+    if (-not $separate) { continue }
+    $source = Join-Path $ProjectRoot "src_mods\$($separate.name)"
+    $pack = Join-Path $DistDir $separate.pack
+    if (-not (Test-Path $source) -or -not (Get-ChildItem -Path $source -Recurse -File)) {
+        if (Test-Path $pack) { Remove-Item -Force -Path $pack -Confirm:$false }
+        Write-Warning "$($separate.title) not built: src_mods\$($separate.name) is empty (run python generator\generate.py)."
+        continue
+    }
+    Build-ModPack -Source $source -PackName $separate.pack
 }
