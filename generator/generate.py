@@ -3,8 +3,8 @@
 Usage:  python generator/generate.py
 
 Needs the game data extracted by scripts/extract.ps1 and the schema downloaded by
-scripts/setup.ps1. All tunable values are in generator/settings.py; the hand-made
-rows (landmarks, administration reductions, ...) are in generator/data/.
+scripts/setup.ps1. All tunable values are in generator/settings/ (one module per section);
+the rebuilt landmarks (new building levels, texts) are in generator/data/.
 """
 
 from __future__ import annotations
@@ -18,7 +18,8 @@ sys.path.insert(0, os.path.join(ROOT, "generator"))
 
 import settings  # noqa: E402
 from addons import generate_addons  # noqa: E402
-from features import admin, ai, buildings, characters, difficulty, garrisons, landmarks, movement, outposts  # noqa: E402
+from features import (admin, ai, buildings, characters, difficulty, experience, garrisons, landmarks,  # noqa: E402
+                      movement, outposts)
 from lib.data import GameData, Overlay  # noqa: E402
 from lib.output import drop_unchanged, write_source  # noqa: E402
 from lib.report import write_report  # noqa: E402
@@ -27,10 +28,10 @@ from separate_mods import generate_separate_mods  # noqa: E402
 
 # Order matters: later features see (and may change) the rows written by earlier ones.
 # Landmarks run first so the production multiplier and garrison doubling include them.
-FEATURES = [landmarks, admin, outposts, movement, buildings, garrisons, difficulty, ai, characters]
+FEATURES = [landmarks, admin, outposts, movement, buildings, garrisons, experience, difficulty, ai, characters]
 # Section order of CHANGELOG.md, used for the report.
-REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "difficulty", "ai", "characters",
-                "confederations"]
+REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "experience", "difficulty", "ai",
+                "characters", "confederations"]
 
 
 def main() -> int:

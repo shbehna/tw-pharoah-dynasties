@@ -31,8 +31,9 @@ The scripts find the game through Steam; if that fails, pass its folder: `script
 
 ## Change a value
 
-Every number is in [generator/settings.py](generator/settings.py). Hand-made rows (landmarks,
-religious conversion costs, garrison ammunition) are TSV files in [generator/data/](generator/data). After editing either:
+Every number is in [generator/settings/](generator/settings), one module per section of the changelog
+(`admin.py`, `landmarks.py`, `experience.py`, ...). The rebuilt landmarks (new building levels, their names
+and help pages) are TSV files in [generator/data/](generator/data). After editing either:
 
 ```powershell
 python generator\generate.py                                   # rewrites src\ and docs\CHANGES.md
@@ -110,7 +111,7 @@ position, so the setting names regions rather than factions.
 ## How it is built
 
 - `generator/` reads the extracted game tables (`reference/vanilla`) and its own data files
-  (`generator/data`), and writes the mod source to `src/`: one TSV file per table and section, the
+  (`generator/data`) and settings (`generator/settings/`), and writes the mod source to `src/`: one TSV file per table and section, the
   texts, and four Lua scripts (administration tiers, outpost sacking, progressive difficulty, unique characters). It only writes rows that differ
   from the game.
 - `scripts/build.ps1` packs `src/` with RPFM (Rusted PackFile Manager) 4.7.4, the last version with a
@@ -122,8 +123,8 @@ position, so the setting names regions rather than factions.
 | Path | Contents |
 | --- | --- |
 | `CHANGELOG.md` | What the mod changes |
-| `generator/settings.py` | All the numbers |
-| `generator/data/` | Hand-made rows (landmarks, conversion costs, garrison ammunition) |
+| `generator/settings/` | All the numbers, one module per section |
+| `generator/data/` | Rebuilt landmarks: new building levels, names, help pages, fixes |
 | `generator/features/` | One module per section |
 | `generator/conflicts.py` | Comparison with the enabled mods |
 | `scripts/` | `setup`, `extract`, `build`, `install`, `check` |

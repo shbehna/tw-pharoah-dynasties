@@ -1,6 +1,6 @@
 """Buildings.
 
-- religious building conversions cost stone and wood instead of gold (generator/data/buildings)
+- religious building conversions cost stone and wood instead of gold (RELIGIOUS_CONVERSION_COSTS)
 - granary, bronzeworker and goldsmith chains
 - summer festival grounds and beer hall
 - Kushite Delegate School influence
@@ -67,15 +67,13 @@ MOVEMENT_EFFECTS = {
 OUTPOST = "_ers_"  # outpost slots, including the unique wonders built in them
 UPKEEP_EFFECT = "troy_effect_economy_building_upkeep_add_"  # + resource: flat building upkeep (negative values)
 RUIN_SUFFIXES = ("_ruin", "_ruins")
+POOLED_COSTS = "resource_cost_pooled_resource_junctions_tables"
+GOLD_COST, STONE_COST, WOOD_COST = "troy_gold_buildings", "troy_stones_buildings", "troy_wood_buildings"
 
 
 def apply(overlay: Overlay, settings) -> None:
     s = settings
-    count = 0
-    for tsv in overlay.data.data_tables("buildings"):
-        count += overlay.import_rows(tsv, FEATURE)
-    overlay.note(FEATURE, f"Religious building conversions cost stone and wood instead of gold "
-                          f"({count} cost rows, generator/data/buildings).")
+    _conversion_costs(overlay, s)
 
     mentioned = _chains(overlay, s)
     mentioned |= _happiness_buildings(overlay, s)
@@ -84,6 +82,34 @@ def apply(overlay: Overlay, settings) -> None:
     _delegate_school(overlay, s)
     _movement_bonus(overlay, s)
     _upkeep(overlay, s)
+
+
+def _conversion_costs(overlay: Overlay, s) -> None:
+    """Religious building conversions cost stone and wood instead of gold (RELIGIOUS_CONVERSION_COSTS)."""
+    costs = collections.defaultdict(set)
+    for row in overlay.rows(POOLED_COSTS):
+        costs[row["resource_cost"]].add(row["pooled_resource_factor"])
+    count = 0
+    for cost, factors in sorted(costs.items()):
+        if GOLD_COST not in factors:
+            continue
+        for pattern, spec in s.RELIGIOUS_CONVERSION_COSTS:
+            match = re.fullmatch(pattern, cost)
+            if not match:
+                continue
+            if isinstance(spec, dict):
+                level = int(match.group(1))
+                if level not in spec:
+                    raise ValueError(f"RELIGIOUS_CONVERSION_COSTS: no level {level} in {pattern} for {cost}")
+                spec = spec[level]
+            stone, wood = spec
+            for factor, amount in ((GOLD_COST, 0), (STONE_COST, -stone), (WOOD_COST, -wood)):
+                overlay.put(POOLED_COSTS, {"pooled_resource_factor": factor, "resource_cost": cost,
+                                           "amount": amount}, FEATURE)
+            count += 1
+            break
+    overlay.note(FEATURE, f"Religious building conversions cost stone and wood instead of gold "
+                          f"({count} conversions, RELIGIOUS_CONVERSION_COSTS).")
 
 
 def _delegate_school(overlay: Overlay, s) -> None:

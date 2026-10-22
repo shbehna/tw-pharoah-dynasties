@@ -9,11 +9,27 @@ rows into the overlay, so later features see the result of earlier ones.
 from __future__ import annotations
 
 import glob
+import hashlib
 import os
 from dataclasses import dataclass, field
 
 from .schema import Schema
 from .tsv import TsvFile, read_tsv
+
+
+INT32_MAX = 2**31 - 1  # vanilla ids are random positive 32-bit numbers; stay in that range
+
+
+def stable_id(seed: str, used: set[int]) -> int:
+    """A new row id derived from `seed` (the same on every run), not in `used`; it is added to `used`."""
+    salt = 0
+    while True:
+        digest = hashlib.sha1(f"dyn_rebal|{seed}|{salt}".encode()).digest()
+        candidate = int.from_bytes(digest[:4], "big") & INT32_MAX
+        if candidate > 1_000_000 and candidate not in used:
+            used.add(candidate)
+            return candidate
+        salt += 1
 
 
 def fmt_float(value: float) -> str:
