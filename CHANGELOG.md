@@ -125,7 +125,24 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Converting a religious building no longer costs gold; it costs stone and wood instead:
   75 stone and 50 wood for a level 1 temple, 100 and 75 for level 2, 125 and 100 for level 3;
   75 stone and 35 wood for Mesopotamian dwellings; 125/100, 175/125 and 225/150 for Sea Peoples idols; 75 and 75 for shrines.
-- Granary chain: +20%, +30%, +65% food production in the province (vanilla +5%, +10%, +20%); the Granary also gives -15% food upkeep for armies in the province.
+- Granary chain: +25%, +40%, +75% food production in the province (vanilla +5%, +10%, +20%); the Granary also gives -15% food upkeep for armies in the province.
+- War Council chains, food upkeep of units in the province (vanilla none): Hanigalbat's War Stockpiles, War Treasury,
+  War Council -5%, -10%, -15%; Recruitment Hall, War Council, War Coffers -2%, -5%, -10%.
+- Officer chains, upkeep of generals' bodyguard units in the province (vanilla none): -30%, -50%, -85% (Hanigalbat's
+  Officers' School, Royal Officers' School, Palace of War; Officer Training Grounds, Officer School, Royal Officer
+  School; Ramesses' Military Office, Military School, Military Academy).
+- Garrison chains, campaign movement of own armies in the region (vanilla none): Hanigalbat's City Guard Station,
+  Inner Army Headquarters, Defenders' Fortress +5%, +10%, +15%; City Guard Station and City Guard Compound (and their
+  regional equivalents) +3%, +6%.
+- Main wood chains: 45 and 100 wood per turn (Logging Grounds and Logging Camp, vanilla 35 and 50; Woodcutting Yard and
+  Woodcutting Complex, vanilla 30 and 40; Pine and Oak Timber Yard, vanilla 45 and 55; Irsu's versions included).
+- Wood derivative chains build 1 turn faster: Cedar Warehouse, Woodcutters' District and Lumber Mill 1 turn (vanilla 2),
+  Lumber Mill Complex 2 turns (vanilla 3).
+- Compatibility add-on for CPTT Recruitment Rework (`dynasties_rebalance_compat_cptt_recruitment_rework.pack`; enable it
+  only together with that mod): Relocation Office and Deportation Hub -10/-20 workforce growth in the province, +4/+8
+  in adjacent provinces, +2/+5 influence, -3/-6 happiness and -5%/-10% upkeep of native units in the province (all
+  resources: the game has no food-only upkeep effect for a set of units). Fixes the mod's two workforce growth rows,
+  which share one key so only one of them applied.
 - Bronzeworker chain: +10%, +20%, +35% bronze production (vanilla +5%, +10%, +20%); the Royal Bronzeworker also gives -10% bronze upkeep for armies in the province.
 - Goldsmith chain: +10%, +15%, +25% gold production (vanilla +5%, +10%, +20%); the Royal Goldsmith also gives -5% gold upkeep for armies in the province.
 - Summer Festival Grounds: +40% food production (vanilla +10%) and +2 happiness (vanilla +4).
@@ -187,6 +204,8 @@ nearest 5; that mod should be disabled. Unit experience per turn, in the provinc
   Sword of Adad-narari I +175 (+25); Theban Veteran +115 (+20), unique version +175 (+20); Royal Steward and Man of the
   People +90, upgraded +165 (+50, +100); Lionlike in Wrath +125 (+75); Overseer of Militia +90 (+20).
 - Traits, unit experience per turn: Grieving (Achilles) +190 (+100); Mentor +35 (+10).
+- Training chains (vanilla none): Hanigalbat's Practice Halls, Training Compound, Arena of Trials +30, +60, +120;
+  Proving Grounds and Training Grounds, Kuru's Mercenary Office and Mercenary Centre +20, +50.
 - Hanigalbat's own buildings get 20% more than the matching shared ones (rounded to the nearest 5): Champion's Hall
   +205 (+40); City Guard Station, Inner Army Headquarters, Defenders' Fortress +120, +180, +240 for own armies in the
   region (vanilla none); Officers' School, Royal Officers' School, Palace of War +30, +65, +105 experience per turn for

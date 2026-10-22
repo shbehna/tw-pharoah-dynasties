@@ -20,7 +20,7 @@ RELIGIOUS_CONVERSION_COSTS = [
 
 # Production % of the three province resource chains, by level, and the unit
 # upkeep reduction (province) added to their last level.
-GRANARY_PRODUCTION = [20, 30, 65]  # vanilla 5-10-20
+GRANARY_PRODUCTION = [25, 40, 75]  # vanilla 5-10-20
 GRANARY_FOOD_UPKEEP = -15
 BRONZEWORKER_PRODUCTION = [10, 20, 35]  # vanilla 5-10-20
 BRONZEWORKER_BRONZE_UPKEEP = -10
@@ -70,6 +70,73 @@ OTHER_PRODUCTION_ALL_RESOURCES = [r"_landmark_"]
 # Regular expressions of building keys left out of the multiplier, e.g. r"_main_building_"
 # to keep settlement buildings at their vanilla production bonus.
 OTHER_PRODUCTION_EXCLUDE = []
+# Effects set on whole building chains, by level: (regular expression matched against the whole chain key,
+# effect, scope, values from the first level). A chain with fewer levels than values uses the first ones. An
+# effect the level already has gets the new value (its other columns rescaled); a new one gives half when
+# damaged, nothing when ruined and the full value at low and medium influence.
+BUILDING_CHAIN_EFFECTS = [
+    # Hanigalbat's War Stockpiles, War Treasury, War Council: food upkeep of units in the province (vanilla none)
+    (r"phar_map_ash_military_administration_cost_mod", "phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+     "building_to_force_own_provincewide", [-5, -10, -15]),
+    # Recruitment Hall, War Council, War Coffers: the same (vanilla none)
+    (r"phar_main_all_military_administration_cost_mod", "phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+     "building_to_force_own_provincewide", [-2, -5, -10]),
+    # Officer chains, upkeep of generals (bodyguard units) in the province (vanilla none): Hanigalbat's Officers'
+    # School, Royal Officers' School, Palace of War; Officer Training Grounds, Officer School, Royal Officer
+    # School; Ramesses' Military Office, Military School, Military Academy
+    (r"phar_map_ash_military_administration_hero_training|phar_main_all_military_hero_training"
+     r"|phar_main_ram_military_administration_hero_training",
+     "phar_main_upkeep_mod_bodyguards", "building_to_force_own_provincewide", [-30, -50, -85]),
+    # Hanigalbat's City Guard Station, Inner Army Headquarters, Defenders' Fortress: campaign movement of own
+    # armies in the region (vanilla none)
+    (r"phar_map_ash_military_garrison_type_a", "phar_main_mod_land_movement_campaign_basic", "region_to_force_own",
+     [5, 10, 15]),
+    # City Guard Station, City Guard Compound and their regional equivalents: the same (vanilla none)
+    (r"phar_main_(?:canaan|hatti|kemet)_military_garrison_type_a|phar_(?:main|map)_military_garrison_type_a_\w+",
+     "phar_main_mod_land_movement_campaign_basic", "region_to_force_own", [3, 6, 12]),
+    # Main wood chains, wood per turn in the region: Logging Grounds, Logging Camp (vanilla 35, 50; Irsu's 30);
+    # Woodcutting Yard, Woodcutting Complex (vanilla 30, 40; Irsu's 35); Pine and Oak Timber Yard (vanilla 45, 55)
+    (r"phar_map_(?:all|irsu)_resource_production_wood_mesopotamia_type_a|phar_main_wood_production_canaan_type_a"
+     r"|phar_main_irsu_resource_production_wood_type_a|phar_main_wood_production_hatti",
+     "phar_main_building_wood_base_amount", "region_to_region_own", [45, 100]),
+]
+
+# Construction time of whole building chains, in turns added (minimum 1 turn): (regular expression matched
+# against the whole chain key, turns).
+BUILDING_CONSTRUCTION_TIME = [
+    # Wood derivative chains: Cedar Warehouse (vanilla 2 turns), Woodcutters' District (2), Lumber Mill (2) and
+    # Lumber Mill Complex (3)
+    (r"phar_map_all_resource_production_wood_mesopotamia_type_a_derivative"
+     r"|phar_main_wood_production_canaan_derivative_type_a|phar_main_wood_production_hatti_derivative", -1),
+]
+
+# Buildings of the CPTT Recruitment Rework mod (Workshop 3441336326), in its compatibility add-on
+# (dynasties_rebalance_compat_cptt_recruitment_rework.pack): building level -> {(effect, scope): value}. A value
+# alone means: nothing when damaged or ruined, the full value at low and medium influence (as that mod does);
+# otherwise (value, damaged, ruined, low influence, medium influence). The effects listed replace the mod's
+# rows of the same effect; its other effects stay.
+CPTT_BUILDING_EFFECTS = {
+    # Relocation Office, Deportation Hub (Mesopotamian factions; the mod: workforce growth -10/-20 here and
+    # +10/+20 in adjacent provinces, which share one row so only one applies; influence 0, +2/+4 at low and
+    # medium influence; happiness -10/-15)
+    "cptt_fac_mes_depo_1": {
+        ("phar_main_province_development_growth_added_building", "region_to_province_own_text_provincewide"): -10,
+        ("phar_sea_province_development_growth_added_building", "province_to_adjacent_province_own"): 4,
+        ("phar_main_influence_province_management_buildings", "region_to_province_own_text_provincewide"): 2,
+        ("phar_main_province_management_happiness_building", "region_to_province_own_text_provincewide"): -3,
+        # Upkeep of native units in the province (all resources: the game has no food-only upkeep effect for a
+        # set of units)
+        ("phar_main_upkeep_cost_mod_unit_sets_all_native_units", "building_to_force_own_provincewide"): -5,
+    },
+    "cptt_fac_mes_depo_2": {
+        ("phar_main_province_development_growth_added_building", "region_to_province_own_text_provincewide"): -20,
+        ("phar_sea_province_development_growth_added_building", "province_to_adjacent_province_own"): 8,
+        ("phar_main_influence_province_management_buildings", "region_to_province_own_text_provincewide"): 5,
+        ("phar_main_province_management_happiness_building", "region_to_province_own_text_provincewide"): -6,
+        ("phar_main_upkeep_cost_mod_unit_sets_all_native_units", "building_to_force_own_provincewide"): -10,
+    },
+}
+
 # Per-turn building upkeep (vanilla: a handful of buildings). Every level of the building sets in
 # BUILDING_UPKEEP_SETS costs BUILDING_UPKEEP_PERCENT % of its construction cost per turn, for each
 # resource of that cost, rounded up to a multiple of BUILDING_UPKEEP_ROUNDING. A resource the

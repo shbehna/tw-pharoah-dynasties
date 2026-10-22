@@ -16,6 +16,16 @@ EXPERIENCE_UNIT_BUILDINGS = [
     (r"phar_map_ash_military_garrison_type_a_1", 120, "building_to_forces_own_regionwide"),
     (r"phar_map_ash_military_garrison_type_a_2", 180, "building_to_forces_own_regionwide"),
     (r"phar_map_ash_military_garrison_type_a_3", 240, "building_to_forces_own_regionwide"),
+    # Hanigalbat's Practice Halls, Training Compound, Arena of Trials (vanilla none)
+    (r"phar_map_ash_military_administration_unit_training_type_a_1", 30, "building_to_force_own_provincewide"),
+    (r"phar_map_ash_military_administration_unit_training_type_a_2", 60, "building_to_force_own_provincewide"),
+    (r"phar_map_ash_military_administration_unit_training_type_a_3", 120, "building_to_force_own_provincewide"),
+    # Proving Grounds, Training Grounds; Kuru's Mercenary Office, Mercenary Centre (vanilla none). These chains
+    # have 2 levels.
+    (r"phar_main_(?:all|kuru)_military_administration_unit_training_type_a_1", 20,
+     "building_to_force_own_provincewide"),
+    (r"phar_main_(?:all|kuru)_military_administration_unit_training_type_a_2", 50,
+     "building_to_force_own_provincewide"),
     # Kuru's Mercenary Hunting Camp, Mercenary Hunting Village (vanilla 25, 50)
     (r"phar_main_kuru_military_administration_unit_training_type_b_1", 105),
     (r"phar_main_kuru_military_administration_unit_training_type_b_2", 210),

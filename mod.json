@@ -12,6 +12,12 @@
       "title": "Make Character Unique",
       "workshop_id": "3320741050",
       "pack": "dynasties_rebalance_compat_make_character_unique.pack"
+    },
+    {
+      "name": "cptt_recruitment_rework",
+      "title": "CPTT Recruitment Rework",
+      "workshop_id": "3441336326",
+      "pack": "dynasties_rebalance_compat_cptt_recruitment_rework.pack"
     }
   ],
   "separate_mods": [

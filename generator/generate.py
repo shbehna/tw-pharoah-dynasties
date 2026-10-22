@@ -51,8 +51,8 @@ def main() -> int:
     dropped = drop_unchanged(overlay)
     written = write_source(overlay, os.path.join(ROOT, "src"), mod["file_prefix"])
     addons = generate_addons(ROOT, data, settings, mod)
-    for summary in addons:
-        overlay.note("characters", summary)
+    for section, summary in addons:
+        overlay.note(section, summary)
     separate = generate_separate_mods(ROOT, data, settings, mod)
     for entry, notes in separate:
         overlay.note("confederations", f"Separate mod {entry['pack']} (src_mods/{entry['name']}/), "
@@ -64,7 +64,7 @@ def main() -> int:
     rows = sum(len(t.rows) for t in overlay.tables.values())
     print(f"Wrote {len(written)} files to src/ ({rows} table rows, {len(overlay.loc)} texts, "
           f"{len(overlay.scripts)} scripts; {dropped} rows identical to the game were left out).")
-    for summary in addons:
+    for _section, summary in addons:
         print(f"Add-on: {summary[:160]}")
     for entry, _notes in separate:
         print(f"Separate mod: {entry['title']} ({entry['pack']}) in src_mods/{entry['name']}/")

@@ -81,6 +81,9 @@ def apply(overlay: Overlay, settings) -> None:
     _multiply_production(overlay, s, mentioned)
     _delegate_school(overlay, s)
     _movement_bonus(overlay, s)
+    # After the movement bonus, so the chain values are not raised by it.
+    _chain_effects(overlay, s)
+    _construction_time(overlay, s)
     _upkeep(overlay, s)
 
 
@@ -192,6 +195,40 @@ def _movement_bonus(overlay: Overlay, s) -> None:
                    float(row["value"]) + s.BUILDING_MOVEMENT_BONUS, FEATURE)
     overlay.note(FEATURE, f"Campaign movement bonus of buildings +{s.BUILDING_MOVEMENT_BONUS}% "
                           f"({len(rows)} buildings: {', '.join(sorted(row['building'] for row in rows))}).")
+
+
+def _matching_chains(levels: dict[str, dict], pattern: str, setting: str) -> dict[str, list[str]]:
+    """Chains whose key matches `pattern` -> their levels in order (ruins left out)."""
+    chains: dict[str, list[str]] = collections.defaultdict(list)
+    for building, row in levels.items():
+        if re.fullmatch(pattern, row["chain"]) and not building.endswith(RUIN_SUFFIXES):
+            chains[row["chain"]].append(building)
+    if not chains:
+        raise ValueError(f"{setting}: no building chain matches {pattern}")
+    return {chain: sorted(buildings, key=lambda b: int(levels[b]["level"])) for chain, buildings in chains.items()}
+
+
+def _chain_effects(overlay: Overlay, s) -> None:
+    levels = building_levels(overlay)
+    for pattern, effect, scope, values in s.BUILDING_CHAIN_EFFECTS:
+        chains = _matching_chains(levels, pattern, "BUILDING_CHAIN_EFFECTS")
+        for buildings in chains.values():
+            for building, value in zip(buildings, values):
+                set_effect(overlay, building, effect, scope, value, FEATURE)
+        overlay.note(FEATURE, f"{effect} ({scope}) {'/'.join(f'{v:+g}' for v in values)} by level on "
+                              f"{len(chains)} chains: {', '.join(sorted(chains))}.")
+
+
+def _construction_time(overlay: Overlay, s) -> None:
+    levels = building_levels(overlay)
+    for pattern, turns in s.BUILDING_CONSTRUCTION_TIME:
+        chains = _matching_chains(levels, pattern, "BUILDING_CONSTRUCTION_TIME")
+        for buildings in chains.values():
+            for building in buildings:
+                row = dict(levels[building])
+                row["create_time"] = max(1, int(row["create_time"]) + turns)
+                overlay.put("building_levels_tables", row, FEATURE)
+        overlay.note(FEATURE, f"Construction time {turns:+d} turns on {len(chains)} chains: {', '.join(sorted(chains))}.")
 
 
 def _chains(overlay: Overlay, s) -> set[str]:

@@ -78,14 +78,16 @@ python generator\conflicts.py
 
 ### Compatibility add-ons
 
-Mods that add unique characters get an add-on pack that lets those characters serve in any faction, as the
-main mod does for the game's own (permitted subtypes, bodyguard units allowed everywhere, bodyguards for every
-culture). The add-on's rows refer to the other mod's characters and units, so **enable an add-on only together
-with its mod**.
+Some mods get an add-on pack: mods that add unique characters (to let those characters serve in any faction,
+as the main mod does for the game's own: permitted subtypes, bodyguard units allowed everywhere, bodyguards for
+every culture), and mods whose buildings this mod rebalances. An add-on's rows refer to the other mod's
+characters, units or buildings, so **enable an add-on only together with its mod**. Each add-on has a builder in
+`generator/addons.py`.
 
 | Add-on pack | For |
 | --- | --- |
 | `dynasties_rebalance_compat_make_character_unique.pack` | Make Character Unique (Workshop 3320741050), also its "Slot" variant (same characters) |
+| `dynasties_rebalance_compat_cptt_recruitment_rework.pack` | CPTT Recruitment Rework (Workshop 3441336326): rebalanced Relocation Office and Deportation Hub (`CPTT_BUILDING_EFFECTS`) |
 
 The add-ons are listed in `mod.json` (`compat_addons`). To add one for another mod, add an entry with its
 Workshop ID, subscribe to it, then run `scripts\extract.ps1` (it extracts the mod's tables to
