@@ -76,7 +76,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   - Royal Asaminthos: -2% fatigue for bodyguard and high tier units
   - Royal Legal Complex: +2 happiness and +2 influence in your provinces, +5 legitimacy, +15 civilization points, +3 workforce from occupied slots, +1 victory point
   - Royal Tax Collector's Office: +5 legitimacy (vanilla +3)
-  - Royal War Academy: +8 hero recruit rank (vanilla +7), +4 legitimacy (vanilla +3), +465 experience per turn for units (vanilla +70; see Experience)
+  - Royal War Academy: +8 hero recruit rank (vanilla +7), +4 legitimacy (vanilla +3), +235 experience per turn for units (vanilla +70; see Experience)
   - Sanctified Cattle Herds: +2 happiness (vanilla +3), +2 influence
   - Shipment Redistribution Hub: +4 influence (vanilla +5), +2 influence in adjacent provinces
   - The Northern Oasis Fields: +250 food per turn (vanilla +215), +2 influence (vanilla +3), +6 workforce growth (vanilla +7), +4 happiness (vanilla +5)
@@ -169,26 +169,26 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
 ### Experience
 
-From the "XP Followers Traits And Buildings Buffed" mod (Workshop 3456700913), which should now be disabled.
-Unit experience per turn, in the province unless noted (vanilla in brackets):
+Half the values of the "XP Followers Traits And Buildings Buffed" mod (Workshop 3456700913), rounded to the
+nearest 5; that mod should be disabled. Unit experience per turn, in the province unless noted (vanilla in brackets):
 
-- Champion's Hall (all cultures): +335 (+40). Kuru's Mercenary Hunting Camp and Village: +205, +415 (+25, +50).
-- Warriors' Refuge: +335 for own armies in its region (+40).
-- City Guard Station and City Guard Compound (and their equivalents): +200 and +300 for own armies in the region
-  (vanilla none); Guard Tower (and equivalents): +150 (vanilla none).
-- Royal War Academy: +465 (+70).
-- Shrine of Amun, Shrine of Kumarbi: +125, +250 for own armies in the region (+15, +30).
-- Sea Peoples: Trapping Sites, Hunters' Tents, Hunting Bivouac +100, +250, +510 (+20, +50, +120); Peleset Single
-  Combat Arena, Fighting Games, Fighting Tournaments +150, +200, +375 (+30, +40, +75); Dueling Field, Battle Arena
-  +290, +465 (+35, +70); Peleset Great Assembly +250 for all armies (+50).
-- Officer School, Royal Officer School: +45, +112 experience per turn for characters (+20, +50).
-- Followers and titles, unit experience for the army: Veteran Soldier and Clay Tablet +175 (+10); Mitanni Horse Trainer,
-  Kushite Guards, Duellist, Blind Veteran, Strongman, Wise Nobleman, Obsidian Tools & Blades +325 (+20); Ceremonial
-  Sword of Adad-narari I +350 (+25); Theban Veteran +225 (+20), unique version +350 (+20); Royal Steward and Man of the
-  People +175, upgraded +325 (+50, +100); Lionlike in Wrath +250 (+75); Overseer of Militia +175 (+20).
-- Traits, unit experience per turn: Grieving (Achilles) +375 (+100); Mentor +65 (+10).
-- Buildings give about half when damaged and at low or medium influence (the Officer Schools keep the full value at
-  low and medium influence), as in the mod.
+- Champion's Hall (all cultures): +170 (+40). Kuru's Mercenary Hunting Camp and Village: +105, +210 (+25, +50).
+- Warriors' Refuge: +170 for own armies in its region (+40).
+- City Guard Station and City Guard Compound (and their equivalents): +100 and +150 for own armies in the region
+  (vanilla none); Guard Tower (and equivalents): +75 (vanilla none).
+- Royal War Academy: +235 (+70).
+- Shrine of Amun, Shrine of Kumarbi: +65, +125 for own armies in the region (+15, +30).
+- Sea Peoples: Trapping Sites, Hunters' Tents, Hunting Bivouac +50, +125, +255 (+20, +50, +120); Peleset Single
+  Combat Arena, Fighting Games, Fighting Tournaments +75, +100, +190 (+30, +40, +75); Dueling Field, Battle Arena
+  +145, +235 (+35, +70); Peleset Great Assembly +125 for all armies (+50).
+- Officer School, Royal Officer School: +25, +55 experience per turn for characters (+20, +50).
+- Followers and titles, unit experience for the army: Veteran Soldier and Clay Tablet +90 (+10); Mitanni Horse Trainer,
+  Kushite Guards, Duellist, Blind Veteran, Strongman, Wise Nobleman, Obsidian Tools & Blades +165 (+20); Ceremonial
+  Sword of Adad-narari I +175 (+25); Theban Veteran +115 (+20), unique version +175 (+20); Royal Steward and Man of the
+  People +90, upgraded +165 (+50, +100); Lionlike in Wrath +125 (+75); Overseer of Militia +90 (+20).
+- Traits, unit experience per turn: Grieving (Achilles) +190 (+100); Mentor +35 (+10).
+- Buildings give half (rounded down) when damaged and at low or medium influence (the Officer Schools keep the full
+  value at low and medium influence).
 
 ### Progressive difficulty
 
