@@ -262,11 +262,14 @@ def _chains(overlay: Overlay, s) -> set[str]:
         for building, value in zip(buildings, production):
             set_effect(overlay, building, effect, PROVINCE, value, FEATURE)
         upkeep = getattr(s, upkeep_setting)
-        set_effect(overlay, buildings[-1], f"phar_main_unit_upkeep_cost_percentage_multiplier_mod_{resource}",
-                   ARMIES_IN_PROVINCE, upkeep, FEATURE)
+        # 0: no upkeep effect (vanilla has none), rather than a "+0%" line in the tooltip.
+        if upkeep:
+            set_effect(overlay, buildings[-1], f"phar_main_unit_upkeep_cost_percentage_multiplier_mod_{resource}",
+                       ARMIES_IN_PROVINCE, upkeep, FEATURE)
         done.update(buildings)
-        overlay.note(FEATURE, f"{chain}: +{'/'.join(map(str, production))}% {resource} production; last level also "
-                              f"{upkeep:g}% {resource} upkeep for armies in the province.")
+        overlay.note(FEATURE, f"{chain}: +{'/'.join(map(str, production))}% {resource} production"
+                              + (f"; last level also {upkeep:g}% {resource} upkeep for armies in the province."
+                                 if upkeep else "."))
     return done
 
 

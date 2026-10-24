@@ -19,9 +19,9 @@ RELIGIOUS_CONVERSION_COSTS = [
 ]
 
 # Production % of the three province resource chains, by level, and the unit
-# upkeep reduction (province) added to their last level.
+# upkeep reduction (province) added to their last level (vanilla none; 0: none).
 GRANARY_PRODUCTION = [25, 40, 75]  # vanilla 5-10-20
-GRANARY_FOOD_UPKEEP = -15
+GRANARY_FOOD_UPKEEP = 0
 BRONZEWORKER_PRODUCTION = [10, 20, 35]  # vanilla 5-10-20
 BRONZEWORKER_BRONZE_UPKEEP = -10
 GOLDSMITH_PRODUCTION = [10, 15, 25]  # vanilla 5-10-20

@@ -125,7 +125,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Converting a religious building no longer costs gold; it costs stone and wood instead:
   75 stone and 50 wood for a level 1 temple, 100 and 75 for level 2, 125 and 100 for level 3;
   75 stone and 35 wood for Mesopotamian dwellings; 125/100, 175/125 and 225/150 for Sea Peoples idols; 75 and 75 for shrines.
-- Granary chain: +25%, +40%, +75% food production in the province (vanilla +5%, +10%, +20%); the Granary also gives -15% food upkeep for armies in the province.
+- Granary chain: +25%, +40%, +75% food production in the province (vanilla +5%, +10%, +20%).
 - War Council chains, food upkeep of units in the province (vanilla none): Hanigalbat's War Stockpiles, War Treasury,
   War Council -5%, -10%, -15%; Recruitment Hall, War Council, War Coffers -2%, -5%, -10%.
 - Officer chains, upkeep of generals' bodyguard units in the province (vanilla none): -30%, -50%, -85% (Hanigalbat's
