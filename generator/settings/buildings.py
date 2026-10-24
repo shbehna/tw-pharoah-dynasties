@@ -77,10 +77,10 @@ OTHER_PRODUCTION_EXCLUDE = []
 BUILDING_CHAIN_EFFECTS = [
     # Hanigalbat's War Stockpiles, War Treasury, War Council: food upkeep of units in the province (vanilla none)
     (r"phar_map_ash_military_administration_cost_mod", "phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
-     "building_to_force_own_provincewide", [-5, -10, -15]),
+     "building_to_force_own_provincewide", [-6, -15, -25]),
     # Recruitment Hall, War Council, War Coffers: the same (vanilla none)
     (r"phar_main_all_military_administration_cost_mod", "phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
-     "building_to_force_own_provincewide", [-2, -5, -10]),
+     "building_to_force_own_provincewide", [-5, -8, -15]),
     # Officer chains, upkeep of generals (bodyguard units) in the province (vanilla none): Hanigalbat's Officers'
     # School, Royal Officers' School, Palace of War; Officer Training Grounds, Officer School, Royal Officer
     # School; Ramesses' Military Office, Military School, Military Academy
