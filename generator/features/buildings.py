@@ -68,6 +68,8 @@ OUTPOST = "_ers_"  # outpost slots, including the unique wonders built in them
 UPKEEP_EFFECT = "troy_effect_economy_building_upkeep_add_"  # + resource: flat building upkeep (negative values)
 RUIN_SUFFIXES = ("_ruin", "_ruins")
 POOLED_COSTS = "resource_cost_pooled_resource_junctions_tables"
+# Wood per turn of a building: base wood, or port wood (WOOD_PRODUCTION).
+WOOD_EFFECTS = {"phar_main_building_wood_base_amount", "phar_main_base_amount_troy_wood_phar_main_ports"}
 GOLD_COST, STONE_COST, WOOD_COST = "troy_gold_buildings", "troy_stones_buildings", "troy_wood_buildings"
 
 
@@ -83,6 +85,7 @@ def apply(overlay: Overlay, settings) -> None:
     _movement_bonus(overlay, s)
     # After the movement bonus, so the chain values are not raised by it.
     _chain_effects(overlay, s)
+    _wood_production(overlay, s)
     _construction_time(overlay, s)
     _upkeep(overlay, s)
 
@@ -217,6 +220,24 @@ def _chain_effects(overlay: Overlay, s) -> None:
                 set_effect(overlay, building, effect, scope, value, FEATURE)
         overlay.note(FEATURE, f"{effect} ({scope}) {'/'.join(f'{v:+g}' for v in values)} by level on "
                               f"{len(chains)} chains: {', '.join(sorted(chains))}.")
+
+
+def _wood_production(overlay: Overlay, s) -> None:
+    levels = building_levels(overlay)
+    effects = effects_by_building(overlay)
+    changed = 0
+    for chain, values in s.WOOD_PRODUCTION.items():
+        buildings = _matching_chains(levels, re.escape(chain), "WOOD_PRODUCTION")[chain]
+        if len(buildings) != len(values):
+            raise ValueError(f"WOOD_PRODUCTION: {chain} has {len(buildings)} levels ({', '.join(buildings)}), "
+                             f"not {len(values)}")
+        for building, value in zip(buildings, values):
+            rows = [row for row in effects.get(building, []) if row["effect"] in WOOD_EFFECTS]
+            if len(rows) != 1:
+                raise ValueError(f"WOOD_PRODUCTION: {building} needs exactly one of {sorted(WOOD_EFFECTS)}")
+            changed += set_effect(overlay, building, rows[0]["effect"], rows[0]["effect_scope"], value, FEATURE)
+    overlay.note(FEATURE, f"Wood per turn of {len(s.WOOD_PRODUCTION)} wood chains (WOOD_PRODUCTION): "
+                          f"{changed} building levels changed.")
 
 
 def _construction_time(overlay: Overlay, s) -> None:

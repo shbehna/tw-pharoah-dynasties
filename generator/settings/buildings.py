@@ -94,12 +94,44 @@ BUILDING_CHAIN_EFFECTS = [
     # City Guard Station, City Guard Compound and their regional equivalents: the same (vanilla none)
     (r"phar_main_(?:canaan|hatti|kemet)_military_garrison_type_a|phar_(?:main|map)_military_garrison_type_a_\w+",
      "phar_main_mod_land_movement_campaign_basic", "region_to_force_own", [3, 6, 12]),
-    # Main wood chains, wood per turn in the region: Logging Grounds, Logging Camp (vanilla 35, 50; Irsu's 30);
-    # Woodcutting Yard, Woodcutting Complex (vanilla 30, 40; Irsu's 35); Pine and Oak Timber Yard (vanilla 45, 55)
-    (r"phar_map_(?:all|irsu)_resource_production_wood_mesopotamia_type_a|phar_main_wood_production_canaan_type_a"
-     r"|phar_main_irsu_resource_production_wood_type_a|phar_main_wood_production_hatti",
-     "phar_main_building_wood_base_amount", "region_to_region_own", [45, 100]),
 ]
+
+# Wood per turn of the wood production chains, by level: chain -> values (vanilla in the comments). The chain's
+# own wood effect changes (wood, or port wood for the ports), other columns rescaled; a chain must list every
+# level (ruins excluded). Mycenae's extra wood at high influence is not changed.
+WOOD_PRODUCTION = {
+    # Mesopotamia: Logging Grounds, Logging Camp
+    "phar_map_all_resource_production_wood_mesopotamia_type_a": [55, 110],  # vanilla 35, 50
+    "phar_map_irsu_resource_production_wood_mesopotamia_type_a": [55],  # Irsu's (vanilla 30)
+    # Canaan: Woodcutting Yard, Woodcutting Complex
+    "phar_main_wood_production_canaan_type_a": [55, 110],  # vanilla 30, 40
+    "phar_main_irsu_resource_production_wood_type_a": [55],  # Irsu's (vanilla 35)
+    # Canaan: Cypress Timber Yard, Cedar Timber Yard (also +1/+3 influence)
+    "phar_main_wood_production_canaan_type_b": [50, 80],  # vanilla 50, 60
+    "phar_main_irsu_resource_production_wood_canaan_type_b": [80],  # Irsu's (vanilla 50)
+    # Hatti: Pine Timber Yard, Oak Timber Yard
+    "phar_main_wood_production_hatti": [55, 110],  # vanilla 45, 55
+    # Achaea: Logger's Yard, Logger's Square
+    "phar_map_wood_production_achaea": [40, 85],  # vanilla 30, 40
+    "phar_map_irsu_wood_production_achaea": [65],  # Irsu's (vanilla 30)
+    # Assuwa: Lumber Shacks, Oak Storage
+    "phar_map_wood_production_assuwa": [40, 85],  # vanilla 30, 40
+    "phar_map_irsu_wood_production_assuwa": [50],  # Irsu's (vanilla 30)
+    # Thrace: Foresters' Huts, Foresters' Houses
+    "phar_map_wood_production_thrace": [60, 125],  # vanilla 30, 40
+    "phar_map_irsu_wood_production_thrace": [65],  # Irsu's (vanilla 30)
+    # Mycenae: Woodworker Kerosiya, Woodworker Brigades (+45/+55 more at high influence)
+    "phar_map_myc_resource_production_wood_minor": [35, 75],  # vanilla 25, 35
+    # Oases: Woodcutter Encampment, Woodcutter Camp (also lower recruitment cost)
+    "phar_main_wood_oasis": [30, 50],  # vanilla 20, 30
+    "phar_main_irsu_resource_production_wood_oasis": [40],  # Irsu's (vanilla 20)
+    # Nile: Nile Lumber Camp, Nile Lumber Yard (also more fish)
+    "phar_main_all_resource_production_wood_nile": [25, 45],  # vanilla 15, 20
+    # Ports: Lumber Depot, Lumber Reserve (Nile); Lumber Waterways, Lumber Storehouse (Tigris and Euphrates)
+    "phar_main_port_nile": [45, 75],  # vanilla 45, 55
+    "phar_main_irsu_resource_production_wood_port_nile": [65],  # Irsu's (vanilla 45)
+    "phar_map_all_resource_production_wood_port_tigris_euphrates": [50, 90],  # vanilla 50, 60
+}
 
 # Construction time of whole building chains, in turns added (minimum 1 turn): (regular expression matched
 # against the whole chain key, turns).

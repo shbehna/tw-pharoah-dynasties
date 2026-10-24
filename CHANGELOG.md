@@ -134,8 +134,10 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Garrison chains, campaign movement of own armies in the region (vanilla none): Hanigalbat's City Guard Station,
   Inner Army Headquarters, Defenders' Fortress +5%, +10%, +15%; City Guard Station and City Guard Compound (and their
   regional equivalents) +3%, +6%.
-- Main wood chains: 45 and 100 wood per turn (Logging Grounds and Logging Camp, vanilla 35 and 50; Woodcutting Yard and
-  Woodcutting Complex, vanilla 30 and 40; Pine and Oak Timber Yard, vanilla 45 and 55; Irsu's versions included).
+- Wood per turn, set per chain (`WOOD_PRODUCTION`): Logging Grounds and Logging Camp 55 and 110 (vanilla 35 and 50);
+  Woodcutting Yard and Woodcutting Complex 55 and 110 (vanilla 30 and 40); Pine and Oak Timber Yard 55 and 110 (vanilla
+  45 and 55); Irsu's Logging Grounds and Woodcutting Yard 55 (vanilla 30 and 35). Other wood chains keep their vanilla
+  amounts.
 - Wood derivative chains build 1 turn faster: Cedar Warehouse, Woodcutters' District and Lumber Mill 1 turn (vanilla 2),
   Lumber Mill Complex 2 turns (vanilla 3).
 - Compatibility add-on for CPTT Recruitment Rework (`dynasties_rebalance_compat_cptt_recruitment_rework.pack`; enable it
