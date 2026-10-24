@@ -177,6 +177,13 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   50 gold and adds 250 stone and 65 wood. Military Support, Recruitment, Resources and Production buildings, outposts,
   wonders, Sea Peoples horde buildings and ruins have no added upkeep.
 
+### Religion
+
+- Food production bonuses of the gods' shrines and dwellings are doubled, at every favour tier (vanilla in brackets):
+  Arinna's, Ptah's and Marduk's shrines +10/+16/+24% (+5/+8/+12%); Yamm's shrine +10/+16/+20% food from buildings
+  (+5/+8/+10%); Levs' shrine +20/+30/+40% (+10/+15/+20%); Marduk's dwelling +8/+12/+18% (+4/+6/+9%).
+  Their help pages show the new values.
+
 ### Buildings with garrisons
 
 - Buildings with a garrison, other than the main buildings of settlements and lookout posts, provide 4 times as many garrison units

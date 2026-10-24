@@ -12,10 +12,10 @@ from __future__ import annotations
 from types import ModuleType
 
 from . import (admin, ai, buildings, characters, confederations, difficulty, experience, garrisons, landmarks,
-               movement, outposts)
+               movement, outposts, religion)
 
-MODULES: list[ModuleType] = [admin, outposts, movement, landmarks, buildings, garrisons, experience, difficulty, ai,
-                             characters, confederations]
+MODULES: list[ModuleType] = [admin, outposts, movement, landmarks, buildings, religion, garrisons, experience,
+                             difficulty, ai, characters, confederations]
 
 
 def _collect() -> dict[str, object]:

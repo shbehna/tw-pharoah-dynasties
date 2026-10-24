@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(ROOT, "generator"))
 import settings  # noqa: E402
 from addons import generate_addons  # noqa: E402
 from features import (admin, ai, buildings, characters, difficulty, experience, garrisons, landmarks,  # noqa: E402
-                      movement, outposts)
+                      movement, outposts, religion)
 from lib.data import GameData, Overlay  # noqa: E402
 from lib.output import drop_unchanged, write_source  # noqa: E402
 from lib.report import write_report  # noqa: E402
@@ -28,10 +28,10 @@ from separate_mods import generate_separate_mods  # noqa: E402
 
 # Order matters: later features see (and may change) the rows written by earlier ones.
 # Landmarks run first so the production multiplier and garrison doubling include them.
-FEATURES = [landmarks, admin, outposts, movement, buildings, garrisons, experience, difficulty, ai, characters]
+FEATURES = [landmarks, admin, outposts, movement, buildings, religion, garrisons, experience, difficulty, ai, characters]
 # Section order of CHANGELOG.md, used for the report.
-REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "garrisons", "experience", "difficulty", "ai",
-                "characters", "confederations"]
+REPORT_ORDER = ["admin", "outposts", "movement", "landmarks", "buildings", "religion", "garrisons", "experience",
+                "difficulty", "ai", "characters", "confederations"]
 
 
 def main() -> int:

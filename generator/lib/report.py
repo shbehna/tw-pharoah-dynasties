@@ -15,6 +15,7 @@ TITLES = {
     "movement": "Movement",
     "landmarks": "Landmarks",
     "buildings": "Buildings",
+    "religion": "Religion",
     "garrisons": "Buildings with garrisons",
     "experience": "Experience",
     "difficulty": "Progressive difficulty",
