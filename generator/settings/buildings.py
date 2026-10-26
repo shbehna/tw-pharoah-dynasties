@@ -104,13 +104,13 @@ WOOD_PRODUCTION = {
     "phar_map_all_resource_production_wood_mesopotamia_type_a": [55, 110],  # vanilla 35, 50
     "phar_map_irsu_resource_production_wood_mesopotamia_type_a": [55],  # Irsu's (vanilla 30)
     # Canaan: Woodcutting Yard, Woodcutting Complex
-    "phar_main_wood_production_canaan_type_a": [55, 110],  # vanilla 30, 40
+    "phar_main_wood_production_canaan_type_a": [45, 80],  # vanilla 30, 40
     "phar_main_irsu_resource_production_wood_type_a": [55],  # Irsu's (vanilla 35)
     # Canaan: Cypress Timber Yard, Cedar Timber Yard (also +1/+3 influence)
-    "phar_main_wood_production_canaan_type_b": [50, 80],  # vanilla 50, 60
-    "phar_main_irsu_resource_production_wood_canaan_type_b": [80],  # Irsu's (vanilla 50)
+    "phar_main_wood_production_canaan_type_b": [50, 90],  # vanilla 50, 60
+    "phar_main_irsu_resource_production_wood_canaan_type_b": [90],  # Irsu's (vanilla 50)
     # Hatti: Pine Timber Yard, Oak Timber Yard
-    "phar_main_wood_production_hatti": [55, 110],  # vanilla 45, 55
+    "phar_main_wood_production_hatti": [55, 95],  # vanilla 45, 55
     # Achaea: Logger's Yard, Logger's Square
     "phar_map_wood_production_achaea": [40, 85],  # vanilla 30, 40
     "phar_map_irsu_wood_production_achaea": [65],  # Irsu's (vanilla 30)
@@ -128,9 +128,9 @@ WOOD_PRODUCTION = {
     # Nile: Nile Lumber Camp, Nile Lumber Yard (also more fish)
     "phar_main_all_resource_production_wood_nile": [25, 45],  # vanilla 15, 20
     # Ports: Lumber Depot, Lumber Reserve (Nile); Lumber Waterways, Lumber Storehouse (Tigris and Euphrates)
-    "phar_main_port_nile": [45, 75],  # vanilla 45, 55
-    "phar_main_irsu_resource_production_wood_port_nile": [65],  # Irsu's (vanilla 45)
-    "phar_map_all_resource_production_wood_port_tigris_euphrates": [50, 90],  # vanilla 50, 60
+    "phar_main_port_nile": [45, 65],  # vanilla 45, 55
+    "phar_main_irsu_resource_production_wood_port_nile": [45],  # Irsu's (vanilla 45)
+    "phar_map_all_resource_production_wood_port_tigris_euphrates": [50, 75],  # vanilla 50, 60
 }
 
 # Construction time of whole building chains, in turns added (minimum 1 turn): (regular expression matched
