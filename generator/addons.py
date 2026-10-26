@@ -5,7 +5,8 @@ enabled together with its mod. Each add-on has a builder below (BUILDERS, by "na
 - make_character_unique: the unique characters added by that mod can serve in any faction, as the main
   mod does for the game's own (generator/lib/characters.py): permitted in every faction, bodyguard units
   allowed for every unit group, bodyguards for every subculture
-- cptt_recruitment_rework: rebalanced effects of that mod's buildings (CPTT_BUILDING_EFFECTS)
+- cptt_recruitment_rework: rebalanced effects, costs and upkeep of that mod's buildings (CPTT_BUILDING_EFFECTS,
+  CPTT_BUILDING_COSTS, CPTT_BUILDING_UPKEEP_RESOURCES)
 
 The other mod's tables are read from reference/addons/<name>/ (scripts/extract.ps1).
 """
@@ -13,7 +14,9 @@ The other mod's tables are read from reference/addons/<name>/ (scripts/extract.p
 from __future__ import annotations
 
 import glob
+import math
 import os
+import re
 
 from lib.characters import BODYGUARDS, PERMITTED, UNIT_PERMISSIONS, any_faction_rows, unique_subtypes
 from lib.data import GameData, fmt_float
@@ -21,6 +24,13 @@ from lib.output import clear_folder
 from lib.tsv import TsvFile, read_tsv, write_tsv
 
 BEJ = "building_effects_junction_tables"
+LEVELS = "building_levels_tables"
+COSTS = "resource_costs_tables"
+POOLED_COSTS = "resource_cost_pooled_resource_junctions_tables"
+COST_FACTORS = {"gold": "troy_gold_buildings", "stones": "troy_stones_buildings", "wood": "troy_wood_buildings"}
+UPKEEP_EFFECTS = {"gold": "troy_effect_economy_building_upkeep_add_gold",
+                  "stones": "troy_effect_economy_building_upkeep_add_stone",
+                  "wood": "troy_effect_economy_building_upkeep_add_wood"}
 
 
 def _mod_rows(mod_dir: str, table: str) -> list[dict]:
@@ -60,7 +70,8 @@ def _make_character_unique(mod_dir: str, data: GameData, settings, addon: dict) 
 
 
 def _cptt_recruitment_rework(mod_dir: str, data: GameData, settings, addon: dict) -> tuple[dict, str]:
-    buildings = {row["level_name"] for row in _mod_rows(mod_dir, "building_levels_tables")}
+    levels = {row["level_name"]: row for row in _mod_rows(mod_dir, LEVELS)}
+    buildings = set(levels)
     effects = {row["effect"] for row in data.table("effects_tables").dicts()}
     rows = []
     for building, building_effects in settings.CPTT_BUILDING_EFFECTS.items():
@@ -77,9 +88,51 @@ def _cptt_recruitment_rework(mod_dir: str, data: GameData, settings, addon: dict
                          **{column: fmt_float(v) for column, v in (
                              ("value", value), ("value_damaged", damaged), ("value_ruined", ruined),
                              ("value_low_influence", low), ("value_medium_influence", medium))}})
+    tables = {BEJ: rows, LEVELS: [], COSTS: [], POOLED_COSTS: []}
+    _cptt_costs(settings, levels, tables, addon)
+    upkeep = _cptt_upkeep(settings, tables, addon)
     summary = (f"{addon['title']} add-on ({addon['pack']}): effects of {len(settings.CPTT_BUILDING_EFFECTS)} "
-               f"buildings ({len(rows)} rows, CPTT_BUILDING_EFFECTS).")
-    return {BEJ: rows}, summary
+               f"buildings ({len(rows) - upkeep} rows, CPTT_BUILDING_EFFECTS), construction costs of "
+               f"{len(settings.CPTT_BUILDING_COSTS)} buildings (CPTT_BUILDING_COSTS), {upkeep} building upkeep "
+               f"effects (CPTT_BUILDING_UPKEEP_RESOURCES).")
+    return tables, summary
+
+
+def _cptt_costs(settings, levels: dict[str, dict], tables: dict, addon: dict) -> None:
+    """Each building level gets its own construction cost (the mod's levels share theirs)."""
+    for building, costs in settings.CPTT_BUILDING_COSTS.items():
+        if building not in levels:
+            raise ValueError(f"CPTT_BUILDING_COSTS: {addon['title']} has no building {building}")
+        unknown = set(costs) - set(COST_FACTORS)
+        if unknown:
+            raise ValueError(f"CPTT_BUILDING_COSTS ({building}): unknown resources {sorted(unknown)}")
+        cost_id = f"dyn_rebal_{building}_cost"
+        tables[LEVELS].append(dict(levels[building], create_resource_cost=cost_id))
+        tables[COSTS].append({"id": cost_id, "treasury_cost": "0", "expenditure_type": "CONSTRUCTION_BUILDING",
+                              "income_type": "OTHER"})
+        for resource, amount in costs.items():
+            tables[POOLED_COSTS].append({"pooled_resource_factor": COST_FACTORS[resource], "resource_cost": cost_id,
+                                         "amount": str(-amount)})
+
+
+def _cptt_upkeep(settings, tables: dict, addon: dict) -> int:
+    """Building upkeep from the construction cost, as the main mod's buildings feature does."""
+    count = 0
+    for building, costs in settings.CPTT_BUILDING_COSTS.items():
+        resources = next((r for pattern, r in settings.CPTT_BUILDING_UPKEEP_RESOURCES
+                          if re.fullmatch(pattern, building)), [])
+        for resource in resources:
+            if resource not in costs:
+                raise ValueError(f"CPTT_BUILDING_UPKEEP_RESOURCES: {building} has no {resource} cost")
+            value = math.ceil(costs[resource] * settings.BUILDING_UPKEEP_PERCENT
+                              / (100 * settings.BUILDING_UPKEEP_ROUNDING)) * settings.BUILDING_UPKEEP_ROUNDING
+            # Negative: the factor counts income. Damaged buildings pay in full, ruined ones nothing.
+            tables[BEJ].append({"building": building, "effect": UPKEEP_EFFECTS[resource],
+                                "effect_scope": "region_to_region_own", "value": fmt_float(-value),
+                                "value_damaged": fmt_float(-value), "value_ruined": fmt_float(0),
+                                "value_low_influence": fmt_float(-value), "value_medium_influence": fmt_float(-value)})
+            count += 1
+    return count
 
 
 # mod.json "compat_addons" name -> (builder(mod_dir, data, settings, addon) -> ({table: rows}, summary),

@@ -167,7 +167,58 @@ CPTT_BUILDING_EFFECTS = {
         ("phar_main_province_management_happiness_building", "region_to_province_own_text_provincewide"): -6,
         ("phar_main_upkeep_cost_mod_unit_sets_all_native_units", "building_to_force_own_provincewide"): -10,
     },
+    # Grand Archive chain (Mesopotamian factions): State Archive, Central Archive, Royal Archive, Imperial Archive,
+    # Universal Archives. Factionwide upkeep of units, at high influence only (as the mod does; the mod: food and
+    # gold -5/-10/-20/-35/-50%). 0 removes the mod's value.
+    "cptt_fac_mes_grandadmin_1": {
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+         "building_to_force_own_factionwide"): (-5, 0, 0, 0, 0),
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_gold",
+         "building_to_force_own_factionwide"): (0, 0, 0, 0, 0),
+    },
+    "cptt_fac_mes_grandadmin_2": {
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+         "building_to_force_own_factionwide"): (-10, 0, 0, 0, 0),
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_gold",
+         "building_to_force_own_factionwide"): (0, 0, 0, 0, 0),
+    },
+    "cptt_fac_mes_grandadmin_3": {
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+         "building_to_force_own_factionwide"): (-15, 0, 0, 0, 0),
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_gold",
+         "building_to_force_own_factionwide"): (0, 0, 0, 0, 0),
+    },
+    "cptt_fac_mes_grandadmin_4": {
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+         "building_to_force_own_factionwide"): (-25, 0, 0, 0, 0),
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_gold",
+         "building_to_force_own_factionwide"): (-5, 0, 0, 0, 0),
+    },
+    "cptt_fac_mes_grandadmin_5": {
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_food",
+         "building_to_force_own_factionwide"): (-35, 0, 0, 0, 0),
+        ("phar_main_unit_upkeep_cost_percentage_multiplier_mod_gold",
+         "building_to_force_own_factionwide"): (-10, 0, 0, 0, 0),
+    },
 }
+
+# Construction costs of CPTT Recruitment Rework buildings: building level -> {resource: amount} (resources:
+# gold, stones, wood). Each level gets its own cost; the mod's own costs are positive amounts, so its buildings
+# cost nothing (Grand Archive: level 1 +3000 of each, levels 2-5 +2000 stone, +5000 wood and gold).
+CPTT_BUILDING_COSTS = {
+    "cptt_fac_mes_grandadmin_1": {"stones": 1000, "wood": 200, "gold": 100},  # State Archive
+    "cptt_fac_mes_grandadmin_2": {"stones": 2000, "wood": 400, "gold": 200},  # Central Archive
+    "cptt_fac_mes_grandadmin_3": {"stones": 3000, "wood": 600, "gold": 300},  # Royal Archive
+    "cptt_fac_mes_grandadmin_4": {"stones": 4000, "wood": 800, "gold": 400},  # Imperial Archive
+    "cptt_fac_mes_grandadmin_5": {"stones": 5000, "wood": 1000, "gold": 500},  # Universal Archives
+}
+# Building upkeep of CPTT Recruitment Rework buildings, for these resources of their cost in CPTT_BUILDING_COSTS,
+# like the main mod's buildings: BUILDING_UPKEEP_PERCENT % of the cost per turn, rounded up to a multiple of
+# BUILDING_UPKEEP_ROUNDING. (regular expression matched against the whole building level key, resources).
+# The Grand Archive also keeps its fixed 50 gold upkeep and its wood upkeep (-20 to -320 wood production).
+CPTT_BUILDING_UPKEEP_RESOURCES = [
+    (r"cptt_fac_mes_grandadmin_\d", ["stones", "gold"]),
+]
 
 # Per-turn building upkeep (vanilla: a handful of buildings). Every level of the building sets in
 # BUILDING_UPKEEP_SETS costs BUILDING_UPKEEP_PERCENT % of its construction cost per turn, for each

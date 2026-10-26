@@ -145,6 +145,10 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   in adjacent provinces, +2/+5 influence, -3/-6 happiness and -5%/-10% upkeep of native units in the province (all
   resources: the game has no food-only upkeep effect for a set of units). Fixes the mod's two workforce growth rows,
   which share one key so only one of them applied.
+  Grand Archive chain (State Archive to Universal Archives): costs 1000 stone, 200 wood and 100 gold per level (level 5:
+  5000, 1000, 500; the mod's costs are positive amounts, so it cost nothing); building upkeep of 50 stone and 5 gold
+  per level (on top of its 50 gold upkeep and its wood upkeep); factionwide unit upkeep at high influence: food -5,
+  -10, -15, -25, -35% (the mod: -5 to -50%), gold -5 and -10% on the last two levels only (the mod: -5 to -50%).
 - Bronzeworker chain: +10%, +20%, +35% bronze production (vanilla +5%, +10%, +20%); the Royal Bronzeworker also gives -10% bronze upkeep for armies in the province.
 - Goldsmith chain: +10%, +15%, +25% gold production (vanilla +5%, +10%, +20%); the Royal Goldsmith also gives -5% gold upkeep for armies in the province.
 - Summer Festival Grounds: +40% food production (vanilla +10%) and +2 happiness (vanilla +4).
