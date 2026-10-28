@@ -91,6 +91,9 @@ BUILDING_CHAIN_EFFECTS = [
     # armies in the region (vanilla none)
     (r"phar_map_ash_military_garrison_type_a", "phar_main_mod_land_movement_campaign_basic", "region_to_force_own",
      [5, 10, 15]),
+    # Newscrier's Stand, Public Square (the two-level influence chain): influence in the province (vanilla 2, 4)
+    (r"phar_main_all_province_management_influence_type_b", "phar_main_influence_province_management_buildings",
+     "region_to_province_own_text_provincewide", [3, 6]),
     # City Guard Station, City Guard Compound and their regional equivalents: the same (vanilla none)
     (r"phar_main_(?:canaan|hatti|kemet)_military_garrison_type_a|phar_(?:main|map)_military_garrison_type_a_\w+",
      "phar_main_mod_land_movement_campaign_basic", "region_to_force_own", [3, 6, 12]),
