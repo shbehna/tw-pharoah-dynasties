@@ -70,6 +70,10 @@ OTHER_PRODUCTION_ALL_RESOURCES = [r"_landmark_"]
 # Regular expressions of building keys left out of the multiplier, e.g. r"_main_building_"
 # to keep settlement buildings at their vanilla production bonus.
 OTHER_PRODUCTION_EXCLUDE = []
+# Wood derivative chains (built next to a wood production chain): Cedar Warehouse (Mesopotamia), Woodcutters' District
+# (Canaan), Lumber Mill and Lumber Mill Complex (Hatti).
+WOOD_DERIVATIVE_CHAINS = (r"phar_map_all_resource_production_wood_mesopotamia_type_a_derivative"
+                          r"|phar_main_wood_production_canaan_derivative_type_a|phar_main_wood_production_hatti_derivative")
 # Effects set on whole building chains, by level: (regular expression matched against the whole chain key,
 # effect, scope, values from the first level). A chain with fewer levels than values uses the first ones. An
 # effect the level already has gets the new value (its other columns rescaled); a new one gives half when
@@ -97,6 +101,20 @@ BUILDING_CHAIN_EFFECTS = [
     # City Guard Station, City Guard Compound and their regional equivalents: the same (vanilla none)
     (r"phar_main_(?:canaan|hatti|kemet)_military_garrison_type_a|phar_(?:main|map)_military_garrison_type_a_\w+",
      "phar_main_mod_land_movement_campaign_basic", "region_to_force_own", [3, 6, 12]),
+    # Stone Carvers' District (also Irsu's): % stone upkeep of all buildings in the province (vanilla none). The
+    # dyn_rebal_building_upkeep_percentage_mod_<resource> effects are the mod's own (the game has none).
+    (r"phar_main_stone_mine_derivative_type_a|phar_main_irsu_resource_production_stone_mine_derivative_type_a",
+     "dyn_rebal_building_upkeep_percentage_mod_stones", "region_to_province_own_text_provincewide", [-50]),
+    # Wood derivative chains: Cedar Warehouse, Woodcutters' District, Lumber Mill, Lumber Mill Complex
+    # - % wood upkeep of all buildings in the province (vanilla none)
+    (WOOD_DERIVATIVE_CHAINS, "dyn_rebal_building_upkeep_percentage_mod_wood",
+     "region_to_province_own_text_provincewide", [-50, -50]),
+    # - % wood production in the province (vanilla 20; Lumber Mill Complex 30)
+    (WOOD_DERIVATIVE_CHAINS, "phar_main_building_wood_percentage_multiplier_mod",
+     "region_to_province_own_text_provincewide", [40, 60]),
+    # - construction time of all buildings in the province, in turns (vanilla none; Stone Carvers' District has -1)
+    (WOOD_DERIVATIVE_CHAINS, "phar_main_add_build_time_all_buildings",
+     "region_to_region_own_provincewide_text_this_province", [-1, -1]),
 ]
 
 # Wood per turn of the wood production chains, by level: chain -> values (vanilla in the comments). The chain's
@@ -137,13 +155,9 @@ WOOD_PRODUCTION = {
 }
 
 # Construction time of whole building chains, in turns added (minimum 1 turn): (regular expression matched
-# against the whole chain key, turns).
-BUILDING_CONSTRUCTION_TIME = [
-    # Wood derivative chains: Cedar Warehouse (vanilla 2 turns), Woodcutters' District (2), Lumber Mill (2) and
-    # Lumber Mill Complex (3)
-    (r"phar_map_all_resource_production_wood_mesopotamia_type_a_derivative"
-     r"|phar_main_wood_production_canaan_derivative_type_a|phar_main_wood_production_hatti_derivative", -1),
-]
+# against the whole chain key, turns). This is the building's own construction time; a bonus to the other
+# buildings of the province is an effect (phar_main_add_build_time_all_buildings, BUILDING_CHAIN_EFFECTS).
+BUILDING_CONSTRUCTION_TIME = []
 
 # Buildings of the CPTT Recruitment Rework mod (Workshop 3441336326), in its compatibility add-on
 # (dynasties_rebalance_compat_cptt_recruitment_rework.pack): building level -> {(effect, scope): value}. A value

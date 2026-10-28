@@ -6,8 +6,9 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 
 ### Administrative burden
 
-- Administration tiers start at 0, 150, 250, 400, 600, 750, 950, 1150, 1350, 1600, 1900 and 2250 points
-  (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The tier titles show the new ranges.
+- Administration tiers start at 0, 250, 450, 650, 850, 1050, 1250, 1500, 1750, 2050, 2350 and 2700 points
+  (vanilla 0, 55, 110, 160, 215, 270, 330, 390, 455, 520, 590 and 660). The administration bar is 2800 points long
+  (vanilla 730). The tier titles show the new ranges.
 - Each administration tier adds to building construction costs: +0% at tier 1, then +10% per tier, up to +110% at tier 12.
 - Administration tiers change the gold and stone upkeep of buildings: -50% at tier 1, -25% at tier 2, none at tier 3,
   then +10% at tier 4 and +10% more per tier, up to +90% at tier 12.
@@ -22,18 +23,21 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   Province capitals keep their vanilla extra point: 4, 7, 11, 17 and 25.
 - Main buildings of minor settlements cost 3, 6 and 12 administration points by level (vanilla 2, 3, 4).
 - Administrative buildings reduce the administration burden (full value at high influence, less at lower influence):
-  - Newscrier's Stand, Public Square, Hall of Messengers: -4, -8, -12 (the second Newscrier's Stand chain: -2, -5)
-  - Hall of Records, Palace of Correspondence, Wisdom Codices: -4, -8, -12 (Seti's Office of Relations and Royal Palace: -4, -8)
-  - Tax Collector's Office, Tax Administration Centre, Royal Tax Administration: -1, -3, -5 (Seti's versions: -1, -3)
-  - Recruitment Hall, War Council, War Coffers: -3, -6, -10 (also Seti's Military Office chain and Mustering Office, and Ashur's War Stockpiles chain)
-  - Traveller's Inn, Caravanserai, Visitor's Quarters: -1, -2, -5 (also the Mycenaean road chain)
-  - Babylon's City Trade Records, Merchants' Guild, Royal Scribal Archives: -4, -8, -12; Royal Garrison: -1
+  - Newscrier's Stand, Public Square, Hall of Messengers: -5, -10, -14 (the second Newscrier's Stand chain: -4, -7)
+  - Hall of Records, Palace of Correspondence: -6, -10; in province capitals Hall of Records, Palace of Correspondence,
+    Wisdom Codices: -5, -10, -14 (Seti's Office of Relations and Royal Palace: -8, -12)
+  - Tax Collector's Office, Tax Administration Centre, Royal Tax Administration: -2, -4, -6 (Seti's versions: -2, -5)
+  - Recruitment Hall, War Council, War Coffers: -3, -6, -10 (also Seti's Military Office chain; Mustering Office -3);
+    Hanigalbat's War Stockpiles, War Treasury, War Council: -5, -8, -14
+  - Traveller's Inn, Caravanserai, Visitor's Quarters: -2, -4, -7 (also the Mycenaean road chain)
+  - Babylon's City Trade Records, Merchants' Guild, Royal Scribal Archives: -7, -10, -14 (in province capitals: -6,
+    -10, -14); Royal Garrison: -3
   - Translators' Quarters: -3
   - Faction buildings: Amenmesse's Foreign Visitors' Entertainments chain -1, -3, -5; Bay's Chief Scribe's Headquarters -3 and Trading Fairground chain -1, -3;
     Ramesses' Medjay chain -1, -3, -5; Suppiluliuma's Militia Gathering Post and Army Supply Centre -2, -4;
     Peleset Oxen chain -1, -3, -5; Sea Peoples' Highborn Gathering and Tribal Convocation -4, -10
-  - Landmarks: Royal Legal Complex, Royal War Academy, The Great Archives, Professional Scribal Complex,
-    Royal Tax Collector's Office and Palace Archive: -5 each
+  - Landmarks: Royal Legal Complex -10, Royal War Academy -8, The Great Archives -10, Professional Scribal Complex -7,
+    Royal Tax Collector's Office -12, Palace Archive -10
 
 ### Outposts
 
@@ -128,19 +132,39 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Granary chain: +25%, +40%, +75% food production in the province (vanilla +5%, +10%, +20%).
 - Newscrier's Stand, Public Square (the two-level influence chain): +3, +6 influence in the province (vanilla +2, +4).
 - War Council chains, food upkeep of units in the province (vanilla none): Hanigalbat's War Stockpiles, War Treasury,
-  War Council -5%, -10%, -15%; Recruitment Hall, War Council, War Coffers -2%, -5%, -10%.
+  War Council -6%, -15%, -25%; Recruitment Hall, War Council, War Coffers -5%, -8%, -15%.
 - Officer chains, upkeep of generals' bodyguard units in the province (vanilla none): -30%, -50%, -85% (Hanigalbat's
   Officers' School, Royal Officers' School, Palace of War; Officer Training Grounds, Officer School, Royal Officer
   School; Ramesses' Military Office, Military School, Military Academy).
 - Garrison chains, campaign movement of own armies in the region (vanilla none): Hanigalbat's City Guard Station,
   Inner Army Headquarters, Defenders' Fortress +5%, +10%, +15%; City Guard Station and City Guard Compound (and their
   regional equivalents) +3%, +6%.
-- Wood per turn, set per chain (`WOOD_PRODUCTION`): Logging Grounds and Logging Camp 55 and 110 (vanilla 35 and 50);
-  Woodcutting Yard and Woodcutting Complex 55 and 110 (vanilla 30 and 40); Pine and Oak Timber Yard 55 and 110 (vanilla
-  45 and 55); Irsu's Logging Grounds and Woodcutting Yard 55 (vanilla 30 and 35). Other wood chains keep their vanilla
-  amounts.
-- Wood derivative chains build 1 turn faster: Cedar Warehouse, Woodcutters' District and Lumber Mill 1 turn (vanilla 2),
-  Lumber Mill Complex 2 turns (vanilla 3).
+- Wood per turn, set per chain (`WOOD_PRODUCTION`):
+
+  | Chain | Wood per turn | Vanilla |
+  | --- | --- | --- |
+  | Logging Grounds, Logging Camp (Mesopotamia) | 55, 110 | 35, 50 |
+  | Woodcutting Yard, Woodcutting Complex (Canaan) | 45, 80 | 30, 40 |
+  | Cypress Timber Yard, Cedar Timber Yard (Canaan) | 50, 90 | 50, 60 |
+  | Pine Timber Yard, Oak Timber Yard (Hatti) | 55, 95 | 45, 55 |
+  | Logger's Yard, Logger's Square (Achaea) | 40, 85 | 30, 40 |
+  | Lumber Shacks, Oak Storage (Assuwa) | 40, 85 | 30, 40 |
+  | Foresters' Huts, Foresters' Houses (Thrace) | 60, 125 | 30, 40 |
+  | Woodworker Kerosiya, Woodworker Brigades (Mycenae; extra at high influence unchanged) | 35, 75 | 25, 35 |
+  | Woodcutter Encampment, Woodcutter Camp (oases) | 30, 50 | 20, 30 |
+  | Nile Lumber Camp, Nile Lumber Yard | 25, 45 | 15, 20 |
+  | Lumber Depot, Lumber Reserve (Nile ports) | 45, 65 | 45, 55 |
+  | Lumber Waterways, Lumber Storehouse (Tigris and Euphrates ports) | 50, 75 | 50, 60 |
+
+  Irsu's one-level versions: Logging Grounds 55 (vanilla 30), Woodcutting Yard 55 (35), Cypress Timber Yard 90 (50),
+  Logger's Yard 65 (30), Lumber Shacks 50 (30), Foresters' Huts 65 (30), Woodcutter Encampment 40 (20); Lumber Depot
+  unchanged (45).
+
+- Wood derivative chains (Cedar Warehouse, Woodcutters' District, Lumber Mill, Lumber Mill Complex): -1 turn
+  construction time of all buildings in the province, like Stone Carvers' District (vanilla none); -50% wood upkeep of
+  all buildings in the province (vanilla none); +40% wood production in the province, Lumber Mill Complex +60% (vanilla
+  +20%, +30%). Their own construction time is back to vanilla.
+- Stone Carvers' District: -50% stone upkeep of all buildings in the province (vanilla none).
 - Compatibility add-on for CPTT Recruitment Rework (`dynasties_rebalance_compat_cptt_recruitment_rework.pack`; enable it
   only together with that mod): Relocation Office and Deportation Hub -10/-20 workforce growth in the province, +4/+8
   in adjacent provinces, +2/+5 influence, -3/-6 happiness and -5%/-10% upkeep of native units in the province (all
@@ -157,7 +181,7 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
 - Kushite Delegate School (Amenmesse): +3 influence in the province (vanilla -3).
 - Tax Collector's Office, Tax Administration Centre, Royal Tax Administration: +10%, +20%, +35% to all resources produced
   in the province (vanilla +5%, +10%, +20%).
-- Hall of Records, Palace of Correspondence, Wisdom Codices: +2%, +5%, +8% royal decree completion rate
+- Hall of Records, Palace of Correspondence, Wisdom Codices: +1%, +3%, +5% royal decree completion rate
   ("administration efficiency for royal decrees"; vanilla none). Every building adds to it.
 - Artisan's Workshop, Art School, Bazaar of the Arts: +3, +5, +8 happiness (vanilla +2, +4, +6).
 - Midwife's House, Healing Hall, Surgeon's Practice: +5, +8, +12 workforce growth (vanilla +4, +6, +9).

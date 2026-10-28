@@ -19,6 +19,7 @@ import collections
 import math
 import re
 
+from features import admin
 from lib.buildings import (BEJ, UPKEEP_FACTOR, VALUE_COLUMNS, bonus_value_ui, building_levels, building_sets,
                            effects_by_building, new_values, set_effect, upkeep_ui_name)
 from lib.data import Overlay, fmt_float
@@ -214,6 +215,9 @@ def _matching_chains(levels: dict[str, dict], pattern: str, setting: str) -> dic
 def _chain_effects(overlay: Overlay, s) -> None:
     levels = building_levels(overlay)
     for pattern, effect, scope, values in s.BUILDING_CHAIN_EFFECTS:
+        if effect.startswith(admin.BUILDING_UPKEEP):
+            # The mod's own % building upkeep effect of that resource.
+            admin.building_upkeep_effects(overlay, [effect.removeprefix(admin.BUILDING_UPKEEP)])
         chains = _matching_chains(levels, pattern, "BUILDING_CHAIN_EFFECTS")
         for buildings in chains.values():
             for building, value in zip(buildings, values):
