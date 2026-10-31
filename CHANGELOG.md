@@ -161,8 +161,8 @@ Values are the ones you see in game; "vanilla" is the unmodded game.
   unchanged (45).
 
 - Wood derivative chains (Cedar Warehouse, Woodcutters' District, Lumber Mill, Lumber Mill Complex): -1 turn
-  construction time of all buildings in the province, like Stone Carvers' District (vanilla none); -50% wood upkeep of
-  all buildings in the province (vanilla none); +40% wood production in the province, Lumber Mill Complex +60% (vanilla
+  construction time of all buildings in the province, like Stone Carvers' District (vanilla none); -50% wood upkeep and
+  -20% stone upkeep of all buildings in the province (vanilla none); +40% wood production in the province, Lumber Mill Complex +60% (vanilla
   +20%, +30%). Their own construction time is back to vanilla.
 - Stone Carvers' District: -50% stone upkeep of all buildings in the province (vanilla none).
 - Compatibility add-on for CPTT Recruitment Rework (`dynasties_rebalance_compat_cptt_recruitment_rework.pack`; enable it

@@ -109,6 +109,9 @@ BUILDING_CHAIN_EFFECTS = [
     # - % wood upkeep of all buildings in the province (vanilla none)
     (WOOD_DERIVATIVE_CHAINS, "dyn_rebal_building_upkeep_percentage_mod_wood",
      "region_to_province_own_text_provincewide", [-50, -50]),
+    # - % stone upkeep of all buildings in the province (vanilla none)
+    (WOOD_DERIVATIVE_CHAINS, "dyn_rebal_building_upkeep_percentage_mod_stones",
+     "region_to_province_own_text_provincewide", [-20, -20]),
     # - % wood production in the province (vanilla 20; Lumber Mill Complex 30)
     (WOOD_DERIVATIVE_CHAINS, "phar_main_building_wood_percentage_multiplier_mod",
      "region_to_province_own_text_provincewide", [40, 60]),
